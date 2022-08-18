@@ -1,8 +1,5 @@
-.box {
-  width: 200px;
-  height: 200px;
-  background-color: #0f0;
-  p {
-    font-size: 24px;
-  }
-}
+@import '~bootstrap/scss/functions';
+@import './helpers/variables';
+@import '~bootstrap/scss/bootstrap';
+
+@import './custom/root'
