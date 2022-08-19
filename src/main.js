@@ -4,15 +4,15 @@ import './assets/images/logo_lg.png'
 // 載入 CSS
 import './assets/scss/all.scss'
 
-import { url } from './assets/js/AjaxApi'
+// import { url } from './assets/js/AjaxApi'
 import { login } from './assets/js/Login'
 import { SignUp }  from './assets/js/SignUp'
 
 const userControl = document.getElementById('js-user-control')
-const globalControl = document.getElementById('js-global-control')
-console.log(url)
-console.log(userControl)
-console.log(globalControl)
+// const globalControl = document.getElementById('js-global-control')
+// console.log(url)
+// console.log(userControl)
+// console.log(globalControl)
 console.log(login)
 
 userControl.innerHTML = SignUp
