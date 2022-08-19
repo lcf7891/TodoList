@@ -6,18 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
-<body>
+<body class="bg-primary" id="js-global-control">
   <!-- <a href="https://todoo.5xcamp.us/api-docs/index.html" target="_blank" rel="noreferrer noopenner">API 文件</a>
   <a href="https://www.figma.com/file/pFivfS3rDX3N3u3dN9aIlx/TodoList?node-id=6%3A194" target="_blank" rel="noreferrer noopenner">UI 設計稿</a> -->
-  <section class="bg-primary vh-100">
-    <div class="container h-100">
-      <div class="row align-items-center h-100">
-        <div class="col-6 text-center">
-          <img src="./assets/images/logo_lg.png" alt="logo_lg" class="img-fluid mb-3">
-          <img src="./assets/images/image.png" alt="image" class="img-fluid">
-        </div>
-        <div class="col-6" id="js-login-control"></div>
+  <section class="container vh-100">
+    <div class="row align-items-center h-100">
+      <div class="col-6 text-center">
+        <img src="./assets/images/logo_lg.png" alt="logo_lg" class="img-fluid mb-3">
+        <img src="./assets/images/image.png" alt="image" class="img-fluid">
       </div>
+      <div class="col-6" id="js-user-control"></div>
     </div>
   </section>
 </body>

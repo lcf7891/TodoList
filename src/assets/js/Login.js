@@ -1,5 +1,5 @@
 
-const loginForm = `
+const login = `
   <h2 class="fs-2 fw-bold mb-4 w-75 mx-auto">最實用的線上待辦事項服務</h2>
   <form action="#">
     <div class="mb-5 w-75 mx-auto">
@@ -17,4 +17,4 @@ const loginForm = `
   </form>
 `
 
-export { loginForm }
+export { login }
