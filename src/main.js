@@ -18,5 +18,5 @@ const globalControl = document.getElementById('js-global-control')
 console.log(login)
 console.log(SignUp)
 
-globalControl.innerHTML = noneList
+// globalControl.innerHTML = noneList
 
