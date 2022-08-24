@@ -9,17 +9,8 @@
 <body class="bg-primary" id="js-global-control">
   <!-- <a href="https://todoo.5xcamp.us/api-docs/index.html" target="_blank" rel="noreferrer noopenner">API 文件</a>
   <a href="https://www.figma.com/file/pFivfS3rDX3N3u3dN9aIlx/TodoList?node-id=6%3A194" target="_blank" rel="noreferrer noopenner">UI 設計稿</a> -->
-  <!-- <section class="container vh-100">
-    <div class="row align-items-center h-100">
-      <div class="col-6 text-center d-lg-block d-none">
-        <img src="./assets/images/logo_lg.png" alt="logo_lg" class="mb-5">
-        <img src="./assets/images/image.png" alt="image">
-      </div>
-      <div class="col-lg-6" id="js-user-control"></div>
-    </div>
-  </section> -->
   <section class="container-fluid">
-    <nav class="navbar flex-md-nowrap flex-nowrap py-5 px-md-8 mb-md-8 mb-3">
+    <nav class="navbar py-5 px-md-8 mb-md-8 mb-3">
       <a href="index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg" class="w-75"></a>
       <div class="ms-auto">
         <span class="d-md-inline-block d-none fs-5 fw-bold">暱稱</span>
@@ -33,41 +24,24 @@
           <button type="button" class="input-group-text p-1 bg-white"><i class="bi bi-plus-square-fill fs-2 p-0"></i></button>
         </div>
         <div class="listCard" id="js-list-control">
-          <ul class="nav justify-content-around">
-            <li class="nav-item border-bottom">
-              <a class="nav-link" href="#">全部</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">待完成</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">已完成</a>
-            </li>
+          <ul class="d-flex text-center fs-5">
+            <li class="border-2 border-bottom w-100 py-4">全部</li>
+            <li class="border-2 border-bottom w-100 py-4">待完成</li>
+            <li class="border-2 border-bottom w-100 py-4">已完成</li>
           </ul>
-          <table class="table table-striped">
-            <tbody>
-              <tr>
-                <td>checkbox</td>
-                <td>content</td>
-                <td>clear</td>
-              </tr>
-              <tr>
-                <td>checkbox</td>
-                <td>content</td>
-                <td>clear</td>
-              </tr>
-              <tr>
-                <td>checkbox</td>
-                <td>content</td>
-                <td>clear</td>
-              </tr>
-              <tr>
-                <td>checkbox</td>
-                <td>content</td>
-                <td>clear</td>
-              </tr>
-            </tbody>
-          </table>
+          <section class="p-4">
+            <ul class="container fs-5">
+              <li class="row">
+                <div class="col-2 border-bottom pb-3">checkbox</div>
+                <div class="col border-bottom pb-3">content</div>
+                <div class="col-1">clear</div>
+              </li>
+            </ul>
+            <div class="d-flex justify-content-between align-items-center">
+              <p class="fs-5 mb-0"><span class="px-2">0</span>個待完成項目</p>
+              <button type="button" class="btn fs-5">清除已完成項目</button>
+            </div>
+          </section>
         </div>
       </div>
     </article>

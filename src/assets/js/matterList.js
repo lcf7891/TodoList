@@ -1,6 +1,6 @@
 const noneList = `
   <section class="container-fluid">
-    <nav class="navbar flex-md-nowrap flex-nowrap py-5 px-md-8 mb-md-8 mb-3">
+    <nav class="navbar py-5 px-md-8 mb-md-8 mb-3">
       <a href="index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg" class="w-75"></a>
       <div class="ms-auto">
         <span class="d-md-inline-block d-none fs-5 fw-bold">暱稱</span>
