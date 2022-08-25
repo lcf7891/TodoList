@@ -1,0 +1,54 @@
+label {
+  font-size: 20px;
+  border-bottom: 1px solid #E5E5E5;
+  padding-bottom: 16px;
+  & input {
+    &[type="checkbox"] {
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+      width: 30px;
+      height: 30px;
+      -webkit-appearance: none;
+      outline: none;
+      transition: 0.5s;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 5px;
+        left: -5px;
+        width: 100%;
+        height: 100%;
+        border: 2px solid $info;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: 0.5s;
+      }
+    }
+    &:checked[type="checkbox"]::before {
+      border: 5px solid $info;
+      border-left: none;
+      border-top: none;
+      width: 16px;
+      border-color: $primary;
+      transform: rotate(40deg) translate(5px, -10px);
+    }
+  }
+}
+
+.hover-clear {
+  button {
+    display: none;
+    font-size: 24px;
+    border: 1px solid transparent;
+    background-color: #fff;
+  }
+  &:hover button {
+    display: inline-block;
+    &:hover {
+      color: $danger;
+      border: 2px solid $info;
+      border-radius: 5px;
+    }
+  }
+}

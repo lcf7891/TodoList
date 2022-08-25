@@ -8,7 +8,7 @@ import './assets/scss/all.scss'
 // import { url } from './assets/js/AjaxApi'
 import { login } from './assets/js/Login'
 import { SignUp }  from './assets/js/SignUp'
-import { noneList } from './assets/js/matterList'
+import { initTemplate, noneList, dateList } from './assets/js/listTemplate'
 
 // const userControl = document.getElementById('js-user-control')
 const globalControl = document.getElementById('js-global-control')
@@ -18,5 +18,8 @@ const globalControl = document.getElementById('js-global-control')
 console.log(login)
 console.log(SignUp)
 
-// globalControl.innerHTML = noneList
+globalControl.innerHTML = initTemplate
 
+const listControl = document.getElementById('js-list-control')
+
+listControl.innerHTML = dateList
