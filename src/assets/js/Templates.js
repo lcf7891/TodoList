@@ -17,8 +17,8 @@ const logIn = `
         <a href="index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg"></a>
       </div>
       <div class="mb-6">
-        <h2 class="fs-3 fw-bold d-none d-lg-block">最實用的線上代辦事項服務</h2>
-        <h2 class="fs-3 fw-bold text-center d-lg-none">最實用的線上代辦事項服務</h2>
+        <h2 class="fs-3 fw-bold d-none d-lg-block">最實用的線上待辦事項服務</h2>
+        <h2 class="fs-3 fw-bold text-center d-lg-none">最實用的線上待辦事項服務</h2>
       </div>
       <form action="#">
         <div class="mb-10">
