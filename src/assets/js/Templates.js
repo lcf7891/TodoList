@@ -128,4 +128,4 @@ const dateList = `
   </section>  
 `
 
-export { startPage, logIn, signUp, initTemplate, noneList, dateList }
+export { startPage, logIn, signUp, initList, noneList, dateList }
