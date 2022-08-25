@@ -6,7 +6,7 @@ import './assets/images/empty.png'
 import './assets/scss/all.scss'
 
 // import { url } from './assets/js/AjaxApi'
-import { startPage, logIn, signUp, initTemplate, noneList, dateList } from './assets/js/Templates'
+import { startPage, logIn, signUp, initList, noneList, dateList } from './assets/js/Templates'
 
 const globalControl = document.getElementById('js-global-control')
 

@@ -78,7 +78,7 @@ const signUp = `
   </div>
 `
 
-const initTemplate = `
+const initList = `
   <section class="container-fluid">
     <nav class="navbar py-5 px-md-8 mb-md-8 mb-3">
       <a href="index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg" class="w-75"></a>
