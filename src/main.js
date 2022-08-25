@@ -6,19 +6,15 @@ import './assets/images/empty.png'
 import './assets/scss/all.scss'
 
 // import { url } from './assets/js/AjaxApi'
-// import { login } from './assets/js/Login'
-// import { SignUp }  from './assets/js/SignUp'
 import { startPage, logIn, signUp, initTemplate, noneList, dateList } from './assets/js/Templates'
 
-// const userControl = document.getElementById('js-user-control')
 const globalControl = document.getElementById('js-global-control')
-// console.log(url)
-// console.log(userControl)
-// console.log(globalControl)
-console.log(logIn)
-console.log(signUp)
 
-// globalControl.innerHTML = initTemplate
+globalControl.innerHTML = startPage
+
+const startlogin = document.getElementById('js-user-control')
+
+startlogin.innerHTML = logIn
 
 // const listControl = document.getElementById('js-list-control')
 
