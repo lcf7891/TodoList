@@ -3,3 +3,13 @@
   border-radius: 10px;
   background-color: #fff;
 }
+
+.active {
+  border-bottom: 4px solid $secondary !important;
+  a {
+    color: $secondary !important;
+    &:hover {
+      color:  $secondary !important;
+    }
+  }
+}

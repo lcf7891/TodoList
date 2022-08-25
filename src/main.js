@@ -6,20 +6,20 @@ import './assets/images/empty.png'
 import './assets/scss/all.scss'
 
 // import { url } from './assets/js/AjaxApi'
-import { login } from './assets/js/Login'
-import { SignUp }  from './assets/js/SignUp'
-import { initTemplate, noneList, dateList } from './assets/js/listTemplate'
+// import { login } from './assets/js/Login'
+// import { SignUp }  from './assets/js/SignUp'
+import { startPage, logIn, signUp, initTemplate, noneList, dateList } from './assets/js/Templates'
 
 // const userControl = document.getElementById('js-user-control')
 const globalControl = document.getElementById('js-global-control')
 // console.log(url)
 // console.log(userControl)
 // console.log(globalControl)
-console.log(login)
-console.log(SignUp)
+console.log(logIn)
+console.log(signUp)
 
-globalControl.innerHTML = initTemplate
+// globalControl.innerHTML = initTemplate
 
-const listControl = document.getElementById('js-list-control')
+// const listControl = document.getElementById('js-list-control')
 
-listControl.innerHTML = dateList
+// listControl.innerHTML = dateList

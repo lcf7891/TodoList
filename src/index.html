@@ -34,9 +34,15 @@
         </div>
         <div class="listCard" id="js-list-control">
           <ul class="d-flex text-center fs-5">
-            <li class="border-2 border-bottom w-100 py-4">全部</li>
-            <li class="border-2 border-bottom w-100 py-4">待完成</li>
-            <li class="border-2 border-bottom w-100 py-4">已完成</li>
+            <li class="border-2 border-bottom w-100 py-4 active">
+              <a href="#" class="d-block link-info text-decoration-none">全部</a>
+            </li>
+            <li class="border-2 border-bottom w-100 py-4">
+              <a href="#" class="d-block link-info text-decoration-none">待完成</a>
+            </li>
+            <li class="border-2 border-bottom w-100 py-4">
+              <a href="#" class="d-block link-info text-decoration-none">已完成</a>
+            </li>
           </ul>
           <section class="p-4">
             <ul class="container fs-5">
@@ -44,12 +50,12 @@
                 <label for="AnimationCheckBox" class="col">
                   <input type="checkbox" name="AnimationCheckBox" id="AnimationCheckBox"><span class="ps-4">Lorem ipsum dolor sit amet.</span>
                 </label>
-                <div class="col-1"><button type="button" class="bi bi-x-lg"></button></div>
+                <div class="col-1 mb-4"><button type="button" class="bi bi-x-lg"></button></div>
               </li>
             </ul>
             <div class="d-flex justify-content-between align-items-center">
               <p class="fs-5 mb-0"><span class="px-2">0</span>個待完成項目</p>
-              <button type="button" class="btn fs-5">清除已完成項目</button>
+              <button type="button" class="btn fs-5 text-info">清除已完成項目</button>
             </div>
           </section>
         </div>
