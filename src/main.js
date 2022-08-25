@@ -5,16 +5,27 @@ import './assets/images/empty.png'
 // 載入 CSS
 import './assets/scss/all.scss'
 
-// import { url } from './assets/js/AjaxApi'
+// 載入版型 JS 
 import { startPage, logIn, signUp, initList, noneList, dateList } from './assets/js/Templates'
 
-const globalControl = document.getElementById('js-global-control')
+function init() {
+  // 將登入頁面載入
+  const globalControl = document.getElementById('js-global-control')
+  globalControl.innerHTML = startPage
+  // 登入版型載入
+  const startlogin = document.getElementById('js-user-control')
+  startlogin.innerHTML = logIn
+} 
 
-globalControl.innerHTML = startPage
+function loginBtn() {
+  const btn = document.querySelector('button')
+}
 
-const startlogin = document.getElementById('js-user-control')
+init()
 
-startlogin.innerHTML = logIn
+// const loginEmail = document.getElementById('loginEmail')
+
+// console.log(loginEmail.value)
 
 // const listControl = document.getElementById('js-list-control')
 
