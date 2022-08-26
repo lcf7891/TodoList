@@ -29,8 +29,8 @@ const logIn = `
           </div>
         </div>
         <div class="mb-6">
-          <label for="loginpassword" class="form-label fs-5 fw-bold">密碼</label>
-          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginpassword" placeholder="請輸入密碼" required>
+          <label for="loginPassword" class="form-label fs-5 fw-bold">密碼</label>
+          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginPassword" placeholder="請輸入密碼" required>
           <div class="invalid-feedback">
             請輸入密碼
           </div>
@@ -75,8 +75,8 @@ const signUp = `
           </div>
         </div>
         <div class="mb-4">
-          <label for="loginpassword" class="form-label fs-5 fw-bold">密碼</label>
-          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginpassword" placeholder="請輸入密碼" required>
+          <label for="loginPassword" class="form-label fs-5 fw-bold">密碼</label>
+          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginPassword" placeholder="請輸入密碼" required>
           <div class="invalid-feedback">
             請輸入密碼
           </div>
@@ -88,6 +88,7 @@ const signUp = `
             請再次輸入密碼
           </div>
         </div>
+        <div class="errMessage"></div>
         <div class="text-center mb-6">
           <button type="submit" class="btn btn-lg btn-secondary py-3 px-12">註冊帳號</button>
         </div>

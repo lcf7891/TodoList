@@ -14,7 +14,7 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 
 let user = {}
 
-function init() {
+function Rendering() {
   // 將登入頁面載入
   const globalControl = document.getElementById('js-global-control')
   globalControl.innerHTML = startPage
@@ -44,22 +44,22 @@ function init() {
 
 function formValidation() {
   const forms = document.querySelectorAll('.needs-validation')
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-      .forEach(form => {
-        form.addEventListener('submit', function (event) {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-          form.classList.add('was-validated')
-        }, false)
-      })
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+    .forEach(form => {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
 }
 
 function userLogin(user, globalControl) {
   const errMessage = document.querySelector('.errMessage')
-  errMessage.style.display = 'none';
+  errMessage.style.display = 'none'
   fetch(`${apiUrl}users/sign_in`, {
     method: 'POST',
     body: JSON.stringify({user}),
@@ -69,11 +69,10 @@ function userLogin(user, globalControl) {
   })
     .then(Response => Response.json())
     .then(data => {
-      if(data.message === '登入失敗') {
-        errMessage.style.display = 'block';
-      }
       if(data.message === '登入成功') {
         globalControl.innerHTML = initList 
+      } else if(data.message === '登入失敗') {
+        errMessage.style.display = 'block'
       }
     })
     .catch(error => console.log('錯誤資訊：', error))
@@ -82,25 +81,28 @@ function userLogin(user, globalControl) {
 function registerInfo(startLogin) {
   const registerBtn = document.querySelector('[type="submit"]')
   registerBtn.addEventListener('click', () => {
-    user.email = document.getElementById('loginEmail').value.trim()
+    user.email = document.querySelector('[type="email"]').value.trim()
     user.nickname = document.getElementById('nickName').value.trim()
-    user.password = document.getElementById('loginpassword').value.trim()
+    const password = document.querySelector('[type="password"]').value.trim()
     const passwords = document.getElementById('loginPasswords').value.trim()
-    // bootstrap 驗證
-    formValidation()
-    // 串接註冊 API
-    userSignUp(user)
-  })
-
-  // 切換登入畫面
-  const changeLogin = document.querySelector('form a')
-  changeLogin.addEventListener('click', () => {
-    startLogin.innerHTML = logIn
-    init()
+    const errMessage = document.querySelector('.errMessage')
+    errMessage.style.display = 'none'
+    if(password === passwords) {
+      // bootstrap 驗證
+      formValidation()
+      // 串接註冊 API
+      userSignUp(user, startLogin)
+    } else {
+      document.getElementById('loginPasswords').classList.add('is-invalid')
+      errMessage.innerHTML = `<p>輸入第 2 次的密碼與第 1 次的不相同</p>`
+        errMessage.style.display = 'block'
+    }
   })
 }
 
-function userSignUp(user) {
+function userSignUp(user, startLogin) {
+  const errMessage = document.querySelector('.errMessage')
+  errMessage.style.display = 'none'
   fetch(`${apiUrl}users`, {
     method: 'POST',
     body: JSON.stringify({user}),
@@ -109,28 +111,25 @@ function userSignUp(user) {
     },
   })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => {
+      console.log(data)
+      if(data.message === '註冊成功') {
+        errMessage.innerHTML = `
+          <p>${data.message}</p>
+          <p>將在 5 秒後跳轉至登入頁面</p>
+        `
+        errMessage.style.display = 'block'
+
+        // 切換登入畫面
+        setTimeout(() => {
+          startLogin.innerHTML = logIn
+        }, 5000)  
+      } else if(data.message === '註冊發生錯誤') {
+        errMessage.innerHTML = `<p>${data.error}</p>`
+        errMessage.style.display = 'block'
+      }
+    })
     .catch(error => console.log('錯誤資訊：', error))
 }
 
-init()
-
-// 抓取使用者登入資料
-
-
-// addBtn.addEventListener('click', () => {
-//   loginData.email = document.querySelector('[type="email"').value.trim()
-//   loginData.password = document.querySelector('[type="password"').value.trim()
-//   console.log(loginData.email)
-//   console.log(loginData.password)
-// })
-
-init()
-
-// const loginEmail = document.getElementById('loginEmail')
-
-// console.log(loginEmail.value)
-
-// const listControl = document.getElementById('js-list-control')
-
-// listControl.innerHTML = dateList
+Rendering()
