@@ -31,14 +31,14 @@ function init() {
     // bootstrap 驗證
     formValidation()
     // 串接登入 API
-    userLogin(user)
+    userLogin(user, globalControl)
   })
 
   // 切換註冊畫面
   const changeSignUp = document.querySelector('form a')
   changeSignUp.addEventListener('click', () => {
     startLogin.innerHTML = signUp
-    registerInfo()
+    registerInfo(startLogin)
   })
 }
 
@@ -57,7 +57,9 @@ function formValidation() {
       })
 }
 
-function userLogin(user) {
+function userLogin(user, globalControl) {
+  const errMessage = document.querySelector('.errMessage')
+  errMessage.style.display = 'none';
   fetch(`${apiUrl}users/sign_in`, {
     method: 'POST',
     body: JSON.stringify({user}),
@@ -67,15 +69,17 @@ function userLogin(user) {
   })
     .then(Response => Response.json())
     .then(data => {
-      console.log(data)
       if(data.message === '登入失敗') {
-        console.log(data.message)
+        errMessage.style.display = 'block';
+      }
+      if(data.message === '登入成功') {
+        globalControl.innerHTML = initList 
       }
     })
     .catch(error => console.log('錯誤資訊：', error))
 }
 
-function registerInfo() {
+function registerInfo(startLogin) {
   const registerBtn = document.querySelector('[type="submit"]')
   registerBtn.addEventListener('click', () => {
     user.email = document.getElementById('loginEmail').value.trim()
@@ -86,6 +90,13 @@ function registerInfo() {
     formValidation()
     // 串接註冊 API
     userSignUp(user)
+  })
+
+  // 切換登入畫面
+  const changeLogin = document.querySelector('form a')
+  changeLogin.addEventListener('click', () => {
+    startLogin.innerHTML = logIn
+    init()
   })
 }
 

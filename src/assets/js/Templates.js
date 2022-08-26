@@ -35,6 +35,9 @@ const logIn = `
             請輸入密碼
           </div>
         </div>
+        <div class="errMessage">
+          <p>帳號或密碼錯誤，如尚未註冊，請先註冊。</p>
+        </div>
         <div class="text-center mb-6">
           <button type="submit" class="btn btn-lg btn-secondary py-3 px-12">登入</button>
         </div>
