@@ -20,17 +20,23 @@ const logIn = `
         <h2 class="fs-3 fw-bold d-none d-lg-block">最實用的線上待辦事項服務</h2>
         <h2 class="fs-3 fw-bold text-center d-lg-none">最實用的線上待辦事項服務</h2>
       </div>
-      <form action="#">
+      <form class="needs-validation" novalidate>
         <div class="mb-10">
           <label for="loginEmail" class="form-label fs-5 fw-bold">Email</label>
-          <input type="email" class="form-control form-control-lg py-3 px-4" id="loginEmail" placeholder="請輸入Email">
+          <input type="email" class="form-control form-control-lg py-3 px-4" id="loginEmail" placeholder="請輸入Email" required>
+          <div class="invalid-feedback">
+            請輸入正確的Email
+          </div>
         </div>
         <div class="mb-6">
           <label for="loginpassword" class="form-label fs-5 fw-bold">密碼</label>
-          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginpassword" placeholder="請輸入密碼">
+          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginpassword" placeholder="請輸入密碼" required>
+          <div class="invalid-feedback">
+            請輸入密碼
+          </div>
         </div>
         <div class="text-center mb-6">
-          <button type="button" class="btn btn-lg btn-secondary py-3 px-12">登入</button>
+          <button type="submit" class="btn btn-lg btn-secondary py-3 px-12">登入</button>
         </div>
         <div class="text-center">
           <a href="#" class="link-secondary text-decoration-none fw-bold fs-5">註冊帳號</a>
@@ -50,25 +56,37 @@ const signUp = `
         <h2 class="fs-3 fw-bold d-none d-lg-block">註冊帳號</h2>
         <h2 class="fs-3 fw-bold text-center d-lg-none">註冊帳號</h2>
       </div>
-      <form action="#">
+      <form class="needs-validation" novalidate>
         <div class="mb-6">
           <label for="loginEmail" class="form-label fs-5 fw-bold">Email</label>
-          <input type="email" class="form-control form-control-lg py-3 px-4" id="loginEmail" placeholder="請輸入Email">
+          <input type="email" class="form-control form-control-lg py-3 px-4" id="loginEmail" placeholder="請輸入Email" required>
+          <div class="invalid-feedback">
+            請輸入正確的Email
+          </div>
         </div>
         <div class="mb-4">
           <label for="nickName" class="form-label fs-5 fw-bold">您的暱稱</label>
-          <input type="email" class="form-control form-control-lg py-3 px-4" id="nickName" placeholder="請輸入您的暱稱">
+          <input type="text" class="form-control form-control-lg py-3 px-4" id="nickName" placeholder="請輸入您的暱稱" required>
+          <div class="invalid-feedback">
+            請輸入您的暱稱
+          </div>
         </div>
         <div class="mb-4">
           <label for="loginpassword" class="form-label fs-5 fw-bold">密碼</label>
-          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginpassword" placeholder="請輸入密碼">
+          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginpassword" placeholder="請輸入密碼" required>
+          <div class="invalid-feedback">
+            請輸入密碼
+          </div>
         </div>
         <div class="mb-6">
           <label for="loginPasswords" class="form-label fs-5 fw-bold">再次輸入密碼</label>
-          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginPasswords" placeholder="請再次輸入密碼">
+          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginPasswords" placeholder="請再次輸入密碼" required>
+          <div class="invalid-feedback">
+            請再次輸入密碼
+          </div>
         </div>
         <div class="text-center mb-6">
-          <button type="button" class="btn btn-lg btn-secondary py-3 px-12">註冊帳號</button>
+          <button type="submit" class="btn btn-lg btn-secondary py-3 px-12">註冊帳號</button>
         </div>
         <div class="text-center">
           <a href="#" class="link-secondary text-decoration-none fw-bold fs-5">登入</a>
@@ -115,7 +133,7 @@ const dateList = `
   <section class="p-4">
     <ul class="container fs-5">
       <li class="row align-items-center hover-clear">
-        <label for="AnimationCheckBox" class="col">
+        <label for="AnimationCheckBox" class="col DynamicBox">
           <input type="checkbox" name="AnimationCheckBox" id="AnimationCheckBox"><span class="ps-4">Lorem ipsum dolor sit amet.</span>
         </label>
         <div class="col-1 mb-4"><button type="button" class="bi bi-x-lg"></button></div>
