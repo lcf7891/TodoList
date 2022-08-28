@@ -69,8 +69,9 @@ function userLogin(user, globalControl) {
   })
     .then(Response => Response.json())
     .then(data => {
+      console.log(data)
       if(data.message === '登入成功') {
-        globalControl.innerHTML = initList 
+        globalControl.innerHTML = initList
       } else if(data.message === '登入失敗') {
         errMessage.style.display = 'block'
       }
@@ -98,6 +99,12 @@ function registerInfo(startLogin) {
         errMessage.style.display = 'block'
     }
   })
+
+  // 切換註冊畫面
+  const changeLogIn = document.querySelector('form a')
+  changeLogIn.addEventListener('click', () => {
+    Rendering()
+  })
 }
 
 function userSignUp(user, startLogin) {
@@ -112,7 +119,6 @@ function userSignUp(user, startLogin) {
   })
     .then(response => response.json())
     .then(data => {
-      console.log(data)
       if(data.message === '註冊成功') {
         errMessage.innerHTML = `
           <p>${data.message}</p>
@@ -125,7 +131,7 @@ function userSignUp(user, startLogin) {
           startLogin.innerHTML = logIn
         }, 5000)  
       } else if(data.message === '註冊發生錯誤') {
-        errMessage.innerHTML = `<p>${data.error}</p>`
+        errMessage.innerHTML = `<p>${data.error[1]}。${data.error[3]}</p>`
         errMessage.style.display = 'block'
       }
     })

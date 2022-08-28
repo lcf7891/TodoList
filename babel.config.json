@@ -1,3 +1,13 @@
 {
-  "presets": ["@babel/preset-env"]
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": "> 0.25%, not dead"
+    }]
+  ],
+  "plugins": [
+    // 不污染全局，在運行時載入
+    ["@babel/plugin-transform-runtime", {
+      "corejs": 3
+    }]
+  ]
 }
