@@ -42,6 +42,18 @@ function Rendering() {
   })
 }
 
+function checkPermissions() {
+  fetch(`${apiUrl}check`, {
+    headers: {
+      'content-type': 'application/json'
+    },
+    method: 'GET'
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+  console.log('g')
+}
+
 function formValidation() {
   const forms = document.querySelectorAll('.needs-validation')
   // Loop over them and prevent submission
@@ -69,9 +81,11 @@ function userLogin(user, globalControl) {
   })
     .then(Response => Response.json())
     .then(data => {
+      console.log('headers', data.headers)
       console.log(data)
       if(data.message === '登入成功') {
-        globalControl.innerHTML = initList
+        checkPermissions()
+        // globalControl.innerHTML = initList
       } else if(data.message === '登入失敗') {
         errMessage.style.display = 'block'
       }
