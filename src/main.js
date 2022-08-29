@@ -81,10 +81,11 @@ function userLogin(user, globalControl) {
   })
     .then(Response => Response.json())
     .then(data => {
-      console.log('headers', data.headers)
       console.log(data)
       if(data.message === '登入成功') {
-        checkPermissions()
+        globalControl.innerHTML =initList
+        userList(data.nickname)
+        // checkPermissions()
         // globalControl.innerHTML = initList
       } else if(data.message === '登入失敗') {
         errMessage.style.display = 'block'
@@ -150,6 +151,15 @@ function userSignUp(user, startLogin) {
       }
     })
     .catch(error => console.log('錯誤資訊：', error))
+}
+
+function userList(nickname) {
+  // 將暱稱改成使用者暱稱
+  const nickName = document.querySelector('span')
+  nickName.innerText = nickname
+  
+  const listControl = document.getElementById('js-list-control')
+  console.log(listControl)
 }
 
 Rendering()
