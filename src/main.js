@@ -6,9 +6,12 @@ import './assets/images/empty.png'
 import './assets/scss/all.scss'
 
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
+// import '../node_modules/axios/dist/axios'
 
 // 載入版型 JS 
 import { startPage, logIn, signUp, initList, noneList, dateList } from './assets/js/Templates'
+// import { axios } from '../node_modules/axios/dist/axios'
+const axios = require('axios').default;
 
 const apiUrl = 'https://todoo.5xcamp.us/'
 
@@ -157,9 +160,22 @@ function userList(nickname) {
   // 將暱稱改成使用者暱稱
   const nickName = document.querySelector('span')
   nickName.innerText = nickname
-  
+  // 宣告列表 DOM 元素的控制
   const listControl = document.getElementById('js-list-control')
   console.log(listControl)
 }
+
+axios.post(`${apiUrl}users/sign_in`, {
+  user: {
+    email: 'qwe789@456.asd',
+    password: 'qsc753'
+  }
+})
+  .then(response => {
+    console.log(response)
+    const token = response.headers.authorization
+    console.log(response.headers.authorization)
+  })
+  .catch(error => console.log('錯誤訊息：', error))
 
 Rendering()

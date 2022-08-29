@@ -97,6 +97,7 @@ module.exports = {
           `${path.resolve(__dirname, 'src')}/**/*`, // 配置需解析檔案
           path.resolve(__dirname, 'node_modules/jquery/dist/jquery.slim.js'),
           path.resolve(__dirname, 'node_modules/bootstrap/dist/js/bootstrap.bundle.js'),
+          path.resolve(__dirname, 'node_modules/axios/dist/axios'),
         ],
         {
           nodir: true, // 過濾資料夾結果
