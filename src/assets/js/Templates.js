@@ -61,8 +61,8 @@ const signUp = `
       </div>
       <form class="needs-validation" novalidate>
         <div class="mb-6">
-          <label for="loginEmail" class="form-label fs-5 fw-bold">Email</label>
-          <input type="email" class="form-control form-control-lg py-3 px-4" id="loginEmail" placeholder="請輸入Email" required>
+          <label for="signUpEmail" class="form-label fs-5 fw-bold">Email</label>
+          <input type="email" class="form-control form-control-lg py-3 px-4" id="signUpEmail" placeholder="請輸入Email" required>
           <div class="invalid-feedback">
             請輸入正確的Email
           </div>
@@ -75,15 +75,15 @@ const signUp = `
           </div>
         </div>
         <div class="mb-4">
-          <label for="loginPassword" class="form-label fs-5 fw-bold">密碼</label>
-          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginPassword" placeholder="請輸入密碼" required>
+          <label for="signUpPassword" class="form-label fs-5 fw-bold">密碼</label>
+          <input type="password" class="form-control form-control-lg py-3 px-4" id="signUpPassword" placeholder="請輸入密碼" required>
           <div class="invalid-feedback">
             請輸入密碼
           </div>
         </div>
         <div class="mb-6">
-          <label for="loginPasswords" class="form-label fs-5 fw-bold">再次輸入密碼</label>
-          <input type="password" class="form-control form-control-lg py-3 px-4" id="loginPasswords" placeholder="請再次輸入密碼" required>
+          <label for="signUpPasswords" class="form-label fs-5 fw-bold">再次輸入密碼</label>
+          <input type="password" class="form-control form-control-lg py-3 px-4" id="signUpPasswords" placeholder="請再次輸入密碼" required>
           <div class="invalid-feedback">
             請再次輸入密碼
           </div>

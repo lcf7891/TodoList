@@ -34,20 +34,15 @@ function Rendering() {
   // 建立登入按鈕監聽
   const addBtn = document.querySelector('[type="submit"]')
   addBtn.addEventListener('click', () => {
-    user.email = document.querySelector('[type="email"]').value.trim()
-    user.password = document.querySelector('[type="password"]').value.trim()
+    user.email = document.getElementById('loginEmail').value.trim()
+    user.password = document.getElementById('loginPassword').value.trim()
     // 登入輸入框驗證
     formValidation()
     // 登入 AJAX
-    userLogin()
+    userSignIn()
   })
-  // 建立註冊帳號按鈕監聽
-  changeUserInfo()
-  // const changeBtn = document.querySelector('form a')
-  // changeBtn.addEventListener('click', () => {
-  //   // 註冊 AJAX
-  //   userSignUp(startLogin)
-  // })
+  // 登入與註冊頁面切換
+  changeUserInfo(signUp, startLogin)
 }
 
 // bootstrap form 驗證
@@ -67,31 +62,81 @@ function formValidation() {
 }
 
 // 登入與註冊頁面切換
-function changeUserInfo(state) {
+function changeUserInfo(state, startLogin) {
   const changeBtn = document.querySelector('form a')
   changeBtn.addEventListener('click', () => {
-    if(state === 'in') {
-      // 登入 AJAX
-      userLongin()
+    startLogin.innerHTML = state
+    if(state === signUp) {
+      registerRendering(startLogin)
     } else {
-      // 註冊 AJAX
-      userSignUp()
+      Rendering()
     }
   })
 }
 
 // 登入 AJAX
-function userLogin() {
+function userSignIn() {
   axios.post(`${apiUrl}users/sign_in`, { user })
     .then(response => {
       console.log(response)
+      console.log(response.data)
     })
+    .catch(error => console.log('錯誤：', error))
+}
+
+// 註冊頁面控制
+function registerRendering(startLogin) {
+  const errText = document.querySelector('.errMessage')
+  errText.style.display = 'none'
+  const sigUpBtn = document.querySelector('[type="submit"]')
+  sigUpBtn.addEventListener('click', () => {
+    user.email = document.getElementById('signUpEmail').value.trim()
+    user.nickname = document.getElementById('nickName').value.trim()
+    let onePassword = document.getElementById('signUpPassword')
+    let twoPassword = document.getElementById('signUpPasswords')
+    // 註冊輸入框驗證
+    formValidation()
+    // 兩次密碼確認
+    if(onePassword.value.trim() === twoPassword.value.trim()) {
+      user.password = onePassword.value.trim()
+      userSignUp(errText, startLogin)
+    } else {
+      errText.innerHTML = '<p>輸入的兩次密碼不同，請重新輸入。</p>'
+      errText.style.display = 'block'
+      onePassword.value = ''
+      twoPassword.value = ''
+    }
+  })
+  // 登入與註冊頁面切換
+  changeUserInfo(logIn, startLogin)
 }
 
 // 註冊 AJAX
-function userSignUp(startLogin) {
-  startLogin.innerHTML = signUp
-  console.log('signUp')
+function userSignUp(errText, startLogin) {
+  axios.post(`${apiUrl}users`, { user })
+    .then(response => {
+      console.log(response.data)
+      if(response.data.message === '註冊成功') {
+        // 提示文字
+        errText.innerHTML = `
+          <p>${response.data.message}</p>
+          <p>將在 5 秒後跳轉至登入頁面</p>
+        `
+        errText.style.display = 'block'
+        // 切換登入畫面
+        setTimeout(() => {
+          startLogin.innerHTML = logIn
+        }, 5000)  
+      }
+    })
+    .catch(error => {
+      console.log('錯誤：', error)
+      errText.innerHTML = `
+        <p>${error.response.data.message}</p>
+        <p>${error.response.data.error}</p>
+      `
+      errText.style.display = 'block'
+    })
 }
 
 Rendering()
