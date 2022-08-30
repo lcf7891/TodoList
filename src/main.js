@@ -76,12 +76,24 @@ function changeUserInfo(state, startLogin) {
 
 // 登入 AJAX
 function userSignIn() {
+  const errText = document.querySelector('.errMessage')
+  console.log(errText)
+  // errText.style.display = 'none'
   axios.post(`${apiUrl}users/sign_in`, { user })
     .then(response => {
+      if(response.data.message === '登入成功') {
+        globalControl.innerHTML = initList
+      }
       console.log(response)
-      console.log(response.data)
     })
-    .catch(error => console.log('錯誤：', error))
+    .catch(error => {
+      console.log('錯誤：', error)
+      errText.innerHTML = `
+        <p>${error.response.data.message}</p>
+        <p>密碼錯誤，或尚未註冊。請確認是否有註冊</p>
+      `
+      errText.style.display = 'block'
+    })
 }
 
 // 註冊頁面控制
@@ -99,7 +111,7 @@ function registerRendering(startLogin) {
     // 兩次密碼確認
     if(onePassword.value.trim() === twoPassword.value.trim()) {
       user.password = onePassword.value.trim()
-      userSignUp(errText, startLogin)
+      userSignUp(errText)
     } else {
       errText.innerHTML = '<p>輸入的兩次密碼不同，請重新輸入。</p>'
       errText.style.display = 'block'
@@ -112,7 +124,7 @@ function registerRendering(startLogin) {
 }
 
 // 註冊 AJAX
-function userSignUp(errText, startLogin) {
+function userSignUp(errText) {
   axios.post(`${apiUrl}users`, { user })
     .then(response => {
       console.log(response.data)
@@ -125,7 +137,7 @@ function userSignUp(errText, startLogin) {
         errText.style.display = 'block'
         // 切換登入畫面
         setTimeout(() => {
-          startLogin.innerHTML = logIn
+          Rendering()
         }, 5000)  
       }
     })
