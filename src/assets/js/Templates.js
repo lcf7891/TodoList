@@ -113,9 +113,9 @@ const initList = `
       <div class="col-md-6">
         <div class="input-group mb-15">
           <input type="text" class="form-control border-end-0 fs-4 py-3 px-4" placeholder="新增待辦事項">
-          <button type="button" class="input-group-text px-2 py-0 bg-white bi bi-plus-square-fill fs-1"></button>
+          <button type="submit" class="input-group-text px-2 py-0 bg-white bi bi-plus-square-fill fs-1"></button>
         </div>
-        <div class="listCard" id="js-list-control"></div>
+        <div id="js-list-control"></div>
       </div>
     </article>
   </section>

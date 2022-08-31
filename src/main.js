@@ -20,6 +20,7 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 
 // 使用者資料變數
 let user = {}
+let token = ''
 
 // 宣告初始 DOM 元素控制
 const globalControl = document.getElementById('js-global-control')
@@ -32,8 +33,8 @@ function Rendering() {
   const startLogin = document.getElementById('js-user-control')
   startLogin.innerHTML = logIn
   // 建立登入按鈕監聽
-  const addBtn = document.querySelector('[type="submit"]')
-  addBtn.addEventListener('click', () => {
+  const logInBtn = document.querySelector('[type="submit"]')
+  logInBtn.addEventListener('click', () => {
     user.email = document.getElementById('loginEmail').value.trim()
     user.password = document.getElementById('loginPassword').value.trim()
     // 登入輸入框驗證
@@ -76,7 +77,7 @@ function changeUserInfo(state, startLogin) {
 
 // 登入 AJAX
 function userSignIn() {
-  // 建立原型鏈，增加時間天數
+  // 建立原型鏈，當下時間欲增加時間天數
   Date.prototype.addDays = function(days) {
     this.setDate(this.getDate() + days);
     return this;
@@ -87,14 +88,16 @@ function userSignIn() {
     .then(response => {
       if(response.data.message === '登入成功') {
         // 取得回傳的 Token 值
-        const token = response.headers.authorization
+        token = response.headers.authorization
         // 建立到期時間
         const expired = new Date().addDays(7)
         // 將 Token 放入瀏覽器 Cookie
         document.cookie = `testToken=${token}; expires=${new Date(expired)}`
-        // document.cookie.replace(/(?:(?:^|.*;\s*)Token\s*=\s*([^;]*).*$)|^.*$/, '$1')
-        // 切換至待辦事項列表
-        userList()
+        // document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1')
+        // 取得使用者暱稱
+        const userName = response.data.nickname
+        // 帶入使用者暱稱並切換至待辦事項列表
+        userList(userName)
       }
     })
     .catch(error => {
@@ -163,11 +166,46 @@ function userSignUp(errText) {
 }
 
 // 登入後事項列表
-function userList() {
+function userList(userName) {
   globalControl.innerHTML = initList
   const listControl = document.getElementById('js-list-control')
+  let arrList = []
+  axios.get(`${apiUrl}todos`, {
+    headers: {
+      Authorization: token
+    }
+  })
+    .then(response => {
+      arrList = [...response.data.todos]
+    })
+    .catch(error => console.log('錯誤：', error))
 
-  console.log(listControl)
+  if(arrList.length === 0) {
+    listControl.innerHTML = noneList
+  } else {
+    listControl.classList = 'listCard'
+  }
+  const inputBox = document.querySelector('[type="text"]')
+  // const addBtn = document.querySelector('[type="submit"]')
+  inputBox.addEventListener('keyup', (e) => {
+    const todo = {}
+    if(e.code === 'Enter') {
+      todo.content = inputBox.value.trim()
+      addTodo(todo)
+    }
+  })
+}
+
+// 新增事項
+function addTodo(todo) {
+  console.log(token)
+  axios.post(`${apiUrl}todos`, {
+    headers: {
+      Authorization: token
+    }
+  })
+    .then(response => console.log(response))
+    .catch(error => console.log('錯誤：', error.response))
 }
 
 Rendering()
