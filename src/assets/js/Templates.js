@@ -103,7 +103,7 @@ const signUp = `
 const initList = `
   <section class="container-fluid">
     <nav class="navbar py-5 px-md-8 mb-md-8 mb-3">
-      <a href="index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg" class="w-75"></a>
+      <a href="./index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg" class="w-75"></a>
       <div class="ms-auto">
         <span class="d-md-inline-block d-none fs-5 fw-bold">暱稱</span>
         <a href="#" class="link-secondary text-decoration-none d-inline-block fs-5 ms-md-6">登出</a>

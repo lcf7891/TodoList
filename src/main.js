@@ -76,15 +76,26 @@ function changeUserInfo(state, startLogin) {
 
 // 登入 AJAX
 function userSignIn() {
+  // 建立原型鏈，增加時間天數
+  Date.prototype.addDays = function(days) {
+    this.setDate(this.getDate() + days);
+    return this;
+  }
   const errText = document.querySelector('.errMessage')
-  console.log(errText)
-  // errText.style.display = 'none'
+  errText.style.display = 'none'
   axios.post(`${apiUrl}users/sign_in`, { user })
     .then(response => {
       if(response.data.message === '登入成功') {
-        globalControl.innerHTML = initList
+        // 取得回傳的 Token 值
+        const token = response.headers.authorization
+        // 建立到期時間
+        const expired = new Date().addDays(7)
+        // 將 Token 放入瀏覽器 Cookie
+        document.cookie = `testToken=${token}; expires=${new Date(expired)}`
+        // document.cookie.replace(/(?:(?:^|.*;\s*)Token\s*=\s*([^;]*).*$)|^.*$/, '$1')
+        // 切換至待辦事項列表
+        userList()
       }
-      console.log(response)
     })
     .catch(error => {
       console.log('錯誤：', error)
@@ -149,6 +160,14 @@ function userSignUp(errText) {
       `
       errText.style.display = 'block'
     })
+}
+
+// 登入後事項列表
+function userList() {
+  globalControl.innerHTML = initList
+  const listControl = document.getElementById('js-list-control')
+
+  console.log(listControl)
 }
 
 Rendering()
