@@ -90,9 +90,9 @@ function userSignIn() {
         // 取得回傳的 Token 值
         token = response.headers.authorization
         // 建立到期時間
-        const expired = new Date().addDays(7)
+        // const expired = new Date().addDays(7)
         // 將 Token 放入瀏覽器 Cookie
-        document.cookie = `testToken=${token}; expires=${new Date(expired)}`
+        // document.cookie = `testToken=${token}; expires=${new Date(expired)}`
         // document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, '$1')
         // 取得使用者暱稱
         const userName = response.data.nickname
@@ -178,7 +178,7 @@ function userList(userName) {
     .then(response => {
       arrList = [...response.data.todos]
     })
-    .catch(error => console.log('錯誤：', error))
+    .catch(error => console.log('錯誤：', error.response))
 
   if(arrList.length === 0) {
     listControl.innerHTML = noneList
