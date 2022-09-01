@@ -209,7 +209,7 @@ let token = ''
 // Rendering()
 
 // bootstrap form 驗證
-function formValidation() {
+function FormValidation() {
   const forms = document.querySelectorAll('.needs-validation')
   // Loop over them and prevent submission
   Array.prototype.slice.call(forms)
@@ -224,45 +224,10 @@ function formValidation() {
   })
 }
 
-// 註冊
-function signUp(email, password, nickname) {
-  axios.post(`${apiUrl}users`, {
-    user: {
-      email,
-      nickname,
-      password
-    }
-  })
-    .then(response => console.log(response))
-    .catch(error => console.log('錯誤資訊：', error.response))
-}
-
-// 登入
-function signIn(email, password) {
-  axios.post(`${apiUrl}users/sign_in`, {
-    user: {
-      email,
-      password
-    }
-  })
-    .then(response => {
-      console.log(response)
-      axios.defaults.headers.common['Authorization'] = response.headers.authorization
-      token = response.headers.authorization
-    })
-    .catch(error => console.log('錯誤資訊：', error.response))
-}
-
-// 登出
-function signOut() {
-  axios.delete(`${apiUrl}users/sign_out`)
-    .then(response => console.log('登出', response))
-    .catch(error => console.log('錯誤資訊：', error.response))
-}
-
-// 取得列表
-function getToDos() {
-  axios.get(`${apiUrl}todos`)
-    .then(response => console.log(response))
-    .catch(error => console.log('錯誤資訊：', error.response))
-}
+const viewGlobal = document.getElementById('js-global-control')
+const viewInit = document.getElementById('js-user-control')
+const viewSignIn = document.getElementById('js-signIn-control')
+const viewSignUp = document.getElementById('js-signUp-control')
+const viewTodos = document.getElementById('js-todos-control')
+const viewNolist = document.getElementById('js-noList-control')
+const viewList = document.getElementById('js-list-control')

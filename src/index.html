@@ -9,7 +9,8 @@
 <body class="bg-primary" id="js-global-control">
   <!-- <a href="https://todoo.5xcamp.us/api-docs/index.html" target="_blank" rel="noreferrer noopenner">API 文件</a>
   <a href="https://www.figma.com/file/pFivfS3rDX3N3u3dN9aIlx/TodoList?node-id=6%3A194" target="_blank" rel="noreferrer noopenner">UI 設計稿</a> -->
-
+  
+  <!-- 起始頁面 -->
   <section class="container vh-100" id="js-user-control">
     <div class="row align-items-center h-100">
       <div class="col-6 text-center d-lg-block d-none">
@@ -19,7 +20,7 @@
       <div class="col-lg-6">
         <div class="row justify-content-center">
           <!-- 登入 -->
-          <div class="col-md-8">
+          <div class="col-md-8" id="js-signIn-control">
             <div class="mb-5 d-lg-none text-center">
               <a href="index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg"></a>
             </div>
@@ -104,9 +105,9 @@
       </div>
     </div>
   </section>
-  
+
   <!-- 登入後 -->
-  <section class="container-fluid d-none" is="js-todos-control">
+  <section class="container-fluid d-none" id="js-todos-control">
     <nav class="navbar py-5 px-md-8 mb-md-8 mb-3">
       <a href="./index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg" class="w-75"></a>
       <div class="ms-auto">
@@ -120,33 +121,31 @@
           <input type="text" class="form-control border-end-0 fs-4 py-3 px-4" placeholder="新增待辦事項">
           <button type="submit" class="input-group-text px-2 py-0 bg-white bi bi-plus-square-fill fs-1"></button>
         </div>
-        <div id="js-list-control">
-          <!-- 無待辦事項 -->
-          <div class="text-center">
-            <p class="fs-3">目前尚無代辦事項</p>
-            <img src="./assets/images/empty.png" class="img-fluid" alt="empty">
-          </div>
-          <!-- 有待辦事項 -->
-          <ul class="d-flex text-center fs-5 d-none">
-            <li class="border-2 border-bottom w-100 py-4">全部</li>
-            <li class="border-2 border-bottom w-100 py-4">待完成</li>
-            <li class="border-2 border-bottom w-100 py-4">已完成</li>
-          </ul>
-          <section class="p-4">
-            <ul class="container fs-5">
-              <li class="row align-items-center hover-clear">
-                <label for="AnimationCheckBox" class="col DynamicBox">
-                  <input type="checkbox" name="AnimationCheckBox" id="AnimationCheckBox"><span class="ps-4">Lorem ipsum dolor sit amet.</span>
-                </label>
-                <div class="col-1 mb-4"><button type="button" class="bi bi-x-lg"></button></div>
-              </li>
-            </ul>
-            <div class="d-flex justify-content-between align-items-center">
-              <p class="fs-5 mb-0"><span class="px-2">0</span>個待完成項目</p>
-              <button type="button" class="btn fs-5">清除已完成項目</button>
-            </div>
-          </section>  
+        <!-- 無待辦事項 -->
+        <div class="text-center" id="js-noList-control">
+          <p class="fs-3">目前尚無代辦事項</p>
+          <img src="./assets/images/empty.png" class="img-fluid" alt="empty">
         </div>
+        <!-- 有待辦事項 -->
+        <ul class="d-flex text-center fs-5 d-none" id="js-list-control">
+          <li class="border-2 border-bottom w-100 py-4">全部</li>
+          <li class="border-2 border-bottom w-100 py-4">待完成</li>
+          <li class="border-2 border-bottom w-100 py-4">已完成</li>
+        </ul>
+        <section class="p-4">
+          <ul class="container fs-5">
+            <li class="row align-items-center hover-clear">
+              <label for="AnimationCheckBox" class="col DynamicBox">
+                <input type="checkbox" name="AnimationCheckBox" id="AnimationCheckBox"><span class="ps-4">Lorem ipsum dolor sit amet.</span>
+              </label>
+              <div class="col-1 mb-4"><button type="button" class="bi bi-x-lg"></button></div>
+            </li>
+          </ul>
+          <div class="d-flex justify-content-between align-items-center">
+            <p class="fs-5 mb-0"><span class="px-2">0</span>個待完成項目</p>
+            <button type="button" class="btn fs-5">清除已完成項目</button>
+          </div>
+        </section>  
       </div>
     </article>
   </section>
