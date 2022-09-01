@@ -6,14 +6,12 @@ import './assets/images/empty.png'
 import './assets/scss/all.scss'
 
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
-// import '../node_modules/axios/dist/axios'
 
 // 載入版型 JS 
-import { startPage, logIn, signUp, initList, noneList, dateList } from './assets/js/Templates'
+// import { startPage, logIn, signUp, initList, noneList, dateList } from './assets/js/Templates'
 
 // 載入 AJAX 工具
-// import { axios } from '../node_modules/axios/dist/axios'
-const axios = require('axios').default;
+import axios from 'axios'
 
 // API 網址
 const apiUrl = 'https://todoo.5xcamp.us/'
@@ -209,3 +207,62 @@ let token = ''
 // }
 
 // Rendering()
+
+// bootstrap form 驗證
+function formValidation() {
+  const forms = document.querySelectorAll('.needs-validation')
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+  .forEach(form => {
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      form.classList.add('was-validated')
+    }, false)
+  })
+}
+
+// 註冊
+function signUp(email, password, nickname) {
+  axios.post(`${apiUrl}users`, {
+    user: {
+      email,
+      nickname,
+      password
+    }
+  })
+    .then(response => console.log(response))
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+// 登入
+function signIn(email, password) {
+  axios.post(`${apiUrl}users/sign_in`, {
+    user: {
+      email,
+      password
+    }
+  })
+    .then(response => {
+      console.log(response)
+      axios.defaults.headers.common['Authorization'] = response.headers.authorization
+      token = response.headers.authorization
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+// 登出
+function signOut() {
+  axios.delete(`${apiUrl}users/sign_out`)
+    .then(response => console.log('登出', response))
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+// 取得列表
+function getToDos() {
+  axios.get(`${apiUrl}todos`)
+    .then(response => console.log(response))
+    .catch(error => console.log('錯誤資訊：', error.response))
+}

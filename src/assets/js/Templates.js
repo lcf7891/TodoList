@@ -122,8 +122,8 @@ const initList = `
 `
 
 const noneList = `
-  <p class="text-center">目前尚無代辦事項</p>
   <div class="text-center">
+    <p class="fs-3">目前尚無代辦事項</p>
     <img src="./assets/images/empty.png" class="img-fluid" alt="empty">
   </div>
 `
