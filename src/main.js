@@ -4,11 +4,11 @@ import './assets/images/logo_lg.png'
 import './assets/images/empty.png'
 // 載入 CSS
 import './assets/scss/all.scss'
-
+// 載入 bootstrap JS
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
 
 // 載入版型 JS 
-// import { startPage, logIn, signUp, initList, noneList, dateList } from './assets/js/Templates'
+import { startPage, logIn, signUp, initList, noneList, dateList } from './assets/js/Templates'
 
 // 載入 AJAX 工具
 import axios from 'axios'
@@ -19,6 +19,142 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 // 使用者資料變數
 let user = {}
 let token = ''
+
+// 控制 DOM 元素
+const viewGlobal = document.getElementById('js-global-control')
+
+const viewSignIn = document.getElementById('js-signIn-control')
+const viewSignUp = document.getElementById('js-signUp-control')
+const viewTodos = document.getElementById('js-todos-control')
+const viewNolist = document.getElementById('js-noList-control')
+const viewList = document.getElementById('js-list-control')
+
+// 初始渲染
+function Rendering() {
+  // 初始畫面渲染
+  viewGlobal.innerHTML = startPage;
+  // 登入版型渲染
+  const viewSignin = document.getElementById('js-user-control')
+  viewSignin.innerHTML = logIn
+  // 監聽登入按鈕
+  const signInBtn = document.querySelector('[type="submit"]')
+  signInBtn.addEventListener('click', () => {
+    // 讀取輸入資料
+    user.email = document.getElementById('loginEmail').value.trim()
+    user.password = document.getElementById('loginPassword').value.trim()
+    // 輸入資料驗證
+    FormValidation()
+    // 登入 AJAX
+    signIn()
+  })
+  changeUserInfo(signUp, viewSignin)
+}
+
+// 註冊頁面控制
+function registerRendering(startLogin) {
+  const errText = document.querySelector('.errMessage')
+  errText.style.display = 'none'
+  const sigUpBtn = document.querySelector('[type="submit"]')
+  sigUpBtn.addEventListener('click', () => {
+    user.email = document.getElementById('signUpEmail').value.trim()
+    user.nickname = document.getElementById('nickName').value.trim()
+    let onePassword = document.getElementById('signUpPassword')
+    let twoPassword = document.getElementById('signUpPasswords')
+    // 註冊輸入框驗證
+    formValidation()
+    // 兩次密碼確認
+    if(onePassword.value.trim() === twoPassword.value.trim()) {
+      user.password = onePassword.value.trim()
+      // 註冊 API
+      userSignUp(errText)
+    } else {
+      errText.innerHTML = '<p>輸入的兩次密碼不同，請重新輸入。</p>'
+      errText.style.display = 'block'
+      onePassword.value = ''
+      twoPassword.value = ''
+    }
+  })
+  // 登入與註冊頁面切換
+  changeUserInfo(logIn, startLogin)
+}
+
+// 登入 API
+function signIn() {
+  const errText = document.querySelector('.errMessage')
+  errText.style.display = 'none'
+  axios.post(`${apiUrl}users/sign_in`, { user })
+    .then(response => {
+      console.log(response)
+      axios.defaults.headers.common['Authorization'] = response.headers.authorization
+    })
+    .catch(error => {
+      console.log('錯誤資訊：', error.response)
+      errText.innerHTML = `
+        <p>${error.response.data.message}</p>
+        <p>Email 或密碼錯誤，請確認是否有註冊。</p>
+      `
+      errText.style.display = 'block'
+    })
+}
+
+// 註冊 API
+function userSignUp(errText) {
+  axios.post(`${apiUrl}users`, { user })
+    .then(response => {
+      console.log(response.data)
+      if(response.data.message === '註冊成功') {
+        // 提示文字
+        errText.innerHTML = `
+          <p>${response.data.message}</p>
+          <p>將在 5 秒後跳轉至登入頁面</p>
+        `
+        errText.style.display = 'block'
+        // 切換登入畫面
+        setTimeout(() => {
+          Rendering()
+        }, 5000)  
+      }
+    })
+    .catch(error => {
+      console.log('錯誤：', error)
+      errText.innerHTML = `
+        <p>${error.response.data.message}</p>
+        <p>${error.response.data.error}</p>
+      `
+      errText.style.display = 'block'
+    })
+}
+
+// bootstrap form 驗證
+function FormValidation() {
+  const forms = document.querySelectorAll('.needs-validation')
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+  .forEach(form => {
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+      form.classList.add('was-validated')
+    }, false)
+  })
+}
+
+// 登入與註冊頁面切換
+function changeUserInfo(state, startLogin) {
+  const changeBtn = document.querySelector('form a')
+  changeBtn.addEventListener('click', () => {
+    startLogin.innerHTML = state
+    if(state === signUp) {
+      registerRendering(startLogin)
+    } else {
+      Rendering()
+    }
+  })
+}
+
+Rendering()
 
 // // 宣告初始 DOM 元素控制
 // const globalControl = document.getElementById('js-global-control')
@@ -108,60 +244,9 @@ let token = ''
 //     })
 // }
 
-// // 註冊頁面控制
-// function registerRendering(startLogin) {
-//   const errText = document.querySelector('.errMessage')
-//   errText.style.display = 'none'
-//   const sigUpBtn = document.querySelector('[type="submit"]')
-//   sigUpBtn.addEventListener('click', () => {
-//     user.email = document.getElementById('signUpEmail').value.trim()
-//     user.nickname = document.getElementById('nickName').value.trim()
-//     let onePassword = document.getElementById('signUpPassword')
-//     let twoPassword = document.getElementById('signUpPasswords')
-//     // 註冊輸入框驗證
-//     formValidation()
-//     // 兩次密碼確認
-//     if(onePassword.value.trim() === twoPassword.value.trim()) {
-//       user.password = onePassword.value.trim()
-//       userSignUp(errText)
-//     } else {
-//       errText.innerHTML = '<p>輸入的兩次密碼不同，請重新輸入。</p>'
-//       errText.style.display = 'block'
-//       onePassword.value = ''
-//       twoPassword.value = ''
-//     }
-//   })
-//   // 登入與註冊頁面切換
-//   changeUserInfo(logIn, startLogin)
-// }
+// 
 
-// // 註冊 AJAX
-// function userSignUp(errText) {
-//   axios.post(`${apiUrl}users`, { user })
-//     .then(response => {
-//       console.log(response.data)
-//       if(response.data.message === '註冊成功') {
-//         // 提示文字
-//         errText.innerHTML = `
-//           <p>${response.data.message}</p>
-//           <p>將在 5 秒後跳轉至登入頁面</p>
-//         `
-//         errText.style.display = 'block'
-//         // 切換登入畫面
-//         setTimeout(() => {
-//           Rendering()
-//         }, 5000)  
-//       }
-//     })
-//     .catch(error => {
-//       console.log('錯誤：', error)
-//       errText.innerHTML = `
-//         <p>${error.response.data.message}</p>
-//         <p>${error.response.data.error}</p>
-//       `
-//       errText.style.display = 'block'
-//     })
-// }
+// 
 
 // // 登入後事項列表
 // function userList(userName) {
@@ -207,27 +292,3 @@ let token = ''
 // }
 
 // Rendering()
-
-// bootstrap form 驗證
-function FormValidation() {
-  const forms = document.querySelectorAll('.needs-validation')
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-  .forEach(form => {
-    form.addEventListener('submit', function (event) {
-      if (!form.checkValidity()) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
-      form.classList.add('was-validated')
-    }, false)
-  })
-}
-
-const viewGlobal = document.getElementById('js-global-control')
-const viewInit = document.getElementById('js-user-control')
-const viewSignIn = document.getElementById('js-signIn-control')
-const viewSignUp = document.getElementById('js-signUp-control')
-const viewTodos = document.getElementById('js-todos-control')
-const viewNolist = document.getElementById('js-noList-control')
-const viewList = document.getElementById('js-list-control')
