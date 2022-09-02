@@ -37,7 +37,7 @@ const logIn = `
         </div>
         <div class="errMessage"></div>
         <div class="text-center mb-6">
-          <button type="submit" class="btn btn-lg btn-secondary py-3 px-12">登入</button>
+          <button type="button" class="btn btn-lg btn-secondary py-3 px-12">登入</button>
         </div>
         <div class="text-center">
           <a href="#" class="link-secondary text-decoration-none fw-bold fs-5">註冊帳號</a>
@@ -88,7 +88,7 @@ const register = `
         </div>
         <div class="errMessage"></div>
         <div class="text-center mb-6">
-          <button type="submit" class="btn btn-lg btn-secondary py-3 px-12">註冊帳號</button>
+          <button type="button" class="btn btn-lg btn-secondary py-3 px-12">註冊帳號</button>
         </div>
         <div class="text-center">
           <a href="#" class="link-secondary text-decoration-none fw-bold fs-5">登入</a>
@@ -104,14 +104,14 @@ const initList = `
       <a href="./index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg" class="w-75"></a>
       <div class="ms-auto">
         <span class="d-md-inline-block d-none fs-5 fw-bold" id="userName">暱稱</span>
-        <a href="#" class="link-secondary text-decoration-none d-inline-block fs-5 ms-md-6">登出</a>
+        <a href="#" class="link-secondary text-decoration-none d-inline-block fs-5 ms-md-6" id="outBtn">登出</a>
       </div>
     </nav>
     <article class="row justify-content-center">
       <div class="col-md-6">
         <div class="input-group mb-15">
           <input type="text" class="form-control border-end-0 fs-4 py-3 px-4" placeholder="新增待辦事項">
-          <button type="submit" class="input-group-text px-2 py-0 bg-white bi bi-plus-square-fill fs-1"></button>
+          <button type="button" class="input-group-text px-2 py-0 bg-white bi bi-plus-square-fill fs-1"></button>
         </div>
         <div id="js-list-control"></div>
       </div>
@@ -126,7 +126,7 @@ const noneList = `
   </div>
 `
 
-const dateList = `
+const dataList = `
   <ul class="d-flex text-center fs-5">
     <li class="border-2 border-bottom w-100 py-4">全部</li>
     <li class="border-2 border-bottom w-100 py-4">待完成</li>
@@ -148,4 +148,4 @@ const dateList = `
   </section>  
 `
 
-export { startPage, logIn, register, initList, noneList, dateList }
+export { startPage, logIn, register, initList, noneList, dataList }

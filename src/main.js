@@ -8,7 +8,7 @@ import './assets/scss/all.scss'
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
 
 // 載入版型 JS 
-import { startPage, logIn, register, initList, noneList, dateList } from './assets/js/Templates'
+import { startPage, logIn, register, initList, noneList, dataList } from './assets/js/Templates'
 
 // 載入 bootstrap 驗證
 import { formValidation } from './assets/js/Validation'
@@ -28,12 +28,12 @@ const globalControl = document.getElementById('js-global-control')
 // 初始頁面控制
 function Rendering() {
   // 渲染初始頁面
-  // globalControl.innerHTML = startPage
+  globalControl.innerHTML = startPage
   // 載入登入格式
   const registerLogIn = document.getElementById('js-user-control')
   registerLogIn.innerHTML = logIn
   // 監聽登入按鈕
-  const signInBtn = document.querySelector('[type="submit"]')
+  const signInBtn = document.querySelector('[type="button"]')
   monitorAddBtn('in', signInBtn)
   // 監聽切換註冊按鈕
   changeRegister(register, registerLogIn)
@@ -55,7 +55,7 @@ function changeRegister(state, registerLogIn) {
 function registerPage(registerLogIn) {
   registerLogIn.innerHTML = register
   // 監聽註冊按鈕
-  const signUpBtn = document.querySelector('[type="submit"]')
+  const signUpBtn = document.querySelector('[type="button"]')
   monitorAddBtn('up', signUpBtn)
   // 監聽切換登入按鈕
   changeRegister(logIn, registerLogIn)
@@ -151,8 +151,6 @@ function signIn() {
   // 串接登入 API
   axios.post(`${apiUrl}users/sign_in`, { user })
     .then(response => {
-      // token = response.headers.authorization
-      // axios.defaults.headers.common['Authorization'] = token
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       todosList(response.data.nickname)
     })
@@ -167,13 +165,19 @@ function signIn() {
     })
 }
 
-// 登入後事項列表
+// 待辦事項列表
 function todosList(nickname) {
   // 載入初始頁面
   globalControl.innerHTML = initList
   // 顯示使用者暱稱
   const userName = document.getElementById('userName')
   userName.innerHTML = nickname
+  // 登出按鈕監聽
+  const outBtn = document.getElementById('outBtn')
+  outBtn.addEventListener('click', () => {
+    // 登出 AJAX
+    signOut()
+  })
   // 宣告控制事項列表區塊
   const userList = document.getElementById('js-list-control')
   // 載入事項列表
@@ -181,6 +185,20 @@ function todosList(nickname) {
     .then(response => {
       if(response.data.todos.length === 0) {
         userList.innerHTML = noneList
+      }
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+// 登出 AJAX
+function signOut() {
+  axios.delete(`${apiUrl}users/sign_out`)
+    .then(response => {
+      if(response.data.message === '已登出') {
+        // 清空 Authorization 資料
+        axios.defaults.headers.common['Authorization'] = ''
+        // 載入初始頁面
+        Rendering()
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
