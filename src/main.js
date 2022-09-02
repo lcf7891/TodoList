@@ -23,7 +23,7 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 let user = {}
 let token = ''
 
-// 宣告初始 DOM 元素控制
+// 宣告全域 DOM 元素控制
 const globalControl = document.getElementById('js-global-control')
 
 // 初始頁面控制
@@ -76,30 +76,6 @@ function changeRegister(state, registerLogIn) {
   })
 }
 
-// 登入 AJAX
-function signIn() {
-  // 錯誤提示區塊控制
-  const errText = document.querySelector('.errMessage')
-  errText.style.display = 'none'
-  // 串接登入 API
-  axios.post(`${apiUrl}users/sign_in`, { user })
-    .then(response => {
-      console.log(response)
-      console.log(response.headers.authorization)
-      token = response.headers.authorization
-      globalControl.innerHTML = initList
-    })
-    .catch(error => {
-      console.log('錯誤資訊：', error.response)
-      // 顯示錯誤訊息與提示
-      errText.innerHTML = `
-        <p>${error.response.data.message}</p>
-        <p>帳號或密碼錯誤，如尚未註冊，請先註冊。</p>
-      `
-      errText.style.display = 'block'
-    })
-}
-
 // 註冊頁面控制
 function registerPage(registerLogIn) {
   registerLogIn.innerHTML = register
@@ -117,7 +93,7 @@ function RegistrInfoCheck() {
   errText.style.display = 'none'
   let onePW = document.getElementById('signUpPassword')
   let twoPW = document.getElementById('signUpPasswords')
-  
+  // 判斷輸入資料是否正確
   if(onePW.value.trim() !== twoPW.value.trim()) {
     errText.innerHTML = '<p>輸入的兩次密碼不同，請重新輸入。</p>'
     errText.style.display = 'block'
@@ -166,6 +142,40 @@ function signUp(errText) {
         errText.style.display = 'block'
       }
     })
+}
+
+// 登入 AJAX
+function signIn() {
+  // 錯誤提示區塊控制
+  const errText = document.querySelector('.errMessage')
+  errText.style.display = 'none'
+  // 串接登入 API
+  axios.post(`${apiUrl}users/sign_in`, { user })
+    .then(response => {
+      // token = response.headers.authorization
+      // axios.defaults.headers.common['Authorization'] = token
+      axios.defaults.headers.common['Authorization'] = response.headers.authorization
+      todosList()
+    })
+    .catch(error => {
+      console.log('錯誤資訊：', error.response)
+      // 顯示錯誤訊息與提示
+      errText.innerHTML = `
+        <p>${error.response.data.message}</p>
+        <p>帳號或密碼錯誤，如尚未註冊，請先註冊。</p>
+      `
+      errText.style.display = 'block'
+    })
+    setTimeout(() => {
+      console.log(token)
+    }, 5000)
+}
+
+function todosList() {
+  globalControl.innerHTML = initList
+  axios.get(`${apiUrl}todos`)
+    .then(response => console.log(response))
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 Rendering()
