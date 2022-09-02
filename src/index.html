@@ -10,5 +10,48 @@
   <!-- <a href="https://todoo.5xcamp.us/api-docs/index.html" target="_blank" rel="noreferrer noopenner">API 文件</a>
   <a href="https://www.figma.com/file/pFivfS3rDX3N3u3dN9aIlx/TodoList?node-id=6%3A194" target="_blank" rel="noreferrer noopenner">UI 設計稿</a> -->
   
-  
+  <section class="container vh-100">
+    <div class="row align-items-center h-100">
+      <div class="col-6 text-center d-lg-block d-none">
+        <img src="./assets/images/logo_lg.png" alt="logo_lg" class="mb-5">
+        <img src="./assets/images/image.png" alt="image">
+      </div>
+      <div class="col-lg-6" id="js-user-control">
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="mb-5 d-lg-none text-center">
+              <a href="index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg"></a>
+            </div>
+            <div class="mb-6">
+              <h2 class="fs-3 fw-bold d-none d-lg-block">最實用的線上待辦事項服務</h2>
+              <h2 class="fs-3 fw-bold text-center d-lg-none">最實用的線上待辦事項服務</h2>
+            </div>
+            <form class="needs-validation" novalidate>
+              <div class="mb-10">
+                <label for="loginEmail" class="form-label fs-5 fw-bold">Email</label>
+                <input type="email" class="form-control form-control-lg py-3 px-4" id="loginEmail" placeholder="請輸入Email" required>
+                <div class="invalid-feedback">
+                  請輸入正確的Email
+                </div>
+              </div>
+              <div class="mb-6">
+                <label for="loginPassword" class="form-label fs-5 fw-bold">密碼</label>
+                <input type="password" class="form-control form-control-lg py-3 px-4" id="loginPassword" placeholder="請輸入密碼" required>
+                <div class="invalid-feedback">
+                  請輸入密碼
+                </div>
+              </div>
+              <div class="errMessage"></div>
+              <div class="text-center mb-6">
+                <button type="submit" class="btn btn-lg btn-secondary py-3 px-12">登入</button>
+              </div>
+              <div class="text-center">
+                <a href="#" class="link-secondary text-decoration-none fw-bold fs-5">註冊帳號</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </body>

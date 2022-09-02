@@ -29,26 +29,50 @@ const globalControl = document.getElementById('js-global-control')
 // 初始頁面控制
 function Rendering() {
   // 渲染初始頁面
-  globalControl.innerHTML = startPage
+  // globalControl.innerHTML = startPage
   // 載入登入格式
   const registerLogIn = document.getElementById('js-user-control')
   registerLogIn.innerHTML = logIn
   // 監聽登入按鈕
   const signInBtn = document.querySelector('[type="submit"]')
-  signInBtn.addEventListener('click', (e) => {
-    // 取得使用者輸入資料
-    user.email = document.getElementById('loginEmail').value.trim()
-    user.password = document.getElementById('loginPassword').value.trim()
-    // 檢查輸入資料
-    formValidation()
-    // 登入 AJAX
-    signIn()
-  })
+  monitorAddBtn('in', signInBtn)
   // 監聽切換註冊按鈕
+  changeRegister(register, registerLogIn)
+}
+
+// 監聽登入與註冊按鈕
+function monitorAddBtn(state, btn) {
+  if(state === 'in') {
+    btn.addEventListener('click', () => {
+      // 取得使用者輸入資料
+      user.email = document.getElementById('loginEmail').value.trim()
+      user.password = document.getElementById('loginPassword').value.trim()
+      // 檢查輸入資料
+      formValidation()
+      // 登入 AJAX
+      signIn()
+    })
+  } else {
+    btn.addEventListener('click', () => {
+      user.email = document.getElementById('signUpEmail').value.trim()
+      user.nickname = document.getElementById('nickName').value.trim()
+      // 檢查輸入資料
+      formValidation()
+      // 註冊前輸入資料查驗
+      RegistrInfoCheck()
+    })
+  }
+}
+
+// 登入與註冊切換
+function changeRegister(state, registerLogIn) {
   const registerBtn = document.querySelector('form a')
   registerBtn.addEventListener('click', () => {
-    console.log('register')
-    registerPage(registerLogIn)
+    if(state === register) {
+      registerPage(registerLogIn)
+    } else {
+      Rendering()
+    }
   })
 }
 
@@ -79,35 +103,69 @@ function signIn() {
 // 註冊頁面控制
 function registerPage(registerLogIn) {
   registerLogIn.innerHTML = register
+  // 監聽註冊按鈕
+  const signUpBtn = document.querySelector('[type="submit"]')
+  monitorAddBtn('up', signUpBtn)
+  // 監聽切換登入按鈕
+  changeRegister(logIn, registerLogIn)
+}
+
+// 註冊前輸入資料查驗
+function RegistrInfoCheck() {
   // 錯誤提示區塊控制
   const errText = document.querySelector('.errMessage')
   errText.style.display = 'none'
-  // 監聽註冊按鈕
-  const signUpBtn = document.querySelector('[type="submit"]')
-  signUpBtn.addEventListener('click', () => {
-    user.email = document.getElementById('signUpEmail').value.trim()
-    user.nickname = document.getElementById('nickName').value.trim()
-    let onePW = document.getElementById('signUpPassword').value
-    let twoPW = document.getElementById('signUpPasswords').value
-    if(onePW === twoPW) {
-      user.password = onePW.trim()
-    } else {
-      console.log('else')
-      const PW = document.querySelectorAll('[type="password"]')
-      PW.forEach(item => {console.log(item.classList.add('is-invalid'))})
-      console.log(PW)
-      errText.innerHTML = '<p>輸入的兩次密碼不同，請重新輸入。</p>'
+  let onePW = document.getElementById('signUpPassword')
+  let twoPW = document.getElementById('signUpPasswords')
+  
+  if(onePW.value.trim() !== twoPW.value.trim()) {
+    errText.innerHTML = '<p>輸入的兩次密碼不同，請重新輸入。</p>'
+    errText.style.display = 'block'
+    onePW.value = ''
+    twoPW.value = ''
+  } else if(onePW.value.trim() === '' || twoPW.value.trim() === '') {
+    errText.innerHTML = '<p>請輸入密碼，兩次密碼不能為空</p>'
+    errText.style.display = 'block'
+    onePW.value = ''
+    twoPW.value = ''
+  } else {
+    user.password = onePW.value.trim()
+    // 判斷暱稱
+    if(user.nickname === '') {
+      errText.innerHTML = '<p>請輸入您的暱稱。</p>'
       errText.style.display = 'block'
-      onePW = ''
-      twoPW = ''
+    } else {
+      // 註冊 AJAX
+      signUp(errText)
     }
-    // 檢查輸入資料
-    formValidation()
-  })
+  }
 }
 
-function signUp() {
-  console.log('signUp')
+// 註冊 AJAX
+function signUp(errText) {
+  // 串接註冊 API
+  axios.post(`${apiUrl}users`, { user })
+    .then(response => {
+      if(response.data.message === '註冊成功') {
+        // 提示文字
+        errText.innerHTML = `
+          <p>${response.data.message}</p>
+          <p>將在 5 秒後跳轉至登入頁面</p>
+        `
+        errText.style.display = 'block'
+        // 切換登入畫面
+        setTimeout(() => {
+          Rendering()
+        }, 5000)  
+      }
+    })
+    .catch(error => {
+      console.log('錯誤資訊：', error.response)
+      if(error.response.data.error.length <= 1) {
+        errText.innerHTML = `<p>${error.response.data.error}</p>`
+        errText.style.display = 'block'
+      }
+    })
 }
 
 Rendering()
