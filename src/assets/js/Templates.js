@@ -99,7 +99,7 @@ const register = `
 `
 
 const initList = `
-  <section class="container-fluid">
+  <section class="container-fluid vh-100">
     <nav class="navbar py-5 px-md-8 mb-md-8 mb-3">
       <a href="./index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg" class="w-75"></a>
       <div class="ms-auto">
@@ -110,7 +110,7 @@ const initList = `
     <article class="row justify-content-center">
       <div class="col-md-6">
         <div class="input-group mb-15">
-          <input type="text" class="form-control border-end-0 fs-4 py-3 px-4" placeholder="新增待辦事項">
+          <input type="text" class="form-control border-end-0 fs-4 py-3 px-4" placeholder="新增待辦事項" id="matters">
           <button type="button" class="input-group-text px-2 py-0 bg-white bi bi-plus-square-fill fs-1"></button>
         </div>
         <div id="js-list-control"></div>

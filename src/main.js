@@ -29,6 +29,7 @@ const globalControl = document.getElementById('js-global-control')
 function Rendering() {
   // 渲染初始頁面
   globalControl.innerHTML = startPage
+  globalControl.classList = 'bg-primary'
   // 載入登入格式
   const registerLogIn = document.getElementById('js-user-control')
   registerLogIn.innerHTML = logIn
@@ -165,10 +166,13 @@ function signIn() {
     })
 }
 
+let todo = {}
+
 // 待辦事項列表
 function todosList(nickname) {
   // 載入初始頁面
   globalControl.innerHTML = initList
+  globalControl.classList = 'bg-twoColor'
   // 顯示使用者暱稱
   const userName = document.getElementById('userName')
   userName.innerHTML = nickname
@@ -183,11 +187,34 @@ function todosList(nickname) {
   // 載入事項列表
   axios.get(`${apiUrl}todos`)
     .then(response => {
-      if(response.data.todos.length === 0) {
+      const todoData = [...response.data.todos]
+      if(response.data.todos.length >= 1) {
+        const layout = ''
+        todoData.forEach(item => {
+          console.log(item)
+          layout += item.content
+        })
+        console.log(layout)
+        userList.innerHTML = layout
+      } else {
         userList.innerHTML = noneList
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
+
+  const addTodoBtn = document.querySelector('[type="button"]')
+  const inputTodo = document.getElementById('matters')
+  inputTodo.addEventListener('keyup', (e) => {
+    if(e.key === 'Enter') {
+      console.log(inputTodo.value)
+      todo.content = inputTodo.value
+      addTodo()
+    }
+  })
+  addTodoBtn.addEventListener('click', (e) => {
+    todo.content = inputTodo.value
+      addTodo()
+  })
 }
 
 // 登出 AJAX
@@ -196,7 +223,7 @@ function signOut() {
     .then(response => {
       if(response.data.message === '已登出') {
         // 清空 Authorization 資料
-        axios.defaults.headers.common['Authorization'] = ''
+        // axios.defaults.headers.common['Authorization'] = ''
         // 載入初始頁面
         Rendering()
       }
@@ -204,4 +231,10 @@ function signOut() {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
+// 新增事項
+function addTodo() {
+  axios.post(`${apiUrl}todos`, { todo })
+    .then(response => console.log(response))
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
 Rendering()
