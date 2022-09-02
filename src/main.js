@@ -189,13 +189,21 @@ function todosList(nickname) {
     .then(response => {
       const todoData = [...response.data.todos]
       if(response.data.todos.length >= 1) {
-        const layout = ''
+        userList.innerHTML = dataList
+        userList.classList = 'listCard'
+        let layout = ''
         todoData.forEach(item => {
-          console.log(item)
-          layout += item.content
+          layout += `
+            <li class="row align-items-center hover-clear">
+              <label for="${item.content}" class="col DynamicBox">
+                <input type="checkbox" name="${item.content}" id="${item.id}"><span class="ps-4">${item.content}</span>
+              </label>
+              <div class="col-1 mb-4"><button type="button" class="bi bi-x-lg"></button></div>
+            </li>
+          `
         })
-        console.log(layout)
-        userList.innerHTML = layout
+        const todosList = document.getElementById('js-todos-control')
+        todosList.innerHTML = layout
       } else {
         userList.innerHTML = noneList
       }

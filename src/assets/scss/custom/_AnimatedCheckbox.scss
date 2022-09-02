@@ -1,12 +1,13 @@
 .DynamicBox {
   font-size: 20px;
-  border-bottom: 1px solid #E5E5E5;
+  border-bottom: 2px solid #E5E5E5;
   padding-bottom: 16px;
   & input {
     &[type="checkbox"] {
       cursor: pointer;
       position: relative;
-      top: 2px;
+      top: 5px;
+      left: -5px;
       width: 30px;
       height: 30px;
       -webkit-appearance: none;
@@ -23,14 +24,17 @@
         border-radius: 5px;
         box-sizing: border-box;
         transition: 0.5s;
+        &:hover {
+          border-color: $primary;
+        }
       }
     }
     &:checked[type="checkbox"]::before {
-      border: 5px solid $info;
+      border: 5px solid $primary;
       border-left: none;
       border-top: none;
       width: 16px;
-      border-color: $primary;
+      // border-color: $primary;
       transform: rotate(40deg) translate(5px, -10px);
     }
   }
@@ -39,16 +43,22 @@
 .hover-clear {
   button {
     display: none;
+    position: relative;
+    top: 6px;
     font-size: 24px;
-    border: 1px solid transparent;
-    background-color: #fff;
+    border: 2px solid transparent;
+    background-color: $info;
   }
-  &:hover button {
-    display: inline-block;
-    &:hover {
-      color: $danger;
-      border: 2px solid $info;
-      border-radius: 5px;
+  &:hover {
+    background-color: $info;
+    button {
+      display: inline-block;
+      vertical-align: middle;
+      &:hover {
+        color: $danger;
+        border: 2px solid $info;
+        border-radius: 5px;
+      }
     }
-  }
+  } 
 }

@@ -133,13 +133,7 @@ const dataList = `
     <li class="border-2 border-bottom w-100 py-4">已完成</li>
   </ul>
   <section class="p-4">
-    <ul class="container fs-5">
-      <li class="row align-items-center hover-clear">
-        <label for="AnimationCheckBox" class="col DynamicBox">
-          <input type="checkbox" name="AnimationCheckBox" id="AnimationCheckBox"><span class="ps-4">Lorem ipsum dolor sit amet.</span>
-        </label>
-        <div class="col-1 mb-4"><button type="button" class="bi bi-x-lg"></button></div>
-      </li>
+    <ul class="container fs-5" id="js-todos-control">
     </ul>
     <div class="d-flex justify-content-between align-items-center">
       <p class="fs-5 mb-0"><span class="px-2">0</span>個待完成項目</p>
@@ -147,5 +141,12 @@ const dataList = `
     </div>
   </section>  
 `
+
+{/* <li class="row align-items-center hover-clear">
+  <label for="AnimationCheckBox" class="col DynamicBox">
+    <input type="checkbox" name="AnimationCheckBox" id="AnimationCheckBox"><span class="ps-4">Lorem ipsum dolor sit amet.</span>
+  </label>
+  <div class="col-1 mb-4"><button type="button" class="bi bi-x-lg"></button></div>
+</li> */}
 
 export { startPage, logIn, register, initList, noneList, dataList }
