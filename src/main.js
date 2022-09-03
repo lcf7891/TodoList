@@ -94,7 +94,7 @@ function regControl() {
 
 /* 登入 AJAX */
 function signIn() {
-  axios.post(`${apiUrl}users/sign_in`, { user:user })
+  axios.post(`${apiUrl}users/sign_in`, { user })
     .then(response => {
       console.log(response)
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
