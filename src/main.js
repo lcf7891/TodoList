@@ -1,33 +1,33 @@
 // API Doc https://todoo.5xcamp.us/api-docs/index.html
 // UI 設計稿 https://www.figma.com/file/pFivfS3rDX3N3u3dN9aIlx/TodoList?node-id=6%3A194
-// 載入圖片
+/* 載入圖片 */
 import './assets/images/image.png'
 import './assets/images/logo_lg.png'
 import './assets/images/empty.png'
-// 載入 CSS
+/* 載入 CSS */
 import './assets/scss/all.scss'
-// 載入 bootstrap JS
+/* 載入 bootstrap JS */
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
-// 載入 bootstrap 驗證
+/* 載入 bootstrap 驗證 */
 import { formValidation } from './assets/js/Validation'
 
-// 載入佈局
+/* 載入佈局 */
 import { login } from './assets/js/LoginLayout'
 import { register } from './assets/js/RegisterLayout'
 import axios from 'axios'
 
-// API 網址
+/* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
 
-// 使用者資料
+/* 使用者資料 */
 const user = {}
 
-// 宣告 DOM 控制變數
+/* 宣告 DOM 控制變數 */
 const globalControl = document.getElementById('js-global-control')
 
 const loginPage = document.getElementById('js-LoginRegister-control')
 
-// 初始頁面
+/* 初始頁面 */
 function Rendering() {
   loginPage.innerHTML = login
   // 登入頁面控制
@@ -36,11 +36,11 @@ function Rendering() {
   transformPage()
 }
 
-// 登入與註冊切換
+/* 登入與註冊切換 */
 function transformPage() {
   const regBtn = document.querySelector('[href="#"]')
   regBtn.addEventListener('click', (e) => {
-    if(e.target.innerText === '註冊帳號') {
+    if(e.target.innerText === '註冊') {
       loginPage.innerHTML = register
       // 註冊頁面控制
       regControl()
@@ -50,7 +50,7 @@ function transformPage() {
   })
 }
 
-// 登入頁面控制
+/* 登入頁面控制 */
 function loginControl() {
   const inBtn = document.querySelector('[type="submit"]')
   inBtn.addEventListener('click', () => {
@@ -63,7 +63,7 @@ function loginControl() {
   })
 }
 
-// 註冊頁面控制
+/* 註冊頁面控制 */
 function regControl() {
   const regBtn = document.querySelector('[type="submit"]')
   const errMsg = document.querySelector('.errMessage')
@@ -72,30 +72,45 @@ function regControl() {
   regBtn.addEventListener('click', () => {
     user.email = document.getElementById('signUpEmail').value.trim()
     user.nickname = document.getElementById('nickname').value.trim()
-    let pwOne = document.getElementById('signUpPassword').value
-    let pwTwo = document.getElementById('signUpPasswords').value
-    if(pwOne === '') {
-      errMsg.innerHTML = '<p>請輸入密碼</p>'
-      errBlock
-    } else if(pwTwo === '') {
-      errMsg.innerHTML = '<p>請再次輸入密碼</p>'
-      errBlock
-    } else if(pwOne !== pwTwo) {
-      errMsg.innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
-      errBlock     
+    let pwOne = document.getElementById('signUpPassword')
+    let pwTwo = document.getElementById('signUpPasswords')
+    if(user.nickname !== '') {
+      if(pwOne.value !== pwTwo.value) {
+        pwOne.value = ''
+        pwTwo.value = ''
+        errMsg.innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
+        errBlock     
+      }
+      user.password = pwOne.value.trim()
     }
     // 輸入資料驗證
     formValidation()
+    // 註冊 AJAX
+    signUp(errMsg, errBlock)
   })
   // 切換登入
   transformPage()
 }
 
-// 登入 AJAX
+/* 登入 AJAX */
 function signIn() {
-  axios.post(`${apiUrl}`, { user })
+  axios.post(`${apiUrl}users/sign_in`, { user })
     .then(response => console.log(response))
     .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+/* 註冊 AJAX */
+function signUp(errMsg, errBlock) {
+  axios.post(`${apiUrl}users`, { user })
+    .then(response => console.log(response))
+    .catch(error => {
+      console.log('錯誤資訊：', error.response)
+      console.log(error.response.data.error)
+      if(error.response.data.error.length = 1) {
+        errMsg.innerHTML = `<p>${error.response.data.error}</p>`
+        errBlock
+      }
+    })
 }
 
 Rendering()

@@ -24,7 +24,7 @@ const login = `
       <button class="btn btn-lg btn-secondary py-3 px-12" type="submit">登入</button>
     </div>
     <div class="text-center">
-      <a class="link-secondary text-decoration-none" href="#">註冊帳號</a>
+      <a class="link-secondary text-decoration-none" href="#">註冊</a>
     </div>
   </form>
 `
