@@ -94,9 +94,12 @@ function regControl() {
 
 /* 登入 AJAX */
 function signIn() {
-  axios.post(`${apiUrl}users/sign_in`, { user })
-    .then(response => console.log(response))
-    .catch(error => console.log('錯誤資訊：', error.response))
+  axios.post(`${apiUrl}users/sign_in`, { user:user })
+    .then(response => {
+      console.log(response)
+      axios.defaults.headers.common['Authorization'] = response.headers.authorization
+    })
+    .catch(error => console.log('錯誤資訊：', error.response, user))
 }
 
 /* 註冊 AJAX */
@@ -105,7 +108,6 @@ function signUp(errMsg, errBlock) {
     .then(response => console.log(response))
     .catch(error => {
       console.log('錯誤資訊：', error.response)
-      console.log(error.response.data.error)
       if(error.response.data.error.length = 1) {
         errMsg.innerHTML = `<p>${error.response.data.error}</p>`
         errBlock
