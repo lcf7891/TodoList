@@ -1,5 +1,5 @@
 // bootstrap form 驗證
-export function formValidation() {
+function formValidation() {
   const forms = document.querySelectorAll('.needs-validation')
   // Loop over them and prevent submission
   Array.prototype.slice.call(forms)
@@ -13,3 +13,5 @@ export function formValidation() {
       }, false)
     })
 }
+
+export { formValidation }

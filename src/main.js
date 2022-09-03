@@ -6,11 +6,99 @@ import './assets/images/logo_lg.png'
 import './assets/images/empty.png'
 // 載入 CSS
 import './assets/scss/all.scss'
-
-
+// 載入 bootstrap JS
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
+// 載入 bootstrap 驗證
+import { formValidation } from './assets/js/Validation'
 
+// 載入佈局
+import { login } from './assets/js/LoginLayout'
+import { register } from './assets/js/RegisterLayout'
+import axios from 'axios'
 
+// API 網址
+const apiUrl = 'https://todoo.5xcamp.us/'
+
+// 使用者資料
+const user = {}
+
+// 宣告 DOM 控制變數
+const globalControl = document.getElementById('js-global-control')
+
+const loginPage = document.getElementById('js-LoginRegister-control')
+
+// 初始頁面
+function Rendering() {
+  loginPage.innerHTML = login
+  // 登入頁面控制
+  loginControl()
+  // 切換註冊
+  transformPage()
+}
+
+// 登入與註冊切換
+function transformPage() {
+  const regBtn = document.querySelector('[href="#"]')
+  regBtn.addEventListener('click', (e) => {
+    if(e.target.innerText === '註冊帳號') {
+      loginPage.innerHTML = register
+      // 註冊頁面控制
+      regControl()
+    } else {
+      Rendering()
+    }
+  })
+}
+
+// 登入頁面控制
+function loginControl() {
+  const inBtn = document.querySelector('[type="submit"]')
+  inBtn.addEventListener('click', () => {
+    user.email = document.getElementById('signInEmail').value.trim()
+    user.password = document.getElementById('signInPassword').value.trim()
+    // 輸入資料驗證
+    formValidation()
+    // 登入 AJAX
+    signIn()
+  })
+}
+
+// 註冊頁面控制
+function regControl() {
+  const regBtn = document.querySelector('[type="submit"]')
+  const errMsg = document.querySelector('.errMessage')
+  errMsg.style.display = 'none'
+  const errBlock = errMsg.style.display = 'block'
+  regBtn.addEventListener('click', () => {
+    user.email = document.getElementById('signUpEmail').value.trim()
+    user.nickname = document.getElementById('nickname').value.trim()
+    let pwOne = document.getElementById('signUpPassword').value
+    let pwTwo = document.getElementById('signUpPasswords').value
+    if(pwOne === '') {
+      errMsg.innerHTML = '<p>請輸入密碼</p>'
+      errBlock
+    } else if(pwTwo === '') {
+      errMsg.innerHTML = '<p>請再次輸入密碼</p>'
+      errBlock
+    } else if(pwOne !== pwTwo) {
+      errMsg.innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
+      errBlock     
+    }
+    // 輸入資料驗證
+    formValidation()
+  })
+  // 切換登入
+  transformPage()
+}
+
+// 登入 AJAX
+function signIn() {
+  axios.post(`${apiUrl}`, { user })
+    .then(response => console.log(response))
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+Rendering()
 
 // // 載入版型 JS 
 // import { startPage, logIn, register, initList, noneList, dataList } from './assets/js/Templates'
