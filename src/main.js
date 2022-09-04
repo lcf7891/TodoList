@@ -99,8 +99,10 @@ function regControl() {
 function signIn() {
   axios.post(`${apiUrl}users/sign_in`, { user })
     .then(response => {
-      console.log(response)
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
+      if(response.status === 200) {
+        console.log('good')
+      }
     })
     .catch(error => console.log('錯誤資訊：', error.response, user))
 }
@@ -130,7 +132,7 @@ function signUp(errMsg, errBlock) {
     })
 }
 
-Rendering()
+// Rendering()
 
 // // 載入版型 JS 
 // import { startPage, logIn, register, initList, noneList, dataList } from './assets/js/Templates'
