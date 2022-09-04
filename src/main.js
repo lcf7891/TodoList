@@ -1,5 +1,6 @@
 // API Doc https://todoo.5xcamp.us/api-docs/index.html
 // UI 設計稿 https://www.figma.com/file/pFivfS3rDX3N3u3dN9aIlx/TodoList?node-id=6%3A194
+
 /* 載入圖片 */
 import './assets/images/image.png'
 import './assets/images/logo_lg.png'
@@ -11,10 +12,12 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
 /* 載入 bootstrap 驗證 */
 import { formValidation } from './assets/js/Validation'
 
-/* 載入佈局 */
+/* 載入套件 */
+import axios from 'axios'
+
+/* 載入版型 */
 import { login } from './assets/js/LoginLayout'
 import { register } from './assets/js/RegisterLayout'
-import axios from 'axios'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
@@ -105,10 +108,22 @@ function signIn() {
 /* 註冊 AJAX */
 function signUp(errMsg, errBlock) {
   axios.post(`${apiUrl}users`, { user })
-    .then(response => console.log(response))
+    .then(response => {
+      console.log(response)
+      if(response.data.message === '註冊成功') {
+        errMsg.innerHTML = `
+          <p>${response.data.message}</p>
+          <p>將在 5 秒後跳轉至登入頁面</p>
+        `
+        errBlock
+        setTimeout(() => {
+          Rendering()
+        }, 5000)
+      }
+    })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
-      if(error.response.data.error.length = 1) {
+      if(error.response.data.error.length <= 1) {
         errMsg.innerHTML = `<p>${error.response.data.error}</p>`
         errBlock
       }
