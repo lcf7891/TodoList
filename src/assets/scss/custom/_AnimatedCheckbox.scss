@@ -1,41 +1,46 @@
+.li-hover {
+  margin-bottom: 16px;
+  &:hover {
+    background-color: $gray-300;
+    border-radius: 5px;
+  }
+}
+
 .DynamicBox {
-  font-size: 20px;
+  width: 100%;
   border-bottom: 2px solid #E5E5E5;
   padding-bottom: 16px;
   & input {
     &[type="checkbox"] {
       cursor: pointer;
       position: relative;
-      top: 5px;
-      left: -5px;
-      width: 30px;
-      height: 30px;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
       -webkit-appearance: none;
       outline: none;
       transition: 0.5s;
       &::before {
         content: '';
         position: absolute;
-        top: 5px;
-        left: -5px;
+        top: 4px;
+        left: 0;
         width: 100%;
         height: 100%;
         border: 2px solid $info;
         border-radius: 5px;
         box-sizing: border-box;
         transition: 0.5s;
-        &:hover {
-          border-color: $primary;
-        }
       }
     }
     &:checked[type="checkbox"]::before {
-      border: 5px solid $primary;
+      border: 2px solid $primary;
       border-left: none;
       border-top: none;
-      width: 16px;
-      // border-color: $primary;
-      transform: rotate(40deg) translate(5px, -10px);
+      border-radius: 3px;
+      width: 12px;
+      transform: rotate(40deg) translate(5px, -6px);
     }
   }
 }

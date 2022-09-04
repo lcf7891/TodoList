@@ -12,10 +12,13 @@ const dataList = `
       </li>
     </ul>
     <ul class="px-md-6 px-4 mb-5" id="js-toDos-control"></ul>
-    <ul class="d-flex justify-content-between px-md-6 px-4 mb-md-6 mb-4">
-      <li><span>0</span>個待完成項目</li>
+    <ul class="d-flex justify-content-between px-md-6 px-4 pb-md-6 pb-4">
       <li>
-        <button class="btn">清除已完成項目</button></li>
+        <span>0</span>個待完成項目
+      </li>
+      <li>
+        <button class="btn">清除已完成項目</button>
+      </li>
     </ul>
   </div>
 `
