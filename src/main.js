@@ -16,8 +16,12 @@ import { formValidation } from './assets/js/Validation'
 import axios from 'axios'
 
 /* 載入版型 */
+import { startPage } from './assets/js/IndexLayout'
 import { login } from './assets/js/LoginLayout'
 import { register } from './assets/js/RegisterLayout'
+import { initList } from './assets/js/InitListLayout'
+import { dataList } from './assets/js/ListCardLayout'
+import { noneList } from './assets/js/NoListLayout'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
@@ -27,7 +31,7 @@ const user = {}
 
 /* 宣告 DOM 控制變數 */
 const globalControl = document.getElementById('js-global-control')
-
+globalControl.innerHTML = startPage
 const loginPage = document.getElementById('js-LoginRegister-control')
 
 /* 初始頁面 */
@@ -101,7 +105,8 @@ function signIn() {
     .then(response => {
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       if(response.status === 200) {
-        console.log('good')
+        globalControl.innerHTML = initList
+        userTodos()
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response, user))
@@ -111,7 +116,6 @@ function signIn() {
 function signUp(errMsg, errBlock) {
   axios.post(`${apiUrl}users`, { user })
     .then(response => {
-      console.log(response)
       if(response.data.message === '註冊成功') {
         errMsg.innerHTML = `
           <p>${response.data.message}</p>
@@ -132,7 +136,62 @@ function signUp(errMsg, errBlock) {
     })
 }
 
-// Rendering()
+/* 待辦事項頁面控制 */
+function userTodos() {
+  const startList = document.getElementById('js-list-control')
+  getTodos(startList)
+  const addInput = document.getElementById('newTodo')
+  const addBtn = document.getElementById('addTodoBtn')
+  addBtn.addEventListener('click', () => {
+    addTodo(addInput)
+  })
+}
+
+/* 取得待辦事項列表 */
+function getTodos(startList) {
+  axios.get(`${apiUrl}todos`)
+    .then(response => {
+      if(response.data.todos.length === 0) {
+        startList.innerHTML = noneList
+      } else {
+        startList.innerHTML = dataList
+        renderList(response.data.todos)
+      }
+    })
+    .catch(error => console.log('錯誤資訊：?', error.response))
+}
+
+/* 渲染待辦事項列表 */
+function renderList(data) {
+  const listCard = document.getElementById('js-toDos-control')
+  let todosList = ''
+  data.forEach(item => {
+    todosList += `
+      <li class="li-style" id="${item.id}">
+        <label for="${item.content}" class="col DynamicBox">
+          <input type="checkbox" name="${item.content}" id="${item.id}"><span class="ms-5">${item.content}</span>
+        </label>
+        <button class="btn btn-todoitem" type="button" aria-label="editBtn"><i class="bi bi-pencil-fill"></i></button>
+        <button class="btn btn-todoitem" type="button" aria-label="removeBtn"><i class="bi bi-x-lg"></i></button>
+      </li>
+    `
+  })
+  listCard.innerHTML = todosList
+}
+
+/* 新增待辦事項 */
+function addTodo(todo) {
+  console.log(todo.value)
+  axios.post(`${apiUrl}todos`, {
+    todo: {
+      content: todo.value.trim()
+    }
+  })
+    .then(response => console.log(response))
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+Rendering()
 
 // // 載入版型 JS 
 // import { startPage, logIn, register, initList, noneList, dataList } from './assets/js/Templates'
