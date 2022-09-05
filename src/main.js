@@ -28,6 +28,8 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 
 /* 使用者資料 */
 const user = {}
+const todo = {}
+let todoData = []
 
 /* 宣告 DOM 控制變數 */
 const globalControl = document.getElementById('js-global-control')
@@ -106,7 +108,7 @@ function signIn() {
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       if(response.status === 200) {
         globalControl.innerHTML = initList
-        userTodos()
+        userView()
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response, user))
@@ -136,36 +138,74 @@ function signUp(errMsg, errBlock) {
     })
 }
 
-/* 待辦事項頁面控制 */
-function userTodos() {
-  const startList = document.getElementById('js-list-control')
-  getTodos(startList)
+/* 待辦事項初始頁面 */
+function userView() {
+  // 監聽新增事項按鈕
   const addInput = document.getElementById('newTodo')
   const addBtn = document.getElementById('addTodoBtn')
+  // 點擊 + 按紐時觸發
   addBtn.addEventListener('click', () => {
-    addTodo(addInput)
+    examine(addInput)
   })
+  // 按鍵 Enter 時觸發
+  addInput.addEventListener('keyup', (e) => {
+    if(e.key === 'Enter') {
+      examine(addInput, e)
+    }
+  })
+  // 取得待辦事項列表
+  const startList = document.getElementById('js-list-control')
+  getTodos(startList)
+}
+
+function examine(addInput, e) {
+  // 防止泡泡事件，重複加入事項
+  if(e) {
+    e.preventDefault();
+  }
+  // e.preventDefault();
+  const errMsg = document.querySelector('.errMessage')
+  errMsg.style.display = 'none'
+  const errBlock = errMsg.style.display = 'block'
+  const inTxt = addInput.value.trim()
+  let origin = todoData.find(item => inTxt === item.content)
+  if ( inTxt === '' ) {
+    errMsg.innerHTML = '<p>請輸入待辦事項</p>'
+    errBlock
+  } else if ( inTxt !== '' && origin !== undefined ) {
+    errMsg.innerHTML = `<p>${inTxt}，重複的待辦事項</p>`
+    errBlock
+  } else {
+    todo.content = inTxt
+    addTodo()
+  }
+  addInput.value = ''
 }
 
 /* 取得待辦事項列表 */
 function getTodos(startList) {
   axios.get(`${apiUrl}todos`)
-    .then(response => {
+    .then(response => {      
       if(response.data.todos.length === 0) {
+        // 沒有代辦事項時顯示無資料畫面
         startList.innerHTML = noneList
       } else {
+        // 儲存回傳資料
+        todoData = response.data.todos
+        // 有代辦事項時渲染列表卡
         startList.innerHTML = dataList
-        renderList(response.data.todos)
+        renderList(todoData)
       }
     })
     .catch(error => console.log('錯誤資訊：?', error.response))
 }
 
 /* 渲染待辦事項列表 */
-function renderList(data) {
+function renderList() {
   const listCard = document.getElementById('js-toDos-control')
   let todosList = ''
-  data.forEach(item => {
+  // 組裝事項列表
+  todoData.forEach(item => {
     todosList += `
       <li class="li-style" id="${item.id}">
         <label for="${item.content}" class="col DynamicBox">
@@ -176,18 +216,19 @@ function renderList(data) {
       </li>
     `
   })
+  // 渲染完成的事項列表
   listCard.innerHTML = todosList
 }
 
 /* 新增待辦事項 */
-function addTodo(todo) {
-  console.log(todo.value)
-  axios.post(`${apiUrl}todos`, {
-    todo: {
-      content: todo.value.trim()
-    }
-  })
-    .then(response => console.log(response))
+function addTodo() {
+  // 新增事項 AJAX
+  axios.post(`${apiUrl}todos`, { todo })
+    .then(response => {
+      console.log(response)
+      // 重新渲染畫面
+      userView()
+    })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
