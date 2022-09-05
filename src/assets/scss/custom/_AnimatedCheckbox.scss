@@ -1,13 +1,23 @@
-.li-hover {
+.li-style {
+  display: flex;
+  align-items: center;
   margin-bottom: 16px;
   &:hover {
     background-color: $gray-300;
     border-radius: 5px;
+    button {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
+  .btn-todoitem {
+    opacity: 0;
+    cursor: default;
   }
 }
 
 .DynamicBox {
-  width: 100%;
+  display: block;
   border-bottom: 2px solid #E5E5E5;
   padding-bottom: 16px;
   & input {
@@ -45,25 +55,27 @@
   }
 }
 
-.hover-clear {
-  button {
-    display: none;
-    position: relative;
-    top: 6px;
-    font-size: 24px;
-    border: 2px solid transparent;
-    background-color: $info;
-  }
-  &:hover {
-    background-color: $info;
-    button {
-      display: inline-block;
-      vertical-align: middle;
-      &:hover {
-        color: $danger;
-        border: 2px solid $info;
-        border-radius: 5px;
-      }
-    }
-  } 
-}
+// .btn-todoitem {
+  // opacity: 0;
+  // cursor: none;
+  // button {
+  //   display: none;
+  //   position: relative;
+  //   top: 6px;
+  //   font-size: 24px;
+  //   border: 2px solid transparent;
+  //   background-color: $info;
+  // }
+  // &:hover {
+  //   background-color: $info;
+  //   button {
+  //     display: inline-block;
+  //     vertical-align: middle;
+  //     &:hover {
+  //       color: $danger;
+  //       border: 2px solid $info;
+  //       border-radius: 5px;
+  //     }
+  //   }
+  // } 
+// }
