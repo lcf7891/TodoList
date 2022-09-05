@@ -36,3 +36,24 @@
     }
   }
 }
+
+.btn-clearAll {
+  display: inline-block;
+  cursor: pointer;
+  padding: 6px 12px;
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 6px;
+  color: $info;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  &:hover {
+    color: $secondary !important;
+    border-color: $secondary;
+  }
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.65;
+  }
+}
