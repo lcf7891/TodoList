@@ -23,4 +23,15 @@ const dataList = `
   </div>
 `
 
+// 事項列表版型
+{/*
+  <li class="li-style">
+    <label for="AnimationCheckBox" class="col DynamicBox">
+      <input type="checkbox" name="AnimationCheckBox" id="AnimationCheckBox"><span class="ms-5">測試項目</span>
+    </label>
+    <button class="btn btn-todoitem" type="button" aria-label="editBtn"><i class="bi bi-pencil-fill"></i></button>
+    <button class="btn btn-todoitem" type="button" aria-label="removeBtn"><i class="bi bi-x-lg"></i></button>
+  </li>
+*/}
+
 export { dataList }
