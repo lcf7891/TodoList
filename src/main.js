@@ -15,14 +15,6 @@ import { formValidation } from './assets/js/Validation'
 /* 載入套件 */
 import axios from 'axios'
 
-/* 載入版型 */
-import { startPage } from './assets/js/IndexLayout'
-import { login } from './assets/js/LoginLayout'
-import { register } from './assets/js/RegisterLayout'
-import { initList } from './assets/js/InitListLayout'
-import { dataList } from './assets/js/ListCardLayout'
-import { noneList } from './assets/js/NoListLayout'
-
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
 
@@ -32,11 +24,40 @@ const todo = {}
 let todoData = []
 
 // /* 宣告 DOM 控制變數 */
-// const globalControl = document.getElementById('js-global-control')
-// globalControl.innerHTML = startPage
-// const loginPage = document.getElementById('js-LoginRegister-control')
+const globalControl = document.getElementById('js-global-control')
+const loginPage = document.getElementById('js-LoginRegister-control')
 
-// /* 初始頁面 */
+/* 初始頁面 */
+function Rendering() {
+  monitorBtn()
+}
+
+/* 監聽按鈕 */
+function monitorBtn() {
+  const AJAXBtn = document.querySelector('[type="submit"]')
+  const loginReg = document.querySelector('[href="#"]')
+  AJAXBtn.addEventListener('click', (e) => {
+    if(e.target.textContent === '登入') {
+      // 取得使用者輸入資料
+      user.email = document.getElementById('signInEmail').value.trim()
+      user.password = document.getElementById('signInPassword').value.trim()
+      // 輸入欄位驗證
+      formValidation()
+      // 登入 AJAX
+      signIn()
+    }
+  })
+}
+
+/* 登入 AJAX */
+function signIn() {
+  axios.post(`${apiUrl}users/sign_in`, { user })
+    .then(response => console.log(response))
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+Rendering()
+
 // function Rendering() {
 //   loginPage.innerHTML = login
 //   // 登入頁面控制
@@ -59,7 +80,7 @@ let todoData = []
 //   })
 // }
 
-// /* 登入頁面控制 */
+
 // function loginControl() {
 //   const inBtn = document.querySelector('[type="submit"]')
 //   inBtn.addEventListener('click', () => {
