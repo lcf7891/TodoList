@@ -3,7 +3,7 @@
   align-items: center;
   margin-bottom: 16px;
   &:hover {
-    background-color: $gray-300;
+    background-color: $gray-200;
     border-radius: 5px;
     button {
       opacity: 1;
@@ -18,7 +18,7 @@
 
 .DynamicBox {
   display: block;
-  border-bottom: 2px solid #E5E5E5;
+  border-bottom: 3px solid #E5E5E5;
   padding-bottom: 16px;
   & input {
     &[type="checkbox"] {
@@ -45,7 +45,7 @@
       }
     }
     &:checked[type="checkbox"]::before {
-      border: 2px solid $primary;
+      border: 3px solid $primary;
       border-left: none;
       border-top: none;
       border-radius: 3px;
