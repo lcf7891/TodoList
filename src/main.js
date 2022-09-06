@@ -29,6 +29,7 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 /* 使用者資料 */
 const user = {}
 let todo = {}
+let todoData = []
 
 /* 宣告 DOM 控制變數 */
 const globalControl = document.getElementById('js-global-control')
@@ -48,7 +49,7 @@ function Rendering() {
 function transformPage() {
   const regBtn = document.querySelector('[href="#"]')
   regBtn.addEventListener('click', (e) => {
-    if(e.target.innerText === '註冊') {
+    if (e.target.innerText === '註冊') {
       loginPage.innerHTML = register
       // 註冊頁面控制
       regControl()
@@ -82,12 +83,12 @@ function regControl() {
     user.nickname = document.getElementById('nickname').value.trim()
     let pwOne = document.getElementById('signUpPassword')
     let pwTwo = document.getElementById('signUpPasswords')
-    if(user.nickname !== '') {
-      if(pwOne.value !== pwTwo.value) {
+    if (user.nickname !== '') {
+      if (pwOne.value !== pwTwo.value) {
         pwOne.value = ''
         pwTwo.value = ''
         errMsg.innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
-        errBlock     
+        errBlock
       }
       user.password = pwOne.value.trim()
     }
@@ -105,7 +106,7 @@ function signIn() {
   axios.post(`${apiUrl}users/sign_in`, { user })
     .then(response => {
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
-      if(response.status === 200) {
+      if (response.status === 200) {
         globalControl.innerHTML = initList
         userTodos(response.data.nickname)
       }
@@ -117,7 +118,7 @@ function signIn() {
 function signUp(errMsg, errBlock) {
   axios.post(`${apiUrl}users`, { user })
     .then(response => {
-      if(response.data.message === '註冊成功') {
+      if (response.data.message === '註冊成功') {
         errMsg.innerHTML = `
           <p>${response.data.message}</p>
           <p>將在 5 秒後跳轉至登入頁面</p>
@@ -130,7 +131,7 @@ function signUp(errMsg, errBlock) {
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
-      if(error.response.data.error.length <= 1) {
+      if (error.response.data.error.length <= 1) {
         errMsg.innerHTML = `<p>${error.response.data.error}</p>`
         errBlock
       }
@@ -154,11 +155,12 @@ function userTodos(nickname) {
   const addBtn = document.getElementById('addTodoBtn')
   // 監聽新增按鈕
   addInput.addEventListener('keyup', (e) => {
-    if(e.key === 'Enter') {
-      checkData(addInput)
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      examine(addInput)
     }
   })
-  addBtn.addEventListener('click', () => checkData(addInput))
+  addBtn.addEventListener('click', () => examine(addInput))
 }
 
 /* 登出 AJAX */
@@ -178,16 +180,15 @@ function signOut() {
 }
 
 /* 檢查輸入資料 */
-function checkData(source) {
+function examine(source) {
   let data = source.value.trim()
-  console.log(data)
   const origin = todo.find(item => data === item.content)
   const errMeg = document.querySelector('.errMessage')
   errMeg.style.display = 'none'
-  if(data === '') {
+  if (data === '') {
     errMeg.innerHTML = '<p>請輸入待辦事項</p>'
     errMeg.style.display = 'block'
-  } else if(data !== '' && origin !== undefined) {
+  } else if (data !== '' && origin !== undefined) {
     errMeg.innerHTML = `<p>${data}，重複的待辦事項</p>`
     errMeg.style.display = 'block'
   } else {
@@ -199,7 +200,6 @@ function checkData(source) {
 
 /* 新增待辦事項 */
 function addTodo() {
-  console.log(todo)
   axios.post(`${apiUrl}todos`, { todo })
     .then(response => {
       console.log(response)
@@ -214,21 +214,26 @@ function getTodos() {
   axios.get(`${apiUrl}todos`)
     .then(response => {
       todo = response.data.todos
-      if(response.data.todos.length === 0) {
+      if (response.data.todos.length === 0) {
+        // 沒有代辦事項時顯示無資料畫面
         startList.innerHTML = noneList
       } else {
+        // 儲存回傳資料
+        todoData = response.data.todos
+        // 有代辦事項時渲染列表卡
         startList.innerHTML = dataList
-        renderList(response.data.todos)
+        renderList()
       }
     })
     .catch(error => console.log('錯誤資訊：?', error.response))
 }
 
 /* 渲染待辦事項列表 */
-function renderList(data) {
+function renderList() {
   const listCard = document.getElementById('js-toDos-control')
   let todosList = ''
-  data.forEach(item => {
+  // 組裝事項列表
+  todoData.forEach(item => {
     todosList += `
       <li class="li-style" id="${item.id}">
         <label for="${item.content}" class="col DynamicBox">
@@ -239,12 +244,13 @@ function renderList(data) {
       </li>
     `
   })
+  // 渲染完成的事項列表
   listCard.innerHTML = todosList
 }
 
 Rendering()
 
-// // 載入版型 JS 
+// // 載入版型 JS
 // import { startPage, logIn, register, initList, noneList, dataList } from './assets/js/Templates'
 
 // // 載入 bootstrap 驗證
@@ -369,7 +375,7 @@ Rendering()
 //         // 切換登入畫面
 //         setTimeout(() => {
 //           Rendering()
-//         }, 5000)  
+//         }, 5000)
 //       }
 //     })
 //     .catch(error => {
