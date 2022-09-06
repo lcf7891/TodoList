@@ -235,7 +235,7 @@ function renderList() {
   // 組裝事項列表
   todoData.forEach(item => {
     todosList += `
-      <li class="li-style" id="${item.id}">
+      <li class="li-style" data-id="${item.id}">
         <label for="${item.content}" class="col DynamicBox">
           <input type="checkbox" name="${item.content}" id="${item.id}"><span class="ms-5">${item.content}</span>
         </label>
@@ -246,6 +246,13 @@ function renderList() {
   })
   // 渲染完成的事項列表
   listCard.innerHTML = todosList
+  // 編輯待辦事項
+  editTodo(listCard)
+}
+
+function editTodo(el) {
+  console.log(el)
+   
 }
 
 Rendering()
