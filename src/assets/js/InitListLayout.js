@@ -19,6 +19,7 @@ const initList = `
           <input type="text" class="form-control form-control-lg border-0 py-3" id="newTodo" placeholder="新增代辦事項">
           <span class="input-group-text addTodoBtn" id="addTodoBtn"><i class="bi bi-plus-lg"></i></span>
         </div>
+        <div class="errMessage"></div>
       </section>
       <section class="col-md-10" id="js-list-control"></section>
     </div>

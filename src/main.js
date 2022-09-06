@@ -28,6 +28,7 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 
 /* 使用者資料 */
 const user = {}
+let todo = {}
 
 /* 宣告 DOM 控制變數 */
 const globalControl = document.getElementById('js-global-control')
@@ -106,10 +107,10 @@ function signIn() {
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       if(response.status === 200) {
         globalControl.innerHTML = initList
-        userTodos()
+        userTodos(response.data.nickname)
       }
     })
-    .catch(error => console.log('錯誤資訊：', error.response, user))
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 /* 註冊 AJAX */
@@ -137,20 +138,82 @@ function signUp(errMsg, errBlock) {
 }
 
 /* 待辦事項頁面控制 */
-function userTodos() {
-  const startList = document.getElementById('js-list-control')
-  getTodos(startList)
+function userTodos(nickname) {
+  // 改成使用者暱稱
+  const changeName = document.querySelector('li>span')
+  changeName.innerText = nickname
+  // 登出按鈕監聽
+  const log_out = document.querySelector('li>a')
+  log_out.addEventListener('click', (e) => {
+    signOut()
+  })
+  // 取得伺服器待辦列表
+  getTodos()
+
   const addInput = document.getElementById('newTodo')
   const addBtn = document.getElementById('addTodoBtn')
-  addBtn.addEventListener('click', () => {
-    addTodo(addInput)
+  // 監聽新增按鈕
+  addInput.addEventListener('keyup', (e) => {
+    if(e.key === 'Enter') {
+      checkData(addInput)
+    }
   })
+  addBtn.addEventListener('click', () => checkData(addInput))
+}
+
+/* 登出 AJAX */
+function signOut() {
+  axios.delete(`${apiUrl}users/sign_out`)
+    .then(response => {
+      console.log(response)
+      axios.defaults.headers.common['Authorization'] = ''
+      globalControl.innerHTML = startPage
+      document.getElementById('js-LoginRegister-control').innerHTML = login
+      // 登入頁面控制
+      loginControl()
+      // 切換註冊
+      transformPage()
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+/* 檢查輸入資料 */
+function checkData(source) {
+  let data = source.value.trim()
+  console.log(data)
+  const origin = todo.find(item => data === item.content)
+  const errMeg = document.querySelector('.errMessage')
+  errMeg.style.display = 'none'
+  if(data === '') {
+    errMeg.innerHTML = '<p>請輸入待辦事項</p>'
+    errMeg.style.display = 'block'
+  } else if(data !== '' && origin !== undefined) {
+    errMeg.innerHTML = `<p>${data}，重複的待辦事項</p>`
+    errMeg.style.display = 'block'
+  } else {
+    todo = {}
+    todo.content = data
+    addTodo()
+  }
+}
+
+/* 新增待辦事項 */
+function addTodo() {
+  console.log(todo)
+  axios.post(`${apiUrl}todos`, { todo })
+    .then(response => {
+      console.log(response)
+      getTodos()
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 /* 取得待辦事項列表 */
-function getTodos(startList) {
+function getTodos() {
+  const startList = document.getElementById('js-list-control')
   axios.get(`${apiUrl}todos`)
     .then(response => {
+      todo = response.data.todos
       if(response.data.todos.length === 0) {
         startList.innerHTML = noneList
       } else {
@@ -177,18 +240,6 @@ function renderList(data) {
     `
   })
   listCard.innerHTML = todosList
-}
-
-/* 新增待辦事項 */
-function addTodo(todo) {
-  console.log(todo.value)
-  axios.post(`${apiUrl}todos`, {
-    todo: {
-      content: todo.value.trim()
-    }
-  })
-    .then(response => console.log(response))
-    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 Rendering()
