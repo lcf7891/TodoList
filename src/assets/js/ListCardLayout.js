@@ -25,12 +25,13 @@ const dataList = `
 
 // 事項列表版型
 {/*
-  <li class="li-style">
-    <label for="AnimationCheckBox" class="col DynamicBox">
-      <input type="checkbox" name="AnimationCheckBox" id="AnimationCheckBox"><span class="ms-5">測試項目</span>
+  <li class="li-style" data-id="${item.id}">
+    <label for="${item.content}" class="col DynamicBox">
+      <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
+      <span class="ms-5">${item.content}</span>
     </label>
-    <button class="btn btn-todoitem" type="button" aria-label="editBtn"><i class="bi bi-pencil-fill"></i></button>
-    <button class="btn btn-todoitem" type="button" aria-label="removeBtn"><i class="bi bi-x-lg"></i></button>
+    <button class="btn btn-todoitem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+    <button class="btn btn-todoitem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
   </li>
 */}
 
