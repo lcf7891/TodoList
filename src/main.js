@@ -237,22 +237,55 @@ function renderList() {
     todosList += `
       <li class="li-style" data-id="${item.id}">
         <label for="${item.content}" class="col DynamicBox">
-          <input type="checkbox" name="${item.content}" id="${item.id}"><span class="ms-5">${item.content}</span>
+          <input type="checkbox" name="${item.content}" id="${item.id}" ${item.checked}>
+          <span class="ms-5">${item.content}</span>
         </label>
-        <button class="btn btn-todoitem" type="button" aria-label="editBtn"><i class="bi bi-pencil-fill"></i></button>
-        <button class="btn btn-todoitem" type="button" aria-label="removeBtn"><i class="bi bi-x-lg"></i></button>
+        <button class="btn btn-todoitem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+        <button class="btn btn-todoitem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
       </li>
     `
   })
   // 渲染完成的事項列表
   listCard.innerHTML = todosList
-  // 編輯待辦事項
-  editTodo(listCard)
+  // 選擇待辦事項，編輯與刪除
+  listCard.addEventListener('click', checkTodo)
 }
 
-function editTodo(el) {
-  console.log(el)
-   
+// 選擇待辦事項，編輯與刪除
+function checkTodo(e) {
+
+  let id = e.target.closest('li').dataset.id
+  if(e.target.getAttribute('aria-label') === 'editBtn') {
+    e.preventDefault();
+    console.log('編輯按鈕', id)
+  } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
+    e.preventDefault();
+    delTodo(id)
+  } else {
+    todoData.forEach(item => {
+      if(item.id === id) {
+        if(item.checked === '') {
+          item.checked = 'checked'
+        } else {
+          item.checked = ''
+        }
+      }
+    })
+    renderList()
+  }
 }
+
+// 刪除待辦事項
+function delTodo(id) {
+  console.log('g')
+  axios.delete(`${apiUrl}todos/${id}`)
+    .then(response => {
+      console.log(response)
+      getTodos()
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+
 
 Rendering()
