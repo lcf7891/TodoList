@@ -31,8 +31,12 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 
 /* 使用者資料 */
 const user = {}
+// 使用者待辦事項暫存
 let todo = {}
+// API 資料存放
 let todoData = []
+// 頁籤狀態
+let state = 'all'
 
 /* 宣告 DOM 控制變數 */
 const globalControl = document.getElementById('js-global-control')
@@ -182,7 +186,7 @@ function signOut() {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
-/* 檢查輸入資料 */
+/* 檢查待辦事項輸入資料 */
 function examine(source) {
   let data = source.value.trim()
   const origin = todo.find(item => data === item.content)
@@ -251,6 +255,10 @@ function renderList() {
   })
   // 渲染完成的事項列表
   listCard.innerHTML = todosList
+  // 切換頁籤
+  const tabs = document.getElementById('#js-tabs-control')
+  console.log(tabs)
+  // tabs.addEventListener('click', toggleTab)
   // 選擇待辦事項，編輯與刪除
   listCard.addEventListener('click', checkTodo)
 }
@@ -291,6 +299,16 @@ function delTodo(id) {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
+// 切換頁籤
+function toggleTab(e) {
+  const tag = document.querySelectorAll('#js-tabs-control li')
+  console.log(e.target.dataset.toggle)
+  tag.forEach((item) => item.classList.remove('active'));
+  e.target.classList.add('active');
+  state = e.target.dataset.toggle;
+  // 頁籤分類
+  // tagSort()
+}
 
 
 Rendering()
