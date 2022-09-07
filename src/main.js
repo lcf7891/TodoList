@@ -5,14 +5,17 @@
 import './assets/images/image.png'
 import './assets/images/logo_lg.png'
 import './assets/images/empty.png'
+
 /* 載入 CSS */
 import './assets/scss/all.scss'
+
 /* 載入 bootstrap JS */
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
+
 /* 載入 bootstrap 驗證 */
 import { formValidation } from './assets/js/Validation'
 
-/* 載入套件 */
+/* 載入 axios 套件 */
 import axios from 'axios'
 
 /* 載入版型 */
@@ -61,8 +64,8 @@ function transformPage() {
 
 /* 登入頁面控制 */
 function loginControl() {
-  const inBtn = document.querySelector('[type="submit"]')
-  inBtn.addEventListener('click', () => {
+  const changeBtn = document.querySelector('[type="submit"]')
+  changeBtn.addEventListener('click', () => {
     user.email = document.getElementById('signInEmail').value.trim()
     user.password = document.getElementById('signInPassword').value.trim()
     // 輸入資料驗證
@@ -254,14 +257,13 @@ function renderList() {
 
 // 選擇待辦事項，編輯與刪除
 function checkTodo(e) {
-
   let id = e.target.closest('li').dataset.id
   if(e.target.getAttribute('aria-label') === 'editBtn') {
     e.preventDefault();
     console.log('編輯按鈕', id)
-    console.log(todoData)
   } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
     e.preventDefault();
+    // 刪除單一項目
     delTodo(id)
   } else {
     todoData.forEach(item => {
@@ -273,6 +275,7 @@ function checkTodo(e) {
         }
       }
     })
+    // 選擇指定項目後更新畫面
     renderList()
   }
 }
@@ -282,7 +285,7 @@ function delTodo(id) {
   console.log('g')
   axios.delete(`${apiUrl}todos/${id}`)
     .then(response => {
-      console.log(response)
+      // 重新取得事項列表
       getTodos()
     })
     .catch(error => console.log('錯誤資訊：', error.response))
