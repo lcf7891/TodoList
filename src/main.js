@@ -196,6 +196,7 @@ function examine(source) {
     todo.content = data
     addTodo()
   }
+  source.value = ''
 }
 
 /* 新增待辦事項 */
@@ -237,7 +238,7 @@ function renderList() {
     todosList += `
       <li class="li-style" data-id="${item.id}">
         <label for="${item.content}" class="col DynamicBox">
-          <input type="checkbox" name="${item.content}" id="${item.id}" ${item.checked}>
+          <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
           <span class="ms-5">${item.content}</span>
         </label>
         <button class="btn btn-todoitem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
@@ -258,16 +259,17 @@ function checkTodo(e) {
   if(e.target.getAttribute('aria-label') === 'editBtn') {
     e.preventDefault();
     console.log('編輯按鈕', id)
+    console.log(todoData)
   } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
     e.preventDefault();
     delTodo(id)
   } else {
     todoData.forEach(item => {
       if(item.id === id) {
-        if(item.checked === '') {
-          item.checked = 'checked'
+        if(item.completed_at === null) {
+          item.completed_at = new Date()
         } else {
-          item.checked = ''
+          item.completed_at = null
         }
       }
     })
