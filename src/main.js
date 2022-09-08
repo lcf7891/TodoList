@@ -174,14 +174,17 @@ function userTodos(nickname) {
 function signOut() {
   axios.delete(`${apiUrl}users/sign_out`)
     .then(response => {
-      console.log(response)
-      axios.defaults.headers.common['Authorization'] = ''
-      globalControl.innerHTML = startPage
-      document.getElementById('js-LoginRegister-control').innerHTML = login
-      // 登入頁面控制
-      loginControl()
-      // 切換註冊
-      transformPage()
+      if(response.status === 200) {
+        // 清除 axios headers 預設的 Authorization
+        axios.defaults.headers.common['Authorization'] = ''
+        globalControl.innerHTML = startPage
+        document.getElementById('js-LoginRegister-control').innerHTML = login
+        // 登入頁面控制
+        loginControl()
+        // 切換註冊
+        transformPage()
+      }
+      
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
@@ -210,8 +213,10 @@ function examine(source) {
 function addTodo() {
   axios.post(`${apiUrl}todos`, { todo })
     .then(response => {
-      console.log(response)
-      getTodos()
+      if(response.status === 201) {
+        // 取得待辦事項列表
+        getTodos()
+      }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
@@ -230,18 +235,19 @@ function getTodos() {
         todoData = response.data.todos
         // 有代辦事項時渲染列表卡
         startList.innerHTML = dataList
-        renderList()
+        // 渲染待辦事項列表
+        renderList(todoData)
       }
     })
     .catch(error => console.log('錯誤資訊：?', error.response))
 }
 
 /* 渲染待辦事項列表 */
-function renderList() {
+function renderList(data) {
   const listCard = document.getElementById('js-toDos-control')
   let todosList = ''
   // 組裝事項列表
-  todoData.forEach(item => {
+  data.forEach(item => {
     todosList += `
       <li class="li-style" data-id="${item.id}">
         <label for="${item.content}" class="col DynamicBox">
@@ -256,14 +262,13 @@ function renderList() {
   // 渲染完成的事項列表
   listCard.innerHTML = todosList
   // 切換頁籤
-  const tabs = document.getElementById('#js-tabs-control')
-  console.log(tabs)
-  // tabs.addEventListener('click', toggleTab)
+  const tabs = document.getElementById('js-tabs-control')
+  tabs.addEventListener('click', toggleTab)
   // 選擇待辦事項，編輯與刪除
   listCard.addEventListener('click', checkTodo)
 }
 
-// 選擇待辦事項，編輯與刪除
+/* 選擇待辦事項，編輯與刪除 */
 function checkTodo(e) {
   let id = e.target.closest('li').dataset.id
   if(e.target.getAttribute('aria-label') === 'editBtn') {
@@ -283,14 +288,13 @@ function checkTodo(e) {
         }
       }
     })
-    // 選擇指定項目後更新畫面
-    renderList()
   }
+  // 選擇指定項目後更新畫面
+  renderList(todoData)
 }
 
-// 刪除待辦事項
+/* 刪除待辦事項 */
 function delTodo(id) {
-  console.log('g')
   axios.delete(`${apiUrl}todos/${id}`)
     .then(response => {
       // 重新取得事項列表
@@ -299,15 +303,28 @@ function delTodo(id) {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
-// 切換頁籤
+/* 切換頁籤 */
 function toggleTab(e) {
   const tag = document.querySelectorAll('#js-tabs-control li')
-  console.log(e.target.dataset.toggle)
   tag.forEach((item) => item.classList.remove('active'));
-  e.target.classList.add('active');
-  state = e.target.dataset.toggle;
+  state = e.target.closest('li').dataset.toggle
+  e.target.closest('li').classList.add('active')
   // 頁籤分類
-  // tagSort()
+  tagSort()
+}
+
+/* 頁籤分類 */
+function tagSort() {
+  let tempData = []
+  if(state === 'wait') {
+    tempData = todoData.filter(item => item.completed_at === null)
+  } else if (state === 'done') {
+    tempData = todoData.filter(item => item.completed_at !== null)
+  } else {
+    tempData = todoData
+  }
+  // 渲染待辦事項列表
+  renderList(tempData)
 }
 
 
