@@ -276,6 +276,8 @@ function renderList(data) {
   // 判斷有無完成項目開啟按鈕
   if(allDone.length !== 0) {
     delAllDoneBtn.removeAttribute('disabled')
+  } else {
+    delAllDoneBtn.setAttribute('disabled', '')
   }
   // 監聽清除已完成項目按鈕
   delAllDoneBtn.addEventListener('click', delAllDone)
@@ -310,8 +312,10 @@ function checkTodo(e) {
 function delTodo(id) {
   axios.delete(`${apiUrl}todos/${id}`)
     .then(response => {
-      // 重新取得事項列表
-      getTodos()
+      if(response.status === 200) {
+        // 重新取得事項列表
+        getTodos()
+      }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
