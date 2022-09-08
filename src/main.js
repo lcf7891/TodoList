@@ -115,7 +115,10 @@ function signIn() {
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       if (response.status === 200) {
         globalControl.innerHTML = initList
-        userTodos(response.data.nickname)
+        // 改成使用者暱稱
+        const changeName = document.querySelector('li>span')
+        changeName.innerText = response.data.nickname
+        userTodos()
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
@@ -146,10 +149,7 @@ function signUp(errMsg, errBlock) {
 }
 
 /* 待辦事項頁面控制 */
-function userTodos(nickname) {
-  // 改成使用者暱稱
-  const changeName = document.querySelector('li>span')
-  changeName.innerText = nickname
+function userTodos() {
   // 登出按鈕監聽
   const log_out = document.querySelector('li>a')
   log_out.addEventListener('click', (e) => {
