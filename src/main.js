@@ -269,6 +269,16 @@ function renderList(data) {
   tabs.addEventListener('click', toggleTab)
   // 選擇待辦事項，編輯與刪除
   listCard.addEventListener('click', checkTodo)
+  // 取得清除已完成項目按鈕控制
+  const delAllDoneBtn = document.querySelector('.btn-clearAll')
+  // 取出已完成事項
+  const allDone = data.filter(item => item.completed_at !== null)
+  // 判斷有無完成項目開啟按鈕
+  if(allDone.length !== 0) {
+    delAllDoneBtn.removeAttribute('disabled')
+  }
+  // 監聽清除已完成項目按鈕
+  delAllDoneBtn.addEventListener('click', delAllDone)
 }
 
 /* 選擇待辦事項，編輯與刪除 */
@@ -328,6 +338,11 @@ function tagSort() {
   }
   // 渲染待辦事項列表
   renderList(tempData)
+}
+
+/* 清除已完成所有項目 */
+function delAllDone() {
+  console.log('del')
 }
 
 
