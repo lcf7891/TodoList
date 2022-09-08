@@ -155,9 +155,8 @@ function userTodos() {
   log_out.addEventListener('click', (e) => {
     signOut()
   })
-  // 取得伺服器待辦列表
+  // 取得待辦事項列表
   getTodos()
-
   const addInput = document.getElementById('newTodo')
   const addBtn = document.getElementById('addTodoBtn')
   // 監聽新增按鈕
@@ -227,12 +226,12 @@ function getTodos() {
   axios.get(`${apiUrl}todos`)
     .then(response => {
       todo = response.data.todos
-      if (response.data.todos.length === 0) {
+      if(todo.length === 0) {
         // 沒有代辦事項時顯示無資料畫面
         startList.innerHTML = noneList
       } else {
         // 儲存回傳資料
-        todoData = response.data.todos
+        todoData = [...todo]
         // 有代辦事項時渲染列表卡
         startList.innerHTML = dataList
         // 渲染待辦事項列表
@@ -259,6 +258,10 @@ function renderList(data) {
       </li>
     `
   })
+  // 顯示待完成項目數量
+  const nudone = data.filter(item => item.completed_at === null)
+  const pending = document.querySelector('[data-num]')
+  pending.innerText = nudone.length
   // 渲染完成的事項列表
   listCard.innerHTML = todosList
   // 切換頁籤
