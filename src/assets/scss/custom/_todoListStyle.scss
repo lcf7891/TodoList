@@ -34,7 +34,7 @@
 
 .active {
   border-bottom: 2px solid $secondary !important;
-  a {
+  .nav-link {
     color: $secondary !important;
     &:hover {
       color:  $secondary !important;

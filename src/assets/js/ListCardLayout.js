@@ -1,7 +1,7 @@
 const dataList = `
   <div class="listCard">
     <ul class="nav text-center mb-6" id="js-tabs-control">
-      <li class="nav-item tabs position-relative flex-grow-1" data-toggle="all">
+      <li class="nav-item tabs position-relative flex-grow-1 active" data-toggle="all">
         <a class="nav-link link-info stretched-link py-4" href="#">全部</a>
       </li>
       <li class="nav-item tabs position-relative flex-grow-1" data-toggle="wait">
