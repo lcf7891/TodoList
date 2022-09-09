@@ -19,12 +19,12 @@ import { formValidation } from './assets/js/Validation'
 import axios from 'axios'
 
 /* 載入版型 */
-import { startPage } from './assets/js/IndexLayout'
-import { login } from './assets/js/LoginLayout'
-import { register } from './assets/js/RegisterLayout'
-import { initList } from './assets/js/InitListLayout'
-import { dataList } from './assets/js/ListCardLayout'
-import { noneList } from './assets/js/NoListLayout'
+// import { startPage } from './assets/js/IndexLayout'
+// import { login } from './assets/js/LoginLayout'
+// import { register } from './assets/js/RegisterLayout'
+// import { initList } from './assets/js/InitListLayout'
+// import { dataList } from './assets/js/ListCardLayout'
+// import { noneList } from './assets/js/NoListLayout'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
