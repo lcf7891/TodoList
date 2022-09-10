@@ -19,15 +19,18 @@ import { formValidation } from './assets/js/Validation'
 import axios from 'axios'
 
 /* 載入版型 */
-// import { startPage } from './assets/js/IndexLayout'
-// import { login } from './assets/js/LoginLayout'
-// import { register } from './assets/js/RegisterLayout'
-// import { initList } from './assets/js/InitListLayout'
-// import { dataList } from './assets/js/ListCardLayout'
-// import { noneList } from './assets/js/NoListLayout'
+// import { startPage } from './assets/js/layout/IndexLayout'
+// import { login } from './assets/js/layout/LoginLayout'
+// import { register } from './assets/js/layout/RegisterLayout'
+// import { initList } from './assets/js/layout/InitListLayout'
+// import { dataList } from './assets/js/layout/ListCardLayout'
+// import { noneList } from './assets/js/layout/NoListLayout'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
+
+/* AJAX Function */
+import SignUp from './assets/js/SignUp'
 
 /* 使用者資料 */
 const user = {}
@@ -37,6 +40,17 @@ let todo = {}
 let todoData = []
 // 頁籤狀態
 let state = 'all'
+
+
+const indexLayout = document.getElementById('js-indexLayout-control')
+const viewSignIn = document.getElementById('js-signIn-control')
+const viewSignUp = document.getElementById('js-signUp-control')
+
+indexLayout.addEventListener('click', (e) => {
+  console.log(e)
+})
+
+// console.log(SignUp)
 
 // /* 宣告 DOM 控制變數 */
 // const globalControl = document.getElementById('js-global-control')
