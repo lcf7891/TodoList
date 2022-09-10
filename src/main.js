@@ -294,18 +294,23 @@ function checkTodo(e) {
     // 刪除單一項目
     delTodo(id)
   } else {
-    todoData.forEach(item => {
-      if(item.id === id) {
-        if(item.completed_at === null) {
-          item.completed_at = new Date()
-        } else {
-          item.completed_at = null
-        }
-      }
-    })
+    const checkItem = todoData.find(item => id === item.id)
+    // 已完成事項切換
+    statusToggle(checkItem.id)
   }
   // 選擇指定項目後更新畫面
-  renderList(todoData)
+  // renderList(todoData)
+}
+
+/* 已完成事項切換 */
+function statusToggle(id) {
+  axios.patch(`${apiUrl}todos/${id}/toggle`)
+    .then(response => {
+      if(response.status === 200) {
+        getTodos()
+      }
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 /* 刪除待辦事項 */
