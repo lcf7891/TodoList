@@ -244,10 +244,10 @@ function getTodos() {
 /* 渲染待辦事項列表 */
 function renderList(data) {
   const listCard = document.getElementById('js-toDos-control')
-  let todosList = ''
+  let toDosList = ''
   // 組裝事項列表
   data.forEach(item => {
-    todosList += `
+    toDosList += `
       <li class="li-style" data-id="${item.id}">
         <label for="${item.content}" class="col DynamicBox">
           <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
@@ -258,22 +258,24 @@ function renderList(data) {
       </li>
     `
   })
-  // 顯示待完成項目數量
-  const nudone = data.filter(item => item.completed_at === null)
-  const pending = document.querySelector('[data-num]')
-  pending.innerText = nudone.length
   // 渲染完成的事項列表
-  listCard.innerHTML = todosList
+  listCard.innerHTML = toDosList
+
+  // 顯示待完成項目數量
+  const nuDone = data.filter(item => item.completed_at === null)
+  const pending = document.querySelector('[data-num]')
+  pending.innerText = nuDone.length
+
   // 切換頁籤
   const tabs = document.getElementById('js-tabs-control')
   tabs.addEventListener('click', toggleTab)
   // 選擇待辦事項，編輯與刪除
   listCard.addEventListener('click', checkTodo)
+
   // 取得清除已完成項目按鈕控制
   const delAllDoneBtn = document.querySelector('.btn-clearAll')
-  // 取出已完成事項
-  const allDone = data.filter(item => item.completed_at !== null)
   // 判斷有無完成項目開啟按鈕
+  const allDone = data.filter(item => item.completed_at !== null)
   if(allDone.length !== 0) {
     delAllDoneBtn.removeAttribute('disabled')
   } else {
@@ -291,8 +293,9 @@ function checkTodo(e) {
     console.log('編輯按鈕', id)
   } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
     e.preventDefault();
-    // 刪除單一項目
+    // 刪除單一待辦事項
     delTodo(id)
+    getTodos()
   } else {
     const checkItem = todoData.find(item => id === item.id)
     // 已完成事項切換
@@ -313,15 +316,16 @@ function statusToggle(id) {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
-/* 刪除待辦事項 */
+/* 刪除單一待辦事項 */
 function delTodo(id) {
   axios.delete(`${apiUrl}todos/${id}`)
-    .then(response => {
-      if(response.status === 200) {
-        // 重新取得事項列表
-        getTodos()
-      }
-    })
+    .then(response => console.log(response))
+    // .then(response => {
+    //   if(response.status === 200) {
+    //     // 重新取得事項列表
+    //     getTodos()
+    //   }
+    // })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
@@ -350,9 +354,27 @@ function tagSort() {
 }
 
 /* 清除已完成所有項目 */
+
 function delAllDone() {
-  console.log('del')
+  const delData = todoData.filter(item => item.completed_at !== null)
+  const idList = []
+  delData.forEach(item => idList.push(item.id))
+  delPromise(idList)
+    .then(response => {
+      console.log(response)
+      getTodos()
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
+  // const idApi = (id) => delTodo(id)
+  // const delArr = idList.map(idApi)
+  // Promise.all(delArr)
+  //   .then(response => console.log(response))
+  //   .catch(error => console.log('錯誤資訊：', error.response))
+  // getTodos()
 }
 
+function delPromise(idList) {
+  return Promise.all(idList.map(item => delTodo(item)))
+}
 
 Rendering()
