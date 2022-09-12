@@ -1,9 +1,13 @@
 import axios from 'axios'
 
 const apiUrl = 'https://todoo.5xcamp.us/'
+let fulfilled = {}
+
+// const resResolve = ''
+// const resReject = ''
 
 // 註冊
-function signUp(email, password, nickname) {
+function signUp(email, nickname, password) {
   axios.post(`${apiUrl}users`, {
     user: {
       email,
@@ -11,8 +15,16 @@ function signUp(email, password, nickname) {
       password
     }
   })
-    .then(response => console.log(response))
-    .catch(error => console.log('錯誤資訊：', error.response))
+    .then(response => {
+      console.log(response)
+      fulfilled.resMsg = response.data.message
+    })
+    .catch(error => {
+      console.log('錯誤資訊：', error.response)
+      if (error.response.data.error.length <= 1) {
+        fulfilled.resMsg = error.response.data.error
+      }
+    })
 }
 
 // 登入
@@ -24,6 +36,7 @@ function signIn(email, password) {
     }
   })
     .then(response => {
+      console.log(response)
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
     })
     .catch(error => console.log('錯誤資訊：', error.response))
@@ -43,4 +56,4 @@ function getToDos() {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
-export { signUp, signIn, signOut, getToDos }
+export { signUp, signIn, signOut, getToDos, fulfilled }

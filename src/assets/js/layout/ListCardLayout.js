@@ -30,8 +30,8 @@ const dataList = `
       <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
       <span class="ms-5">${item.content}</span>
     </label>
-    <button class="btn btn-todoitem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
-    <button class="btn btn-todoitem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
+    <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+    <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
   </li>
 */}
 

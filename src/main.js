@@ -19,19 +19,21 @@ import { formValidation } from './assets/js/Validation'
 import axios from 'axios'
 
 /* 載入版型 */
-// import { startPage } from './assets/js/layout/IndexLayout'
-// import { login } from './assets/js/layout/LoginLayout'
-// import { register } from './assets/js/layout/RegisterLayout'
-// import { initList } from './assets/js/layout/InitListLayout'
-// import { dataList } from './assets/js/layout/ListCardLayout'
-// import { noneList } from './assets/js/layout/NoListLayout'
+import { indexPage } from './assets/js/layout/IndexLayout'
+import { login } from './assets/js/layout/LoginLayout'
+import { register } from './assets/js/layout/RegisterLayout'
+import { initList } from './assets/js/layout/InitListLayout'
+import { dataList } from './assets/js/layout/ListCardLayout'
+import { noneList } from './assets/js/layout/NoListLayout'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
 
 /* AJAX Function */
-import SignUp from './assets/js/SignUp'
+import { signUp, signIn, fulfilled } from './assets/js/d-AjaxApi'
 
+/* AJAX Request */
+// var fulfilled = ''
 /* 使用者資料 */
 const user = {}
 // 使用者待辦事項暫存
@@ -41,14 +43,97 @@ let todoData = []
 // 頁籤狀態
 let state = 'all'
 
+const gbControl = document.getElementById('js-global-control')
+gbControl.innerHTML = indexPage
+const loginView = document.getElementById('js-loginRegister-control')
 
-const indexLayout = document.getElementById('js-indexLayout-control')
-const viewSignIn = document.getElementById('js-signIn-control')
-const viewSignUp = document.getElementById('js-signUp-control')
+/* 初始頁面 */
+function initPage() {
+  loginView.innerHTML = login
+  // 切換註冊
+  transformView()
+  // 登入驗證
+  loginVerify()
+}
 
-indexLayout.addEventListener('click', (e) => {
-  console.log(e)
-})
+/* 登入與註冊切換 */
+function transformView() {
+  const changeBtn = document.querySelector('[href="#"]')
+  changeBtn.addEventListener('click', (e) => {
+    if(e.target.innerText === '註冊') {
+      loginView.innerHTML = register
+      regControl()
+    } else {
+      initPage()
+    }
+  })
+}
+
+/* 登入驗證 */
+function loginVerify() {
+  const loginBtn = document.querySelector('[type="submit"]')
+  loginBtn.addEventListener('click', () => {
+    const email = document.getElementById('signInEmail').value.trim()
+    const PW = document.getElementById('signInPassword').value.trim()
+    // 輸入驗證
+    formValidation()
+    // 登入
+    signIn(email, PW)
+  })
+  
+}
+
+/* 註冊頁面控制 */
+function regControl() {
+  // 切換登入
+  transformView()
+  // 註冊驗證
+  regVerify()
+}
+
+/* 註冊驗證 */
+function regVerify() {
+  const regBtn = document.querySelector('[type="submit"]')
+  regBtn.addEventListener('click', () => {
+    const email = document.getElementById('signUpEmail').value.trim()
+    const nickname = document.getElementById('nickname').value.trim()
+    let PW = document.getElementById('signUpPassword')
+    let PWS = document.getElementById('signUpPasswords')
+    const password = PWCheck(PW, PWS, nickname)
+    // 輸入驗證
+    formValidation()
+    // 註冊
+    signUp(email, nickname, password)
+    let resMsg = [...fulfilled]
+    console.log(window)
+    console.log(resMsg)
+  })
+}
+
+/* 註冊密碼檢查 */
+function PWCheck(PW, PWS, name) {
+  const errMsg = document.querySelector('.errMessage')
+  errMsg.style.display = 'none'
+  if(name !== '') {
+    if(PW.value.trim() !== PWS.value.trim()) {
+      PW.value = ''
+      PWS.value = ''
+      errMsg.innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
+      errMsg.style.display = 'block'
+    } else {
+      return PW.value.trim()
+    }
+  }
+}
+
+initPage()
+// const indexLayout = document.getElementById('js-indexLayout-control')
+// const viewSignIn = document.getElementById('js-signIn-control')
+// const viewSignUp = document.getElementById('js-signUp-control')
+
+// indexLayout.addEventListener('click', (e) => {
+//   console.log(e)
+// })
 
 // console.log(SignUp)
 
