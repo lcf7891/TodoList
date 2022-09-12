@@ -231,7 +231,7 @@ function getTodos() {
         startList.innerHTML = noneList
       } else {
         // 儲存回傳資料
-        todoData = [...todo]
+        todoData = todo
         // 有代辦事項時渲染列表卡
         startList.innerHTML = dataList
         // 渲染待辦事項列表
@@ -319,7 +319,7 @@ function statusToggle(id) {
 /* 刪除單一待辦事項 */
 function delTodo(id) {
   axios.delete(`${apiUrl}todos/${id}`)
-    .then(response => console.log(response))
+    .then(response => console.log('delTodo', response))
     // .then(response => {
     //   if(response.status === 200) {
     //     // 重新取得事項列表
@@ -359,22 +359,9 @@ function delAllDone() {
   const delData = todoData.filter(item => item.completed_at !== null)
   const idList = []
   delData.forEach(item => idList.push(item.id))
-  delPromise(idList)
-    .then(response => {
-      console.log(response)
-      getTodos()
-    })
-    .catch(error => console.log('錯誤資訊：', error.response))
-  // const idApi = (id) => delTodo(id)
-  // const delArr = idList.map(idApi)
-  // Promise.all(delArr)
-  //   .then(response => console.log(response))
-  //   .catch(error => console.log('錯誤資訊：', error.response))
-  // getTodos()
+  console.log(idList)
 }
 
-function delPromise(idList) {
-  return Promise.all(idList.map(item => delTodo(item)))
-}
+
 
 Rendering()
