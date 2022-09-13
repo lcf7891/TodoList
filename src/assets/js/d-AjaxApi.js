@@ -48,7 +48,14 @@ function signIn(email, password) {
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       gbControl().innerHTML = initList
     })
-    .catch(error => console.log('錯誤資訊：', error.response))
+    .catch(error => {
+      console.log('錯誤資訊：', error.response)
+      errMsgDom().innerHTML = `
+        <p>${error.response.data.message}</p>
+        <p>請確認帳號密碼是否正確。<br>尚未註冊請先註冊。</p>
+      `
+      errMsgDom().style.display = 'block'
+    })
 }
 
 // 登出

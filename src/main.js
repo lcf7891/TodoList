@@ -48,10 +48,10 @@ const loginView = document.getElementById('js-loginRegister-control')
 /* 初始頁面 */
 function initPage() {
   loginView.innerHTML = login
-  // 切換註冊
-  transformView()
   // 登入驗證
   loginVerify()
+  // 切換註冊
+  transformView()
 }
 
 /* 登入與註冊切換 */
@@ -78,7 +78,6 @@ function loginVerify() {
     // 登入
     signIn(email, PW)
   })
-  
 }
 
 /* 註冊頁面控制 */
