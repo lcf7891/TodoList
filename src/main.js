@@ -25,15 +25,11 @@ import { gbControl, errMsgDom } from './assets/js/DomControl'
 import { indexPage } from './assets/js/layout/IndexLayout'
 import { login } from './assets/js/layout/LoginLayout'
 import { register } from './assets/js/layout/RegisterLayout'
-// import { initList } from './assets/js/layout/InitListLayout'
 import { dataList } from './assets/js/layout/ListCardLayout'
 import { noneList } from './assets/js/layout/NoListLayout'
 
 /* AJAX Function */
-import { signUp, signIn } from './assets/js/d-AjaxApi'
-
-/* API 網址 */
-const apiUrl = 'https://todoo.5xcamp.us/'
+import { signUp, signIn } from './assets/js/AjaxApi'
 
 /* 使用者資料 */
 const user = {}
