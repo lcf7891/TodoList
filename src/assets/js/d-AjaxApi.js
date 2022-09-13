@@ -1,10 +1,16 @@
+import { initList } from './layout/InitListLayout'
+
 import axios from 'axios'
 
 const apiUrl = 'https://todoo.5xcamp.us/'
-let fulfilled = {}
 
-// const resResolve = ''
-// const resReject = ''
+function gbControl() {
+  return document.getElementById('js-global-control')
+}
+
+function errMsgDom() {
+  return document.querySelector('.errMessage')
+}
 
 // 註冊
 function signUp(email, nickname, password) {
@@ -17,12 +23,14 @@ function signUp(email, nickname, password) {
   })
     .then(response => {
       console.log(response)
-      fulfilled.resMsg = response.data.message
+      errMsgDom().innerHTML = `<p>${response.data.message}</p>`
+      errMsgDom().style.display = 'block'
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
       if (error.response.data.error.length <= 1) {
-        fulfilled.resMsg = error.response.data.error
+        errMsgDom().innerHTML = `<p>${error.response.data.error}</p>`
+        errMsgDom().style.display = 'block'
       }
     })
 }
@@ -38,6 +46,7 @@ function signIn(email, password) {
     .then(response => {
       console.log(response)
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
+      gbControl().innerHTML = initList
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
@@ -56,4 +65,5 @@ function getToDos() {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
-export { signUp, signIn, signOut, getToDos, fulfilled }
+
+export { signUp, signIn, signOut, getToDos, errMsgDom }

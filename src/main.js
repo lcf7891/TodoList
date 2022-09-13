@@ -22,18 +22,16 @@ import axios from 'axios'
 import { indexPage } from './assets/js/layout/IndexLayout'
 import { login } from './assets/js/layout/LoginLayout'
 import { register } from './assets/js/layout/RegisterLayout'
-import { initList } from './assets/js/layout/InitListLayout'
+// import { initList } from './assets/js/layout/InitListLayout'
 import { dataList } from './assets/js/layout/ListCardLayout'
 import { noneList } from './assets/js/layout/NoListLayout'
+
+/* AJAX Function */
+import { signUp, signIn, errMsgDom } from './assets/js/d-AjaxApi'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
 
-/* AJAX Function */
-import { signUp, signIn, fulfilled } from './assets/js/d-AjaxApi'
-
-/* AJAX Request */
-// var fulfilled = ''
 /* 使用者資料 */
 const user = {}
 // 使用者待辦事項暫存
@@ -104,22 +102,18 @@ function regVerify() {
     formValidation()
     // 註冊
     signUp(email, nickname, password)
-    let resMsg = [...fulfilled]
-    console.log(window)
-    console.log(resMsg)
   })
 }
 
 /* 註冊密碼檢查 */
 function PWCheck(PW, PWS, name) {
-  const errMsg = document.querySelector('.errMessage')
-  errMsg.style.display = 'none'
+  errMsgDom().style.display = 'none'
   if(name !== '') {
     if(PW.value.trim() !== PWS.value.trim()) {
       PW.value = ''
       PWS.value = ''
-      errMsg.innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
-      errMsg.style.display = 'block'
+      errMsgDom().innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
+      errMsgDom().style.display = 'block'
     } else {
       return PW.value.trim()
     }
