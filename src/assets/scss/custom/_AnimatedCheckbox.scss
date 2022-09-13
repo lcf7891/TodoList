@@ -10,7 +10,7 @@
       cursor: pointer;
     }
   }
-  .btn-todoitem {
+  .btn-todoItem {
     opacity: 0;
     cursor: default;
   }
@@ -18,6 +18,7 @@
 
 .DynamicBox {
   display: block;
+  cursor: pointer;
   border-bottom: 3px solid #E5E5E5;
   padding-bottom: 16px;
   & input {
@@ -44,13 +45,19 @@
         transition: 0.5s;
       }
     }
-    &:checked[type="checkbox"]::before {
-      border: 3px solid $primary;
-      border-left: none;
-      border-top: none;
-      border-radius: 3px;
-      width: 12px;
-      transform: rotate(40deg) translate(5px, -6px);
+    &:checked[type="checkbox"] {
+      ~ span {
+        color: $info;
+        text-decoration: line-through;
+      }
+      &::before {
+        border: 3px solid $primary;
+        border-left: none;
+        border-top: none;
+        border-radius: 3px;
+        width: 12px;
+        transform: rotate(40deg) translate(5px, -6px);
+      }
     }
   }
 }

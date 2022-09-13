@@ -7,15 +7,16 @@
   <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 <body class="bg-primary" id="js-global-control">
-  <article class="container vh-100" id="js-startPage">
+  <!-- signIn signUp -->
+  <!-- <article class="container vh-100" id="js-indexLayout-control">
     <div class="row align-items-center h-100">
       <section class="col-6 d-md-block d-none text-center">
         <img class="img-fluid" src="./assets/images/logo_lg.png" alt="logo_lg">
         <img class="img-fluid" src="./assets/images/image.png" alt="image">
       </section>
-      <section class="col-md-6 fw-bold" id="js-LoginRegister-control">
-        <!-- 登入 -->
-        <div id="js-login">
+      <section class="col-md-6 fw-bold"> -->
+        <!-- signIn -->
+        <!-- <div id="js-signIn-control">
           <h3 class="d-md-block d-none fw-bold mb-6">最實用的線上待辦事項服務</h3>
           <div class="d-md-none d-block text-center">
             <img class="mb-5" src="./assets/images/logo_lg.png" alt="logo_lg">
@@ -44,9 +45,9 @@
               <a class="link-secondary text-decoration-none" href="#">註冊帳號</a>
             </div>
           </form>
-        </div>
-        <!-- 註冊 -->
-        <div style="display: none;" id="js-register">
+        </div> -->
+        <!-- signUp -->
+        <!-- <div style="display: none;" id="js-signUp-control">
           <h3 class="d-md-block d-none fw-bold mb-6">註冊帳號</h3>
           <div class="d-md-none d-block text-center">
             <img class="mb-5" src="./assets/images/logo_lg.png" alt="logo_lg">
@@ -92,17 +93,18 @@
         </div>
       </section>
     </div>
-  </article>
-  <div id="js-userList">
+  </article> -->
+  <!-- user todoList -->
+  <!-- <article style="display: none;" id="js-initListLayout-control">
     <nav class="navbar align-items-center py-4 px-md-9 mb-md-6">
       <div class="container-fluid">
         <a href="./index.html"><img src="./assets/images/logo_lg.png" alt="logo_lg"></a>
         <ul class="nav">
           <li class="nav-item d-md-block d-none">
-            <span class="text-secondary fw-bold">暱稱</span>
+            <span class="text-secondary fw-bold" id="js-userName-control">暱稱</span>
           </li>
           <li class="nav-item ms-md-6">
-            <a class="link-secondary text-decoration-none" href="#">登出</a>
+            <a class="link-secondary text-decoration-none" href="#" id="js-signOut-control">登出</a>
           </li>
         </ul>
       </div>
@@ -116,37 +118,37 @@
           </div>
           <div class="errMessage"></div>
         </section>
-        <section class="col-md-10" style="display: none;" id="js-list-control">
-          <!-- 無待辦事項 -->
-          <div class="text-center my-15" id="noneList">
+        <section class="col-md-10"> -->
+          <!-- noneTodo -->
+          <!-- <div class="text-center my-15" id="js-noneList-control">
             <p class="fs-5">目前尚無待辦事項</p>
             <img class="img-fluid" src="./assets/images/empty.png" alt="empty">
-          </div>
-          <!-- 有待辦事項 -->
-          <div class="listCard" style="display: none;" id="dataList">
-            <ul class="nav text-center mb-6">
-              <li class="nav-item tabs position-relative flex-grow-1">
-                <a class="nav-link link-info stretched-link py-4" href="#">完成</a>
+          </div> -->
+          <!-- toDoList -->
+          <!-- <div class="listCard" style="display: none;" id="js-todoList-control">
+            <ul class="nav text-center mb-6" id="js-tabs-control">
+              <li class="nav-item tabs position-relative flex-grow-1 active" data-toggle="all">
+                <a class="nav-link link-info stretched-link py-4" href="#">全部</a>
               </li>
-              <li class="nav-item tabs position-relative flex-grow-1">
+              <li class="nav-item tabs position-relative flex-grow-1" data-toggle="wait">
                 <a class="nav-link link-info stretched-link py-4" href="#">待完成</a>
               </li>
-              <li class="nav-item tabs position-relative flex-grow-1">
+              <li class="nav-item tabs position-relative flex-grow-1" data-toggle="done">
                 <a class="nav-link link-info stretched-link py-4" href="#">已完成</a>
               </li>
             </ul>
             <ul class="px-md-6 px-4 mb-5" id="js-toDos-control"></ul>
             <ul class="d-flex justify-content-between align-items-center px-md-6 px-4 pb-md-6 pb-4">
               <li class="text-secondary">
-                <span class="me-1">0</span>個待完成項目
+                <span class="me-1" data-num="undone">0</span>個待完成項目
               </li>
               <li>
-                <button class="btn-clearAll text-info" type="button" disabled>清除已完成項目</button>
+                <button class="btn-clearAll text-info" id="js-clearAll-control" type="button" disabled>清除已完成項目</button>
               </li>
             </ul>
           </div>
         </section>
       </div>
     </article>
-  </div>
+  </article> -->
 </body>

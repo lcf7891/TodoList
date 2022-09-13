@@ -5,58 +5,172 @@
 import './assets/images/image.png'
 import './assets/images/logo_lg.png'
 import './assets/images/empty.png'
+
 /* 載入 CSS */
 import './assets/scss/all.scss'
+
 /* 載入 bootstrap JS */
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
+
 /* 載入 bootstrap 驗證 */
 import { formValidation } from './assets/js/Validation'
 
-/* 載入套件 */
+/* 載入 axios 套件 */
 import axios from 'axios'
+
+/* 載入版型 */
+import { indexPage } from './assets/js/layout/IndexLayout'
+import { login } from './assets/js/layout/LoginLayout'
+import { register } from './assets/js/layout/RegisterLayout'
+import { initList } from './assets/js/layout/InitListLayout'
+import { dataList } from './assets/js/layout/ListCardLayout'
+import { noneList } from './assets/js/layout/NoListLayout'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
 
+/* AJAX Function */
+import { signUp, signIn, fulfilled } from './assets/js/d-AjaxApi'
+
+/* AJAX Request */
+// var fulfilled = ''
 /* 使用者資料 */
 const user = {}
-const todo = {}
+// 使用者待辦事項暫存
+let todo = {}
+// API 資料存放
 let todoData = []
+// 頁籤狀態
+let state = 'all'
 
-// /* 宣告 DOM 控制變數 */
-const globalControl = document.getElementById('js-global-control')
-const loginPage = document.getElementById('js-LoginRegister-control')
+const gbControl = document.getElementById('js-global-control')
+gbControl.innerHTML = indexPage
+const loginView = document.getElementById('js-loginRegister-control')
 
 /* 初始頁面 */
-function Rendering() {
-  monitorBtn()
+function initPage() {
+  loginView.innerHTML = login
+  // 切換註冊
+  transformView()
+  // 登入驗證
+  loginVerify()
 }
 
-/* 監聽按鈕 */
-function monitorBtn() {
-  const AJAXBtn = document.querySelector('[type="submit"]')
-  const loginReg = document.querySelector('[href="#"]')
-  AJAXBtn.addEventListener('click', (e) => {
-    if(e.target.textContent === '登入') {
-      // 取得使用者輸入資料
-      user.email = document.getElementById('signInEmail').value.trim()
-      user.password = document.getElementById('signInPassword').value.trim()
-      // 輸入欄位驗證
-      formValidation()
-      // 登入 AJAX
-      signIn()
+/* 登入與註冊切換 */
+function transformView() {
+  const changeBtn = document.querySelector('[href="#"]')
+  changeBtn.addEventListener('click', (e) => {
+    if(e.target.innerText === '註冊') {
+      loginView.innerHTML = register
+      regControl()
+    } else {
+      initPage()
     }
   })
 }
 
-/* 登入 AJAX */
-function signIn() {
-  axios.post(`${apiUrl}users/sign_in`, { user })
-    .then(response => console.log(response))
-    .catch(error => console.log('錯誤資訊：', error.response))
+/* 登入驗證 */
+function loginVerify() {
+  const loginBtn = document.querySelector('[type="submit"]')
+  loginBtn.addEventListener('click', () => {
+    const email = document.getElementById('signInEmail').value.trim()
+    const PW = document.getElementById('signInPassword').value.trim()
+    // 輸入驗證
+    formValidation()
+    // 登入
+    signIn(email, PW)
+  })
+  
 }
 
-Rendering()
+/* 註冊頁面控制 */
+function regControl() {
+  // 切換登入
+  transformView()
+  // 註冊驗證
+  regVerify()
+}
+
+/* 註冊驗證 */
+function regVerify() {
+  const regBtn = document.querySelector('[type="submit"]')
+  regBtn.addEventListener('click', () => {
+    const email = document.getElementById('signUpEmail').value.trim()
+    const nickname = document.getElementById('nickname').value.trim()
+    let PW = document.getElementById('signUpPassword')
+    let PWS = document.getElementById('signUpPasswords')
+    const password = PWCheck(PW, PWS, nickname)
+    // 輸入驗證
+    formValidation()
+    // 註冊
+    signUp(email, nickname, password)
+    let resMsg = [...fulfilled]
+    console.log(window)
+    console.log(resMsg)
+  })
+}
+
+/* 註冊密碼檢查 */
+function PWCheck(PW, PWS, name) {
+  const errMsg = document.querySelector('.errMessage')
+  errMsg.style.display = 'none'
+  if(name !== '') {
+    if(PW.value.trim() !== PWS.value.trim()) {
+      PW.value = ''
+      PWS.value = ''
+      errMsg.innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
+      errMsg.style.display = 'block'
+    } else {
+      return PW.value.trim()
+    }
+  }
+}
+
+initPage()
+// const indexLayout = document.getElementById('js-indexLayout-control')
+// const viewSignIn = document.getElementById('js-signIn-control')
+// const viewSignUp = document.getElementById('js-signUp-control')
+
+// indexLayout.addEventListener('click', (e) => {
+//   console.log(e)
+// })
+
+// console.log(SignUp)
+
+// /* 宣告 DOM 控制變數 */
+// const globalControl = document.getElementById('js-global-control')
+// const loginPage = document.getElementById('js-LoginRegister-control')
+
+// /* 初始頁面 */
+// function Rendering() {
+//   monitorBtn()
+// }
+
+// /* 監聽按鈕 */
+// function monitorBtn() {
+//   const AJAXBtn = document.querySelector('[type="submit"]')
+//   const loginReg = document.querySelector('[href="#"]')
+//   AJAXBtn.addEventListener('click', (e) => {
+//     if(e.target.textContent === '登入') {
+//       // 取得使用者輸入資料
+//       user.email = document.getElementById('signInEmail').value.trim()
+//       user.password = document.getElementById('signInPassword').value.trim()
+//       // 輸入欄位驗證
+//       formValidation()
+//       // 登入 AJAX
+//       signIn()
+//     }
+//   })
+// }
+
+// /* 登入 AJAX */
+// function signIn() {
+//   axios.post(`${apiUrl}users/sign_in`, { user })
+//     .then(response => console.log(response))
+//     .catch(error => console.log('錯誤資訊：', error.response))
+// }
+
+// Rendering()
 
 // function Rendering() {
 //   loginPage.innerHTML = login
@@ -70,7 +184,7 @@ Rendering()
 // function transformPage() {
 //   const regBtn = document.querySelector('[href="#"]')
 //   regBtn.addEventListener('click', (e) => {
-//     if(e.target.innerText === '註冊') {
+//     if (e.target.innerText === '註冊') {
 //       loginPage.innerHTML = register
 //       // 註冊頁面控制
 //       regControl()
@@ -82,8 +196,8 @@ Rendering()
 
 
 // function loginControl() {
-//   const inBtn = document.querySelector('[type="submit"]')
-//   inBtn.addEventListener('click', () => {
+//   const changeBtn = document.querySelector('[type="submit"]')
+//   changeBtn.addEventListener('click', () => {
 //     user.email = document.getElementById('signInEmail').value.trim()
 //     user.password = document.getElementById('signInPassword').value.trim()
 //     // 輸入資料驗證
@@ -104,12 +218,12 @@ Rendering()
 //     user.nickname = document.getElementById('nickname').value.trim()
 //     let pwOne = document.getElementById('signUpPassword')
 //     let pwTwo = document.getElementById('signUpPasswords')
-//     if(user.nickname !== '') {
-//       if(pwOne.value !== pwTwo.value) {
+//     if (user.nickname !== '') {
+//       if (pwOne.value !== pwTwo.value) {
 //         pwOne.value = ''
 //         pwTwo.value = ''
 //         errMsg.innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
-//         errBlock     
+//         errBlock
 //       }
 //       user.password = pwOne.value.trim()
 //     }
@@ -127,19 +241,22 @@ Rendering()
 //   axios.post(`${apiUrl}users/sign_in`, { user })
 //     .then(response => {
 //       axios.defaults.headers.common['Authorization'] = response.headers.authorization
-//       if(response.status === 200) {
+//       if (response.status === 200) {
 //         globalControl.innerHTML = initList
-//         userView()
+//         // 改成使用者暱稱
+//         const changeName = document.querySelector('li>span')
+//         changeName.innerText = response.data.nickname
+//         userTodos()
 //       }
 //     })
-//     .catch(error => console.log('錯誤資訊：', error.response, user))
+//     .catch(error => console.log('錯誤資訊：', error.response))
 // }
 
 // /* 註冊 AJAX */
 // function signUp(errMsg, errBlock) {
 //   axios.post(`${apiUrl}users`, { user })
 //     .then(response => {
-//       if(response.data.message === '註冊成功') {
+//       if (response.data.message === '註冊成功') {
 //         errMsg.innerHTML = `
 //           <p>${response.data.message}</p>
 //           <p>將在 5 秒後跳轉至登入頁面</p>
@@ -152,69 +269,100 @@ Rendering()
 //     })
 //     .catch(error => {
 //       console.log('錯誤資訊：', error.response)
-//       if(error.response.data.error.length <= 1) {
+//       if (error.response.data.error.length <= 1) {
 //         errMsg.innerHTML = `<p>${error.response.data.error}</p>`
 //         errBlock
 //       }
 //     })
 // }
 
-// /* 待辦事項初始頁面 */
-// function userView() {
-//   // 監聽新增事項按鈕
-//   const addInput = document.getElementById('newTodo')
-//   const addBtn = document.getElementById('addTodoBtn')
-//   // 點擊 + 按紐時觸發
-//   addBtn.addEventListener('click', () => {
-//     examine(addInput)
-//   })
-//   // 按鍵 Enter 時觸發
-//   addInput.addEventListener('keyup', (e) => {
-//     if(e.key === 'Enter') {
-//       examine(addInput, e)
-//     }
+// /* 待辦事項頁面控制 */
+// function userTodos() {
+//   // 登出按鈕監聽
+//   const log_out = document.querySelector('li>a')
+//   log_out.addEventListener('click', (e) => {
+//     signOut()
 //   })
 //   // 取得待辦事項列表
-//   const startList = document.getElementById('js-list-control')
-//   getTodos(startList)
+//   getTodos()
+//   const addInput = document.getElementById('newTodo')
+//   const addBtn = document.getElementById('addTodoBtn')
+//   // 監聽新增按鈕
+//   addInput.addEventListener('keyup', (e) => {
+//     if (e.key === 'Enter') {
+//       e.preventDefault();
+//       examine(addInput)
+//     }
+//   })
+//   addBtn.addEventListener('click', () => examine(addInput))
 // }
 
-// function examine(addInput, e) {
-//   // 防止泡泡事件，重複加入事項
-//   if(e) {
-//     e.preventDefault();
-//   }
-//   // e.preventDefault();
-//   const errMsg = document.querySelector('.errMessage')
-//   errMsg.style.display = 'none'
-//   const errBlock = errMsg.style.display = 'block'
-//   const inTxt = addInput.value.trim()
-//   let origin = todoData.find(item => inTxt === item.content)
-//   if ( inTxt === '' ) {
-//     errMsg.innerHTML = '<p>請輸入待辦事項</p>'
-//     errBlock
-//   } else if ( inTxt !== '' && origin !== undefined ) {
-//     errMsg.innerHTML = `<p>${inTxt}，重複的待辦事項</p>`
-//     errBlock
+// /* 登出 AJAX */
+// function signOut() {
+//   axios.delete(`${apiUrl}users/sign_out`)
+//     .then(response => {
+//       if(response.status === 200) {
+//         // 清除 axios headers 預設的 Authorization
+//         axios.defaults.headers.common['Authorization'] = ''
+//         globalControl.innerHTML = startPage
+//         document.getElementById('js-LoginRegister-control').innerHTML = login
+//         // 登入頁面控制
+//         loginControl()
+//         // 切換註冊
+//         transformPage()
+//       }
+      
+//     })
+//     .catch(error => console.log('錯誤資訊：', error.response))
+// }
+
+// /* 檢查待辦事項輸入資料 */
+// function examine(source) {
+//   let data = source.value.trim()
+//   const origin = todo.find(item => data === item.content)
+//   const errMeg = document.querySelector('.errMessage')
+//   errMeg.style.display = 'none'
+//   if (data === '') {
+//     errMeg.innerHTML = '<p>請輸入待辦事項</p>'
+//     errMeg.style.display = 'block'
+//   } else if (data !== '' && origin !== undefined) {
+//     errMeg.innerHTML = `<p>${data}，重複的待辦事項</p>`
+//     errMeg.style.display = 'block'
 //   } else {
-//     todo.content = inTxt
+//     todo = {}
+//     todo.content = data
 //     addTodo()
 //   }
-//   addInput.value = ''
+//   source.value = ''
+// }
+
+// /* 新增待辦事項 */
+// function addTodo() {
+//   axios.post(`${apiUrl}todos`, { todo })
+//     .then(response => {
+//       if(response.status === 201) {
+//         // 取得待辦事項列表
+//         getTodos()
+//       }
+//     })
+//     .catch(error => console.log('錯誤資訊：', error.response))
 // }
 
 // /* 取得待辦事項列表 */
-// function getTodos(startList) {
+// function getTodos() {
+//   const startList = document.getElementById('js-list-control')
 //   axios.get(`${apiUrl}todos`)
-//     .then(response => {      
-//       if(response.data.todos.length === 0) {
+//     .then(response => {
+//       todo = response.data.todos
+//       if(todo.length === 0) {
 //         // 沒有代辦事項時顯示無資料畫面
 //         startList.innerHTML = noneList
 //       } else {
 //         // 儲存回傳資料
-//         todoData = response.data.todos
+//         todoData = [...todo]
 //         // 有代辦事項時渲染列表卡
 //         startList.innerHTML = dataList
+//         // 渲染待辦事項列表
 //         renderList(todoData)
 //       }
 //     })
@@ -222,275 +370,112 @@ Rendering()
 // }
 
 // /* 渲染待辦事項列表 */
-// function renderList() {
+// function renderList(data) {
 //   const listCard = document.getElementById('js-toDos-control')
 //   let todosList = ''
 //   // 組裝事項列表
-//   todoData.forEach(item => {
+//   data.forEach(item => {
 //     todosList += `
-//       <li class="li-style" id="${item.id}">
+//       <li class="li-style" data-id="${item.id}">
 //         <label for="${item.content}" class="col DynamicBox">
-//           <input type="checkbox" name="${item.content}" id="${item.id}"><span class="ms-5">${item.content}</span>
+//           <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
+//           <span class="ms-5">${item.content}</span>
 //         </label>
-//         <button class="btn btn-todoitem" type="button" aria-label="editBtn"><i class="bi bi-pencil-fill"></i></button>
-//         <button class="btn btn-todoitem" type="button" aria-label="removeBtn"><i class="bi bi-x-lg"></i></button>
+//         <button class="btn btn-todoitem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+//         <button class="btn btn-todoitem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
 //       </li>
 //     `
 //   })
+//   // 顯示待完成項目數量
+//   const nudone = data.filter(item => item.completed_at === null)
+//   const pending = document.querySelector('[data-num]')
+//   pending.innerText = nudone.length
 //   // 渲染完成的事項列表
 //   listCard.innerHTML = todosList
-// }
-
-// /* 新增待辦事項 */
-// function addTodo() {
-//   // 新增事項 AJAX
-//   axios.post(`${apiUrl}todos`, { todo })
-//     .then(response => {
-//       console.log(response)
-//       // 重新渲染畫面
-//       userView()
-//     })
-//     .catch(error => console.log('錯誤資訊：', error.response))
-// }
-
-// Rendering()
-
-// // 載入版型 JS 
-// import { startPage, logIn, register, initList, noneList, dataList } from './assets/js/Templates'
-
-// // 載入 bootstrap 驗證
-// import { formValidation } from './assets/js/Validation'
-
-// // 載入 AJAX 工具
-// import axios from 'axios'
-
-// // API 網址
-// const apiUrl = 'https://todoo.5xcamp.us/'
-
-// // 使用者資料變數
-// let user = {}
-
-// // 宣告全域 DOM 元素控制
-// const globalControl = document.getElementById('js-global-control')
-
-// // 初始頁面控制
-// function Rendering() {
-//   // 渲染初始頁面
-//   globalControl.innerHTML = startPage
-//   globalControl.classList = 'bg-primary'
-//   // 載入登入格式
-//   const registerLogIn = document.getElementById('js-user-control')
-//   registerLogIn.innerHTML = logIn
-//   // 監聽登入按鈕
-//   const signInBtn = document.querySelector('[type="button"]')
-//   monitorAddBtn('in', signInBtn)
-//   // 監聽切換註冊按鈕
-//   changeRegister(register, registerLogIn)
-// }
-
-// // 登入與註冊切換
-// function changeRegister(state, registerLogIn) {
-//   const registerBtn = document.querySelector('form a')
-//   registerBtn.addEventListener('click', () => {
-//     if(state === register) {
-//       registerPage(registerLogIn)
-//     } else {
-//       Rendering()
-//     }
-//   })
-// }
-
-// // 註冊頁面控制
-// function registerPage(registerLogIn) {
-//   registerLogIn.innerHTML = register
-//   // 監聽註冊按鈕
-//   const signUpBtn = document.querySelector('[type="button"]')
-//   monitorAddBtn('up', signUpBtn)
-//   // 監聽切換登入按鈕
-//   changeRegister(logIn, registerLogIn)
-// }
-
-// // 監聽登入與註冊按鈕
-// function monitorAddBtn(state, btn) {
-//   if(state === 'in') {
-//     btn.addEventListener('click', () => {
-//       // 取得使用者輸入資料
-//       user.email = document.getElementById('loginEmail').value.trim()
-//       user.password = document.getElementById('loginPassword').value.trim()
-//       // 檢查輸入資料
-//       formValidation()
-//       // 登入 AJAX
-//       signIn()
-//     })
+//   // 切換頁籤
+//   const tabs = document.getElementById('js-tabs-control')
+//   tabs.addEventListener('click', toggleTab)
+//   // 選擇待辦事項，編輯與刪除
+//   listCard.addEventListener('click', checkTodo)
+//   // 取得清除已完成項目按鈕控制
+//   const delAllDoneBtn = document.querySelector('.btn-clearAll')
+//   // 取出已完成事項
+//   const allDone = data.filter(item => item.completed_at !== null)
+//   // 判斷有無完成項目開啟按鈕
+//   if(allDone.length !== 0) {
+//     delAllDoneBtn.removeAttribute('disabled')
 //   } else {
-//     btn.addEventListener('click', () => {
-//       user.email = document.getElementById('signUpEmail').value.trim()
-//       user.nickname = document.getElementById('nickName').value.trim()
-//       // 檢查輸入資料
-//       formValidation()
-//       // 註冊前輸入資料查驗
-//       RegisterInfoCheck()
+//     delAllDoneBtn.setAttribute('disabled', '')
+//   }
+//   // 監聽清除已完成項目按鈕
+//   delAllDoneBtn.addEventListener('click', delAllDone)
+// }
+
+// /* 選擇待辦事項，編輯與刪除 */
+// function checkTodo(e) {
+//   let id = e.target.closest('li').dataset.id
+//   if(e.target.getAttribute('aria-label') === 'editBtn') {
+//     e.preventDefault();
+//     console.log('編輯按鈕', id)
+//   } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
+//     e.preventDefault();
+//     // 刪除單一項目
+//     delTodo(id)
+//   } else {
+//     todoData.forEach(item => {
+//       if(item.id === id) {
+//         if(item.completed_at === null) {
+//           item.completed_at = new Date()
+//         } else {
+//           item.completed_at = null
+//         }
+//       }
 //     })
 //   }
+//   // 選擇指定項目後更新畫面
+//   renderList(todoData)
 // }
 
-// // 註冊前輸入資料查驗
-// function RegisterInfoCheck() {
-//   // 錯誤提示區塊控制
-//   const errText = document.querySelector('.errMessage')
-//   errText.style.display = 'none'
-//   let onePW = document.getElementById('signUpPassword')
-//   let twoPW = document.getElementById('signUpPasswords')
-//   // 判斷輸入資料是否正確
-//   if(onePW.value.trim() !== twoPW.value.trim()) {
-//     errText.innerHTML = '<p>輸入的兩次密碼不同，請重新輸入。</p>'
-//     errText.style.display = 'block'
-//     onePW.value = ''
-//     twoPW.value = ''
-//   } else if(onePW.value.trim() === '' || twoPW.value.trim() === '') {
-//     errText.innerHTML = '<p>請輸入密碼，兩次密碼不能為空</p>'
-//     errText.style.display = 'block'
-//     onePW.value = ''
-//     twoPW.value = ''
+// /* 刪除待辦事項 */
+// function delTodo(id) {
+//   axios.delete(`${apiUrl}todos/${id}`)
+//     .then(response => {
+//       if(response.status === 200) {
+//         // 重新取得事項列表
+//         getTodos()
+//       }
+//     })
+//     .catch(error => console.log('錯誤資訊：', error.response))
+// }
+
+// /* 切換頁籤 */
+// function toggleTab(e) {
+//   const tag = document.querySelectorAll('#js-tabs-control li')
+//   tag.forEach((item) => item.classList.remove('active'));
+//   state = e.target.closest('li').dataset.toggle
+//   e.target.closest('li').classList.add('active')
+//   // 頁籤分類
+//   tagSort()
+// }
+
+// /* 頁籤分類 */
+// function tagSort() {
+//   let tempData = []
+//   if(state === 'wait') {
+//     tempData = todoData.filter(item => item.completed_at === null)
+//   } else if (state === 'done') {
+//     tempData = todoData.filter(item => item.completed_at !== null)
 //   } else {
-//     user.password = onePW.value.trim()
-//     // 判斷暱稱
-//     if(user.nickname === '') {
-//       errText.innerHTML = '<p>請輸入您的暱稱。</p>'
-//       errText.style.display = 'block'
-//     } else {
-//       // 註冊 AJAX
-//       signUp(errText)
-//     }
+//     tempData = todoData
 //   }
+//   // 渲染待辦事項列表
+//   renderList(tempData)
 // }
 
-// // 註冊 AJAX
-// function signUp(errText) {
-//   // 串接註冊 API
-//   axios.post(`${apiUrl}users`, { user })
-//     .then(response => {
-//       if(response.data.message === '註冊成功') {
-//         // 提示文字
-//         errText.innerHTML = `
-//           <p>${response.data.message}</p>
-//           <p>將在 5 秒後跳轉至登入頁面</p>
-//         `
-//         errText.style.display = 'block'
-//         // 切換登入畫面
-//         setTimeout(() => {
-//           Rendering()
-//         }, 5000)  
-//       }
-//     })
-//     .catch(error => {
-//       console.log('錯誤資訊：', error.response)
-//       if(error.response.data.error.length <= 1) {
-//         errText.innerHTML = `<p>${error.response.data.error}</p>`
-//         errText.style.display = 'block'
-//       }
-//     })
+// /* 清除已完成所有項目 */
+// function delAllDone() {
+//   console.log('del')
 // }
 
-// // 登入 AJAX
-// function signIn() {
-//   // 錯誤提示區塊控制
-//   const errText = document.querySelector('.errMessage')
-//   errText.style.display = 'none'
-//   // 串接登入 API
-//   axios.post(`${apiUrl}users/sign_in`, { user })
-//     .then(response => {
-//       axios.defaults.headers.common['Authorization'] = response.headers.authorization
-//       toDosList(response.data.nickname)
-//     })
-//     .catch(error => {
-//       console.log('錯誤資訊：', error.response)
-//       // 顯示錯誤訊息與提示
-//       errText.innerHTML = `
-//         <p>${error.response.data.message}</p>
-//         <p>帳號或密碼錯誤，如尚未註冊，請先註冊。</p>
-//       `
-//       errText.style.display = 'block'
-//     })
-// }
 
-// let todo = {}
-
-// // 待辦事項列表
-// function toDosList(nickname) {
-//   // 載入初始頁面
-//   globalControl.innerHTML = initList
-//   globalControl.classList = 'bg-twoColor'
-//   // 顯示使用者暱稱
-//   const userName = document.getElementById('userName')
-//   userName.innerHTML = nickname
-//   // 登出按鈕監聽
-//   const outBtn = document.getElementById('outBtn')
-//   outBtn.addEventListener('click', () => {
-//     // 登出 AJAX
-//     signOut()
-//   })
-//   // 宣告控制事項列表區塊
-//   const userList = document.getElementById('js-list-control')
-//   // 載入事項列表
-//   axios.get(`${apiUrl}todos`)
-//     .then(response => {
-//       const todoData = [...response.data.todos]
-//       if(response.data.todos.length >= 1) {
-//         userList.innerHTML = dataList
-//         userList.classList = 'listCard'
-//         let layout = ''
-//         todoData.forEach(item => {
-//           layout += `
-//             <li class="row align-items-center hover-clear">
-//               <label for="${item.content}" class="col DynamicBox">
-//                 <input type="checkbox" name="${item.content}" id="${item.id}"><span class="ps-4">${item.content}</span>
-//               </label>
-//               <div class="col-1 mb-4"><button type="button" class="bi bi-x-lg"></button></div>
-//             </li>
-//           `
-//         })
-//         const todosList = document.getElementById('js-todos-control')
-//         todosList.innerHTML = layout
-//       } else {
-//         userList.innerHTML = noneList
-//       }
-//     })
-//     .catch(error => console.log('錯誤資訊：', error.response))
-
-//   const addTodoBtn = document.querySelector('[type="button"]')
-//   const inputTodo = document.getElementById('matters')
-//   inputTodo.addEventListener('keyup', (e) => {
-//     if(e.key === 'Enter') {
-//       console.log(inputTodo.value)
-//       todo.content = inputTodo.value
-//       addTodo()
-//     }
-//   })
-//   addTodoBtn.addEventListener('click', (e) => {
-//     todo.content = inputTodo.value
-//       addTodo()
-//   })
-// }
-
-// // 登出 AJAX
-// function signOut() {
-//   axios.delete(`${apiUrl}users/sign_out`)
-//     .then(response => {
-//       if(response.data.message === '已登出') {
-//         // 清空 Authorization 資料
-//         // axios.defaults.headers.common['Authorization'] = ''
-//         // 載入初始頁面
-//         Rendering()
-//       }
-//     })
-//     .catch(error => console.log('錯誤資訊：', error.response))
-// }
-
-// // 新增事項
-// function addTodo() {
-//   axios.post(`${apiUrl}todos`, { todo })
-//     .then(response => console.log(response))
-//     .catch(error => console.log('錯誤資訊：', error.response))
-// }
 // Rendering()
