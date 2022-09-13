@@ -31,6 +31,8 @@ import { noneList } from './assets/js/layout/NoListLayout'
 /* AJAX Function */
 import { signUp, signIn } from './assets/js/AjaxApi'
 
+import { apiRes } from './assets/js/DataSend'
+
 /* 使用者資料 */
 const user = {}
 // 使用者待辦事項暫存
@@ -75,7 +77,9 @@ function loginVerify() {
     formValidation()
     // 登入
     signIn(email, PW)
+    toDosControl()
   })
+
 }
 
 /* 註冊頁面控制 */
@@ -115,6 +119,13 @@ function PWCheck(PW, PWS, name) {
       return PW.value.trim()
     }
   }
+}
+
+/* 待辦事項頁面控制 */
+function toDosControl() {
+  let test = apiRes
+  console.log('main', apiRes)
+  const userName = document.querySelector('.nav > span')
 }
 
 initPage()

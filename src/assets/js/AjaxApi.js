@@ -1,4 +1,5 @@
 import { gbControl, errMsgDom } from './DomControl'
+import { apiRes } from './DataSend'
 import { initList } from './layout/InitListLayout'
 
 import axios from 'axios'
@@ -40,6 +41,7 @@ function signIn(email, password) {
       console.log(response)
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       gbControl().innerHTML = initList
+      apiRes(response.data.nickname)
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
