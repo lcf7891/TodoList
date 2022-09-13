@@ -18,6 +18,9 @@ import { formValidation } from './assets/js/Validation'
 /* 載入 axios 套件 */
 import axios from 'axios'
 
+/* DOM 控制 */
+import { gbControl, errMsgDom } from './assets/js/DomControl'
+
 /* 載入版型 */
 import { indexPage } from './assets/js/layout/IndexLayout'
 import { login } from './assets/js/layout/LoginLayout'
@@ -27,7 +30,7 @@ import { dataList } from './assets/js/layout/ListCardLayout'
 import { noneList } from './assets/js/layout/NoListLayout'
 
 /* AJAX Function */
-import { signUp, signIn, errMsgDom, gbControl } from './assets/js/d-AjaxApi'
+import { signUp, signIn } from './assets/js/d-AjaxApi'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'

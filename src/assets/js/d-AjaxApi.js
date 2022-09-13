@@ -1,16 +1,9 @@
+import { gbControl, errMsgDom } from './DomControl'
 import { initList } from './layout/InitListLayout'
 
 import axios from 'axios'
 
 const apiUrl = 'https://todoo.5xcamp.us/'
-
-function gbControl() {
-  return document.getElementById('js-global-control')
-}
-
-function errMsgDom() {
-  return document.querySelector('.errMessage')
-}
 
 // 註冊
 function signUp(email, nickname, password) {
