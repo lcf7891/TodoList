@@ -27,7 +27,7 @@ import { dataList } from './assets/js/layout/ListCardLayout'
 import { noneList } from './assets/js/layout/NoListLayout'
 
 /* AJAX Function */
-import { signUp, signIn, errMsgDom } from './assets/js/d-AjaxApi'
+import { signUp, signIn, errMsgDom, gbControl } from './assets/js/d-AjaxApi'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
@@ -41,8 +41,7 @@ let todoData = []
 // 頁籤狀態
 let state = 'all'
 
-const gbControl = document.getElementById('js-global-control')
-gbControl.innerHTML = indexPage
+gbControl().innerHTML = indexPage
 const loginView = document.getElementById('js-loginRegister-control')
 
 /* 初始頁面 */

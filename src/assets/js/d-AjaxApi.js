@@ -73,4 +73,4 @@ function getToDos() {
 }
 
 
-export { signUp, signIn, signOut, getToDos, errMsgDom }
+export { signUp, signIn, signOut, getToDos, errMsgDom, gbControl }
