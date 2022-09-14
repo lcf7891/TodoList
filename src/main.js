@@ -127,11 +127,11 @@ function PWCheck(PW, PWS, name) {
 }
 
 /* 登入 AJAX */
-function signIn(email, PW) {
+function signIn(email, password) {
   axios.post(`${apiUrl}users/sign_in`, {
     user: {
-      email: email,
-      password: PW
+      email,
+      password
     }
   })
     .then(response => {
@@ -147,7 +147,28 @@ function signIn(email, PW) {
 
 /* 註冊 AJAX */
 function signUp(email, nickname, password) {
-  console.log(email, nickname, password)
+  errMsgDom().style.display = 'none'
+  axios.post(`${apiUrl}users`, {
+    user: {
+      email,
+      nickname,
+      password
+    }
+  })
+    .then(response => {
+      console.log(response)
+      if(response.status === 201) {
+        errMsgDom().innerHTML = `
+          <p>${response.data.message}</p>
+          <p>將在 5 秒後跳轉至登入頁面</p>
+        `
+        errMsgDom().style.display = 'block'
+        setTimeout(() => {
+          Rendering()
+        }, 5000)
+      }
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 Rendering()
