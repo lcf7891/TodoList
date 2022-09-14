@@ -26,7 +26,69 @@ import { initList } from './assets/js/layout/IndexLayout'
 import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
+const gbControl = document.getElementById('js-global-control')
+function loginView() {
+  return document.getElementById('js-loginRegister-control')
+} 
 
+/* 使用者資料 */
+const user = {}
+// 使用者待辦事項暫存
+let todo = {}
+// API 資料存放
+let apiData = []
+// 頁籤狀態
+let state = 'all'
+
+/* 渲染頁面 */
+function Rendering() {
+  // 初始頁面
+  gbControl.innerHTML = indexPage
+  // 顯示登入區塊
+  loginView().innerHTML = login
+  // 登入驗證
+  loginVerify()
+  // 登入與註冊切換
+  transformView()
+}
+
+/* 登入驗證 */
+function loginVerify() {
+  const loginBtn = document.querySelector('[type="submit"]')
+  loginBtn.addEventListener('click', () => {
+    const email = document.getElementById('signInEmail').value.trim()
+    const PW = document.getElementById('signInPassword').value.trim()
+    // 輸入驗證
+    formValidation()
+    // 登入
+    // signIn(email, PW)
+  })
+}
+
+/* 登入與註冊切換 */
+function transformView() {
+  const changeBtn = document.querySelector('[href="#"]')
+  changeBtn.addEventListener('click', (e) => {
+    if(e.target.innerText === '註冊') {
+      // 切換至註冊
+      loginView().innerHTML = register
+      regControl()
+    } else {
+      // 重新渲染頁面
+      Rendering()
+    }
+  })
+}
+
+/* 註冊頁面控制 */
+function regControl() {
+  // 登入與註冊切換
+  transformView()
+  // 註冊驗證
+  regVerify()
+}
+
+Rendering()
 
 // gbControl().innerHTML = indexPage
 
