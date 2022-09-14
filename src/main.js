@@ -22,7 +22,7 @@ import axios from 'axios'
 import { indexPage } from './assets/js/layout/IndexLayout'
 import { login } from './assets/js/layout/LoginLayout'
 import { register } from './assets/js/layout/RegisterLayout'
-import { initList } from './assets/js/layout/IndexLayout'
+import { initList } from './assets/js/layout/InitListLayout'
 import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
@@ -33,6 +33,9 @@ function loginView() {
 function errMsgDom() {
   return document.querySelector('.errMessage')
 }
+
+/* API 網址 */
+const apiUrl = 'https://todoo.5xcamp.us/'
 
 /* 使用者資料 */
 const user = {}
@@ -104,7 +107,7 @@ function regVerify() {
     // 輸入驗證
     formValidation()
     // 註冊
-    // signUp(email, nickname, password)
+    signUp(email, nickname, password)
   })
 }
 
@@ -133,8 +136,18 @@ function signIn(email, PW) {
   })
     .then(response => {
       console.log(response)
+      if(response.status === 200) {
+        gbControl.innerHTML = initList
+        const userName = document.querySelector('.nav span')
+        userName.innerText = response.data.nickname
+      }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+/* 註冊 AJAX */
+function signUp(email, nickname, password) {
+  console.log(email, nickname, password)
 }
 
 Rendering()
