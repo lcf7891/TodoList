@@ -29,7 +29,10 @@ import { listCard } from './assets/js/layout/ListCardLayout'
 const gbControl = document.getElementById('js-global-control')
 function loginView() {
   return document.getElementById('js-loginRegister-control')
-} 
+}
+function errMsgDom() {
+  return document.querySelector('.errMessage')
+}
 
 /* 使用者資料 */
 const user = {}
@@ -60,8 +63,8 @@ function loginVerify() {
     const PW = document.getElementById('signInPassword').value.trim()
     // 輸入驗證
     formValidation()
-    // 登入
-    // signIn(email, PW)
+    // 登入 AJAX
+    signIn(email, PW)
   })
 }
 
@@ -86,6 +89,52 @@ function regControl() {
   transformView()
   // 註冊驗證
   regVerify()
+}
+
+/* 註冊驗證 */
+function regVerify() {
+  const regBtn = document.querySelector('[type="submit"]')
+  regBtn.addEventListener('click', () => {
+    const email = document.getElementById('signUpEmail').value.trim()
+    const nickname = document.getElementById('nickname').value.trim()
+    let PW = document.getElementById('signUpPassword')
+    let PWS = document.getElementById('signUpPasswords')
+    // 註冊密碼檢查
+    const password = PWCheck(PW, PWS, nickname)
+    // 輸入驗證
+    formValidation()
+    // 註冊
+    // signUp(email, nickname, password)
+  })
+}
+
+/* 註冊密碼檢查 */
+function PWCheck(PW, PWS, name) {
+  errMsgDom().style.display = 'none'
+  if(name !== '') {
+    if(PW.value.trim() !== PWS.value.trim()) {
+      PW.value = ''
+      PWS.value = ''
+      errMsgDom().innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
+      errMsgDom().style.display = 'block'
+    } else {
+      return PW.value.trim()
+    }
+  }
+}
+
+/* 登入 AJAX */
+function signIn(email, PW) {
+  axios.post(`${apiUrl}users/sign_in`, {
+    user: {
+      email: email,
+      password: PW
+    }
+  })
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 Rendering()
