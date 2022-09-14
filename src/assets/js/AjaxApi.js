@@ -1,5 +1,6 @@
-import { gbControl, errMsgDom } from './DomControl'
-import { apiRes } from './DataSend'
+import { gbControl, loginView, errMsgDom } from './DomControl'
+import { setApiRes, getApiRes } from './DataSend'
+import { login } from './layout/LoginLayout'
 import { initList } from './layout/InitListLayout'
 
 import axios from 'axios'
@@ -17,8 +18,14 @@ function signUp(email, nickname, password) {
   })
     .then(response => {
       console.log(response)
-      errMsgDom().innerHTML = `<p>${response.data.message}</p>`
+      errMsgDom().innerHTML = `
+        <p>${response.data.message}</p>
+        <p>將在 5 秒後跳轉至登入頁面</p>
+      `
       errMsgDom().style.display = 'block'
+      setTimeout(() => {
+        console.log('test')
+      }, 5000)
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
@@ -41,7 +48,7 @@ function signIn(email, password) {
       console.log(response)
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       gbControl().innerHTML = initList
-      apiRes(response.data.nickname)
+      setApiRes(response.data.nickname)
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)

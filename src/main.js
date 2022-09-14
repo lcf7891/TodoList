@@ -18,117 +18,105 @@ import { formValidation } from './assets/js/Validation'
 /* 載入 axios 套件 */
 import axios from 'axios'
 
-/* DOM 控制 */
-import { gbControl, errMsgDom } from './assets/js/DomControl'
-
 /* 載入版型 */
 import { indexPage } from './assets/js/layout/IndexLayout'
 import { login } from './assets/js/layout/LoginLayout'
 import { register } from './assets/js/layout/RegisterLayout'
-import { dataList } from './assets/js/layout/ListCardLayout'
+import { initList } from './assets/js/layout/IndexLayout'
 import { noneList } from './assets/js/layout/NoListLayout'
+import { listCard } from './assets/js/layout/ListCardLayout'
 
-/* AJAX Function */
-import { signUp, signIn } from './assets/js/AjaxApi'
 
-import { apiRes } from './assets/js/DataSend'
 
-/* 使用者資料 */
-const user = {}
-// 使用者待辦事項暫存
-let todo = {}
-// API 資料存放
-let todoData = []
-// 頁籤狀態
-let state = 'all'
+// gbControl().innerHTML = indexPage
 
-gbControl().innerHTML = indexPage
-const loginView = document.getElementById('js-loginRegister-control')
+// /* 初始頁面 */
+// function initPage() {
+//   loginView().innerHTML = login
+//   // 登入驗證
+//   loginVerify()
+//   // 切換註冊
+//   transformView()
+// }
 
-/* 初始頁面 */
-function initPage() {
-  loginView.innerHTML = login
-  // 登入驗證
-  loginVerify()
-  // 切換註冊
-  transformView()
-}
+// /* 登入與註冊切換 */
+// function transformView() {
+//   const changeBtn = document.querySelector('[href="#"]')
+//   changeBtn.addEventListener('click', (e) => {
+//     if(e.target.innerText === '註冊') {
+//       loginView().innerHTML = register
+//       regControl()
+//     } else {
+//       initPage()
+//     }
+//   })
+// }
 
-/* 登入與註冊切換 */
-function transformView() {
-  const changeBtn = document.querySelector('[href="#"]')
-  changeBtn.addEventListener('click', (e) => {
-    if(e.target.innerText === '註冊') {
-      loginView.innerHTML = register
-      regControl()
-    } else {
-      initPage()
-    }
-  })
-}
+// /* 登入驗證 */
+// function loginVerify() {
+//   const loginBtn = document.querySelector('[type="submit"]')
+//   loginBtn.addEventListener('click', () => {
+//     const email = document.getElementById('signInEmail').value.trim()
+//     const PW = document.getElementById('signInPassword').value.trim()
+//     // 輸入驗證
+//     formValidation()
+//     // 登入
+//     signIn(email, PW)
+//     toDosControl()
+//   })
 
-/* 登入驗證 */
-function loginVerify() {
-  const loginBtn = document.querySelector('[type="submit"]')
-  loginBtn.addEventListener('click', () => {
-    const email = document.getElementById('signInEmail').value.trim()
-    const PW = document.getElementById('signInPassword').value.trim()
-    // 輸入驗證
-    formValidation()
-    // 登入
-    signIn(email, PW)
-    toDosControl()
-  })
+// }
 
-}
+// /* 註冊頁面控制 */
+// function regControl() {
+//   // 切換登入
+//   transformView()
+//   // 註冊驗證
+//   regVerify()
+// }
 
-/* 註冊頁面控制 */
-function regControl() {
-  // 切換登入
-  transformView()
-  // 註冊驗證
-  regVerify()
-}
+// /* 註冊驗證 */
+// function regVerify() {
+//   const regBtn = document.querySelector('[type="submit"]')
+//   regBtn.addEventListener('click', () => {
+//     const email = document.getElementById('signUpEmail').value.trim()
+//     const nickname = document.getElementById('nickname').value.trim()
+//     let PW = document.getElementById('signUpPassword')
+//     let PWS = document.getElementById('signUpPasswords')
+//     const password = PWCheck(PW, PWS, nickname)
+//     // 輸入驗證
+//     formValidation()
+//     // 初始功能放入跨檔資料暫存
+//     const tempFn = { init: initPage()}
+//     setApiRes(tempFn)
+//     // 註冊
+//     signUp(email, nickname, password)
+//   })
+// }
 
-/* 註冊驗證 */
-function regVerify() {
-  const regBtn = document.querySelector('[type="submit"]')
-  regBtn.addEventListener('click', () => {
-    const email = document.getElementById('signUpEmail').value.trim()
-    const nickname = document.getElementById('nickname').value.trim()
-    let PW = document.getElementById('signUpPassword')
-    let PWS = document.getElementById('signUpPasswords')
-    const password = PWCheck(PW, PWS, nickname)
-    // 輸入驗證
-    formValidation()
-    // 註冊
-    signUp(email, nickname, password)
-  })
-}
+// /* 註冊密碼檢查 */
+// function PWCheck(PW, PWS, name) {
+//   errMsgDom().style.display = 'none'
+//   if(name !== '') {
+//     if(PW.value.trim() !== PWS.value.trim()) {
+//       PW.value = ''
+//       PWS.value = ''
+//       errMsgDom().innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
+//       errMsgDom().style.display = 'block'
+//     } else {
+//       return PW.value.trim()
+//     }
+//   }
+// }
 
-/* 註冊密碼檢查 */
-function PWCheck(PW, PWS, name) {
-  errMsgDom().style.display = 'none'
-  if(name !== '') {
-    if(PW.value.trim() !== PWS.value.trim()) {
-      PW.value = ''
-      PWS.value = ''
-      errMsgDom().innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
-      errMsgDom().style.display = 'block'
-    } else {
-      return PW.value.trim()
-    }
-  }
-}
+// /* 待辦事項頁面控制 */
+// function toDosControl() {
+//   const userName = document.querySelector('.nav > span')
+// }
 
-/* 待辦事項頁面控制 */
-function toDosControl() {
-  let test = apiRes
-  console.log('main', apiRes)
-  const userName = document.querySelector('.nav > span')
-}
+// initPage()
 
-initPage()
+
 // const indexLayout = document.getElementById('js-indexLayout-control')
 // const viewSignIn = document.getElementById('js-signIn-control')
 // const viewSignUp = document.getElementById('js-signUp-control')

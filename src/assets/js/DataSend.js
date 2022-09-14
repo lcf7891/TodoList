@@ -1,5 +1,21 @@
-function apiRes(value) {
-  return value
+const tempData = {}
+
+function setApiRes(value) {
+  let typeV = typeof(value)
+  switch(typeV) {
+    case 'number':
+      tempData.num = value
+      break
+    case 'string':
+      tempData.sting = value
+      break
+    default:
+      tempData.obj = value
+  }
 }
 
-export { apiRes }
+function getApiRes() {
+  return tempData
+}
+
+export { setApiRes, getApiRes }

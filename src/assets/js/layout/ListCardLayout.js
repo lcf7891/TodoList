@@ -1,4 +1,4 @@
-const dataList = `
+const listCard = `
   <div class="listCard">
     <ul class="nav text-center mb-6" id="js-tabs-control">
       <li class="nav-item tabs position-relative flex-grow-1 active" data-toggle="all">
@@ -35,4 +35,4 @@ const dataList = `
   </li>
 */}
 
-export { dataList }
+export { listCard }
