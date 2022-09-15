@@ -27,7 +27,7 @@ import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
 /* 載入 DOM 頁面控制 */
-import { gbControl, loginView, errMsgDom, todosControl } from './assets/js/DomControl'
+import { gbControl, loginView, errMsgDom, todosControl, itemControl } from './assets/js/DomControl'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
@@ -191,6 +191,8 @@ function listControl() {
       signOut()
     }
   })
+  // 取得待辦事項
+  getTodos()
   // 監聽輸入
   const addBtn = document.querySelector('.addTodoBtn')
   const newTodo = document.getElementById('newTodo')
@@ -201,8 +203,6 @@ function listControl() {
       checkInput(newTodo)
     }
   })
-  // 取得待辦事項
-  getTodos()
 }
 
 /* 登出 AJAX */
@@ -212,6 +212,21 @@ function signOut() {
       if(response.status === 200) {
         axios.defaults.headers.common['Authorization'] = ''
         Rendering()
+      }
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+/* 取得待辦事項 */
+function getTodos() {
+  axios.get(`${apiUrl}todos`)
+    .then(response => {
+      todosData = [...response.data.todos]
+      if(todosData.length === 0) {
+        todosControl().innerHTML = noneList
+      } else {
+        todosControl().innerHTML = listCard
+        renderList()
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
@@ -235,22 +250,35 @@ function checkInput(newTodo) {
 
 /* 新增待辦事項 */
 function addTodos(todos) {
-  console.log(todos)
-}
-
-/* 取得待辦事項 */
-function getTodos() {
-  axios.get(`${apiUrl}todos`)
+  axios.post(`${apiUrl}todos`, {
+    todo: {
+      content: todos
+    }
+  })
     .then(response => {
-      todosData = [...response.data.todos]
-      if(todosData.length === 0) {
-        todosControl().innerHTML = noneList
-      } else {
-        todosControl().innerHTML = listCard
-        console.log(todosData)
+      console.log(response)
+      if(response.status === 201) {
+        getTodos()
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+function renderList() {
+  let template = ''
+  todosData.forEach(item => {
+    template += `
+      <li class="li-style" data-id="${item.id}">
+        <label for="${item.content}" class="col DynamicBox">
+          <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
+          <span class="ms-5">${item.content}</span>
+        </label>
+        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+        <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
+      </li>
+    `
+  })
+  itemControl().innerHTML = template
 }
 
 Rendering()
