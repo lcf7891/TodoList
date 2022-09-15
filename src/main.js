@@ -27,14 +27,14 @@ import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
 /* 載入 DOM 頁面控制 */
-import { gbControl, loginView, errMsgDom, todosControl, itemControl } from './assets/js/DomControl'
+import { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn } from './assets/js/DomControl'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
 
 /* 使用者資料 */
 // 使用者待辦事項暫存
-let todosData = []
+let toDosData = []
 // 頁籤狀態
 let state = 'all'
 
@@ -52,8 +52,9 @@ function Rendering() {
 
 /* 登入驗證 */
 function loginVerify() {
-  const loginBtn = document.querySelector('[type="submit"]')
-  loginBtn.addEventListener('click', () => {
+  // const loginBtn = document.querySelector('[type="submit"]')
+  // loginBtn
+  buttonBtn().addEventListener('click', () => {
     // 取得輸入資料
     const email = document.getElementById('signInEmail').value.trim()
     const PW = document.getElementById('signInPassword').value.trim()
@@ -66,8 +67,9 @@ function loginVerify() {
 
 /* 登入與註冊切換 */
 function transformView() {
-  const changeLink = document.querySelector('[href="#"]')
-  changeLink.addEventListener('click', (e) => {
+  // const changeLink = document.querySelector('[href="#"]')
+  // changeLink
+  aLink().addEventListener('click', (e) => {
     if(e.target.innerText === '註冊') {
       // 切換至註冊
       loginView().innerHTML = register
@@ -90,8 +92,9 @@ function regControl() {
 
 /* 註冊驗證 */
 function regVerify() {
-  const regBtn = document.querySelector('[type="submit"]')
-  regBtn.addEventListener('click', () => {
+  // const regBtn = document.querySelector('[type="submit"]')
+  // regBtn
+  buttonBtn().addEventListener('click', () => {
     // 取得輸入資料
     const email = document.getElementById('signUpEmail').value.trim()
     const nickname = document.getElementById('nickname').value.trim()
@@ -189,15 +192,23 @@ function signUp(email, nickname, password) {
 /* 待辦事項頁面控制 */
 function listControl() {
   // 登出按鈕監聽
-  const outLink = document.querySelector('[href="#"]')
-  outLink.addEventListener('click', (e) => {
+  // const outLink = document.querySelector('[href="#"]')
+  // outLink
+  aLink().addEventListener('click', (e) => {
     if(e.target.innerText === '登出') {
       // 登出 AJAX
       signOut()
     }
   })
   // 取得待辦事項
-  getTodos()
+  getToDos()
+  if(toDosData.length === 0) {
+    toDosControl().innerHTML = noneList
+  } else {
+    toDosControl().innerHTML = listCard
+    // 渲染待辦事項列表
+    renderList()
+  }
   // 監聽輸入
   const addBtn = document.querySelector('.addTodoBtn')
   const newTodo = document.getElementById('newTodo')
@@ -227,27 +238,72 @@ function signOut() {
 }
 
 /* 取得待辦事項 */
-function getTodos() {
+function getToDos() {
   axios.get(`${apiUrl}todos`)
     .then(response => {
       // 將資料存放入新的記憶體位置
-      todosData = [...response.data.todos]
-      if(todosData.length === 0) {
-        todosControl().innerHTML = noneList
-      } else {
-        todosControl().innerHTML = listCard
-        // 渲染待辦事項列表
-        renderList()
-      }
+      toDosData = [...response.data.todos]
+      // 渲染待辦事項列表
+      renderList()
     })
     .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+/* 渲染待辦事項列表 */
+function renderList() {
+  if(toDosData.length === 0) {
+    toDosControl().innerHTML = noneList
+  } else {
+    toDosControl().innerHTML = listCard
+  }
+  // 組合事項列表
+  let template = ''
+  toDosData.forEach(item => {
+    template += `
+      <li class="li-style" data-id="${item.id}">
+        <label for="${item.id}" class="col DynamicBox">
+          <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
+          <span class="ms-5">${item.content}</span>
+        </label>
+        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+        <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
+      </li>
+    `
+  })
+  // 渲染完成的事項列表
+  itemControl().innerHTML = template
+  // 選擇待辦事項
+  chooseTodo()
+}
+
+/* 選擇待辦事項 */
+function chooseTodo() {
+  itemControl().addEventListener('click', (e) => {
+    e.preventDefault()
+    // 取得點擊的目標 id 
+    const id = e.target.closest('li').dataset.id
+    if(e.target.getAttribute('aria-label') === 'editBtn') {
+      e.preventDefault();
+      console.log('編輯按鈕', id)
+    } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
+      e.preventDefault();
+      console.log('刪除按鈕', id)
+      // 刪除單一項目
+      // delTodo(id)
+    } else {
+      // 待辦事項 (未完成 / 完成) 切換
+      toDosToggle(id)
+    }
+    // 取得待辦事項
+    getToDos()
+  })
 }
 
 /* 檢查輸入資料 */
 function checkInput(newTodo) {
   errMsgDom().style.display = 'none'
   const newValue = newTodo.value.trim()
-  const origin = todosData.find(item => newValue === item.content)
+  const origin = toDosData.find(item => newValue === item.content)
   if(!newValue) {
     errMsgDom().innerHTML = `
       <p>請輸入待辦事項</p>
@@ -260,75 +316,37 @@ function checkInput(newTodo) {
     errMsgDom().style.display = 'block'
   } else {
     // 新增待辦事項
-    addTodos(newValue)
-    
+    addToDos(newValue)
   }
   newTodo.value = ''
 }
 
 /* 新增待辦事項 */
-function addTodos(todos) {
+function addToDos(toDos) {
   axios.post(`${apiUrl}todos`, {
     todo: {
-      content: todos
+      content: toDos
     }
   })
     .then(response => {
       if(response.status === 201) {
-        getTodos()
+        // 取得待辦事項
+        getToDos()
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
-/* 渲染待辦事項列表 */
-function renderList() {
-  // 組合事項列表
-  let template = ''
-  todosData.forEach(item => {
-    template += `
-      <li class="li-style" data-id="${item.id}">
-        <label for="${item.content}" class="col DynamicBox">
-          <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
-          <span class="ms-5">${item.content}</span>
-        </label>
-        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
-        <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
-      </li>
-    `
-  })
-  // 渲染完成的事項列表
-  itemControl().innerHTML = template
-  // 完成待辦事項
-  chooseTodo()
-}
-
-function chooseTodo() {
-  itemControl().addEventListener('click', (e) => {
-    // 取得點擊的目標 id 
-    const id = e.target.closest('li').dataset.id
-    if(e.target.getAttribute('aria-label') === 'editBtn') {
-      e.preventDefault();
-      console.log('編輯按鈕', id)
-    } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
-      e.preventDefault();
-      console.log('刪除按鈕', id)
-      // 刪除單一項目
-      // delTodo(id)
-    } else {
-      todosData.forEach(item => {
-        if(item.id === id) {
-          if(item.completed_at === null) {
-            item.completed_at = new Date()
-          } else {
-            item.completed_at = null
-          }
-        }
-      })
-    }
-    // 選擇指定項目後更新畫面
-    renderList()
-  })
+/* 待辦事項 (未完成 / 完成) 切換 */
+function toDosToggle(id) {
+  axios.patch(`${apiUrl}todos/${id}/toggle`)
+    .then(response => {
+      if(response.status === 200) {
+        // 取得待辦事項
+        getToDos()
+      }
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 // /* 切換頁籤 */

@@ -10,7 +10,7 @@ function errMsgDom() {
   return document.querySelector('.errMessage')
 }
 
-function todosControl() {
+function toDosControl() {
   return document.getElementById('js-list-control')
 }
 
@@ -26,4 +26,4 @@ function buttonBtn() {
   return document.querySelector('[type="submit"]')
 }
 
-export { gbControl, loginView, errMsgDom, todosControl, itemControl, aLink, buttonBtn }
+export { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn }
