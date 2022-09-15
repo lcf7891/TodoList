@@ -10,4 +10,16 @@ function errMsgDom() {
   return document.querySelector('.errMessage')
 }
 
-export { gbControl, loginView, errMsgDom }
+function todosControl() {
+  return document.getElementById('js-list-control')
+}
+
+function aLink() {
+  return document.querySelector('[href="#"]')
+}
+
+function buttonBtn() {
+  return document.querySelector('[type="submit"]')
+}
+
+export { gbControl, loginView, errMsgDom, todosControl, aLink, buttonBtn }

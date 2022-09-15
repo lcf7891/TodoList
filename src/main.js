@@ -27,17 +27,14 @@ import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
 /* 載入 DOM 頁面控制 */
-import { gbControl, loginView, errMsgDom } from './assets/js/DomControl'
+import { gbControl, loginView, errMsgDom, todosControl } from './assets/js/DomControl'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
 
 /* 使用者資料 */
-const user = {}
 // 使用者待辦事項暫存
-let todo = {}
-// API 資料存放
-let apiData = []
+let todosData = []
 // 頁籤狀態
 let state = 'all'
 
@@ -68,14 +65,15 @@ function loginVerify() {
 
 /* 登入與註冊切換 */
 function transformView() {
-  const changeBtn = document.querySelector('[href="#"]')
-  changeBtn.addEventListener('click', (e) => {
+  const changeLink = document.querySelector('[href="#"]')
+  changeLink.addEventListener('click', (e) => {
     if(e.target.innerText === '註冊') {
       // 切換至註冊
       loginView().innerHTML = register
+      // 註冊頁面控制
       regControl()
     } else {
-      // 重新渲染頁面
+      // 點擊登入按鈕重新渲染頁面
       Rendering()
     }
   })
@@ -131,22 +129,25 @@ function signIn(email, password) {
     }
   })
     .then(response => {
-      console.log(response)
+      //將使用者 Token 在 axios headers 作為預設值
+      axios.defaults.headers.common['Authorization'] = response.headers.authorization
       if(response.status === 200) {
+        // 載入待辦事項初始畫面
         gbControl().innerHTML = initList
+        // 加入使用者暱稱
         const userName = document.querySelector('.nav span')
-        userName.innerText = response.data.nickname
+        userName.innerText = `${response.data.nickname} 的待辦事項`
+        // 待辦事項頁面控制
+        listControl()
       }
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
-      if(error.response.status === 401) {
-        errMsgDom().innerHTML = `
-          <p>${error.response.data.message}</p>
-          <p>帳號密碼錯誤，如未註冊，請先註冊。</p>
-        `
-        errMsgDom().style.display = 'block'
-      }
+      errMsgDom().innerHTML = `
+        <p>${error.response.data.message}</p>
+        <p>帳號密碼錯誤，如未註冊，請先註冊。</p>
+      `
+      errMsgDom().style.display = 'block'
     })
 }
 
@@ -161,29 +162,64 @@ function signUp(email, nickname, password) {
     }
   })
     .then(response => {
-      console.log(response)
-      if(response.status === 201) {
-        errMsgDom().innerHTML = `
-          <p>${response.data.message}</p>
-          <p>將在 5 秒後跳轉至登入頁面</p>
-        `
-        errMsgDom().style.display = 'block'
-        setTimeout(() => {
-          Rendering()
-        }, 5000)
-      }
+      errMsgDom().innerHTML = `
+        <p>${response.data.message}</p>
+        <p>將在 5 秒後跳轉至登入頁面</p>
+      `
+      errMsgDom().style.display = 'block'
+      setTimeout(() => {
+        Rendering()
+      }, 5000)
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
-      if(error.response.status === 422) {
-        if(error.response.data.error.length <= 1) {
-          errMsgDom().innerHTML = `
-            <p>${error.response.data.error[0]}</p>
-          `
-        }
-        errMsgDom().style.display = 'block'
+      if(error.response.data.error.length <= 1) {
+        errMsgDom().innerHTML = `
+          <p>${error.response.data.error[0]}</p>
+        `
+      }
+      errMsgDom().style.display = 'block'
+    })
+}
+
+/* 待辦事項頁面控制 */
+function listControl() {
+  // 登出按鈕監聽
+  const outLink = document.querySelector('[href="#"]')
+  outLink.addEventListener('click', (e) => {
+    if(e.target.innerText === '登出') {
+      signOut()
+    }
+  })
+  // 取得待辦事項
+  getTodos()
+}
+
+/* 登出 AJAX */
+function signOut() {
+  axios.delete(`${apiUrl}users/sign_out`)
+    .then(response => {
+      if(response.status === 200) {
+        axios.defaults.headers.common['Authorization'] = ''
+        Rendering()
       }
     })
+    .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+/* 取得待辦事項 */
+function getTodos() {
+  axios.get(`${apiUrl}todos`)
+    .then(response => {
+      todosData = [...response.data.todos]
+      if(todosData.length === 0) {
+        todosControl().innerHTML = noneList
+      } else {
+        todosControl().innerHTML = listCard
+        console.log(todosData)
+      }
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 Rendering()
