@@ -304,7 +304,31 @@ function renderList() {
 }
 
 function chooseTodo() {
-
+  itemControl().addEventListener('click', (e) => {
+    // 取得點擊的目標 id 
+    const id = e.target.closest('li').dataset.id
+    if(e.target.getAttribute('aria-label') === 'editBtn') {
+      e.preventDefault();
+      console.log('編輯按鈕', id)
+    } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
+      e.preventDefault();
+      console.log('刪除按鈕', id)
+      // 刪除單一項目
+      // delTodo(id)
+    } else {
+      todosData.forEach(item => {
+        if(item.id === id) {
+          if(item.completed_at === null) {
+            item.completed_at = new Date()
+          } else {
+            item.completed_at = null
+          }
+        }
+      })
+    }
+    // 選擇指定項目後更新畫面
+    renderList()
+  })
 }
 
 // /* 切換頁籤 */
