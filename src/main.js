@@ -52,26 +52,30 @@ function Rendering() {
 
 /* 登入驗證 */
 function loginVerify() {
-  buttonBtn().addEventListener('click', () => {
-    // 取得輸入資料
-    const email = document.getElementById('signInEmail').value.trim()
-    const PW = document.getElementById('signInPassword').value.trim()
-    // 輸入驗證
-    formValidation()
-    // 登入 AJAX
-    signIn(email, PW)
+  buttonBtn().addEventListener('click', (e) => {
+    e.preventDefault()
+    if(e.target.innerText === '登入') {
+      // 取得輸入資料
+      const email = document.getElementById('signInEmail').value.trim()
+      const PW = document.getElementById('signInPassword').value.trim()
+      // 輸入驗證
+      formValidation()
+      // 登入 AJAX
+      signIn(email, PW)
+    }
   })
 }
 
 /* 登入與註冊切換 */
 function transformView() {
   aLink().addEventListener('click', (e) => {
+    e.preventDefault()
     if(e.target.innerText === '註冊') {
       // 切換至註冊
       loginView().innerHTML = register
       // 註冊頁面控制
       regControl()
-    } else {
+    } else if(e.target.innerText === '登入') {
       // 點擊登入按鈕重新渲染頁面
       Rendering()
     }
@@ -88,18 +92,20 @@ function regControl() {
 
 /* 註冊驗證 */
 function regVerify() {
-  buttonBtn().addEventListener('click', () => {
-    // 取得輸入資料
-    const email = document.getElementById('signUpEmail').value.trim()
-    const nickname = document.getElementById('nickname').value.trim()
-    let PW = document.getElementById('signUpPassword')
-    let PWS = document.getElementById('signUpPasswords')
-    // 註冊密碼檢查
-    const password = PWCheck(PW, PWS, nickname)
-    // 輸入驗證
-    formValidation()
-    // 註冊
-    signUp(email, nickname, password)
+  buttonBtn().addEventListener('click', (e) => {
+    if(e.target.innerText === '註冊帳號') {
+      // 取得輸入資料
+      const email = document.getElementById('signUpEmail').value.trim()
+      const nickname = document.getElementById('nickname').value.trim()
+      let PW = document.getElementById('signUpPassword')
+      let PWS = document.getElementById('signUpPasswords')
+      // 註冊密碼檢查
+      const password = PWCheck(PW, PWS, nickname)
+      // 輸入驗證
+      formValidation()
+      // 註冊
+      signUp(email, nickname, password)
+    }
   })
 }
 
@@ -210,7 +216,15 @@ function listControl() {
     }
   })
   // 切換頁籤
-  // toggleTab()
+  const tabs = document.getElementById('js-tabs-control')
+  tabs.addEventListener('click', (e) => {
+    const tag = document.querySelectorAll('#js-tabs-control li')
+    tag.forEach((item) => item.classList.remove('active'));
+    state = e.target.closest('li').dataset.toggle
+    e.target.closest('li').classList.add('active')
+    // 頁籤分類
+    // tagSort()
+  })
 }
 
 /* 登出 AJAX */
@@ -312,13 +326,10 @@ function chooseTodo() {
     // 取得點擊的目標 id 
     const id = e.target.closest('li').dataset.id
     if(e.target.getAttribute('aria-label') === 'editBtn') {
-      e.preventDefault();
       console.log('編輯按鈕', id)
     } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
-      e.preventDefault();
-      console.log('刪除按鈕', id)
       // 刪除單一項目
-      // delTodo(id)
+      delToDos(id)
     } else {
       // 待辦事項 (未完成 / 完成) 切換
       toDosToggle(id)
@@ -326,6 +337,18 @@ function chooseTodo() {
     // 取得待辦事項
     getToDos()
   })
+}
+
+/* 刪除單一項目 */
+function delToDos(id) {
+  axios.delete(`${apiUrl}todos/${id}`)
+    .then(response => {
+      if(response.status === 200) {
+        // 取得待辦事項
+        getToDos()
+      }
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 /* 待辦事項 (未完成 / 完成) 切換 */
@@ -339,16 +362,6 @@ function toDosToggle(id) {
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
-
-// /* 切換頁籤 */
-// function toggleTab(e) {
-//   const tag = document.querySelectorAll('#js-tabs-control li')
-//   tag.forEach((item) => item.classList.remove('active'));
-//   state = e.target.closest('li').dataset.toggle
-//   e.target.closest('li').classList.add('active')
-//   // 頁籤分類
-//   tagSort()
-// }
 
 // /* 頁籤分類 */
 // function tagSort() {
