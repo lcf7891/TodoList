@@ -52,8 +52,6 @@ function Rendering() {
 
 /* 登入驗證 */
 function loginVerify() {
-  // const loginBtn = document.querySelector('[type="submit"]')
-  // loginBtn
   buttonBtn().addEventListener('click', () => {
     // 取得輸入資料
     const email = document.getElementById('signInEmail').value.trim()
@@ -67,8 +65,6 @@ function loginVerify() {
 
 /* 登入與註冊切換 */
 function transformView() {
-  // const changeLink = document.querySelector('[href="#"]')
-  // changeLink
   aLink().addEventListener('click', (e) => {
     if(e.target.innerText === '註冊') {
       // 切換至註冊
@@ -92,8 +88,6 @@ function regControl() {
 
 /* 註冊驗證 */
 function regVerify() {
-  // const regBtn = document.querySelector('[type="submit"]')
-  // regBtn
   buttonBtn().addEventListener('click', () => {
     // 取得輸入資料
     const email = document.getElementById('signUpEmail').value.trim()
@@ -134,7 +128,7 @@ function signIn(email, password) {
     }
   })
     .then(response => {
-      //將使用者 Token 在 axios headers 作為預設值
+      // 將使用者 Token 在 axios headers 作為預設值
       axios.defaults.headers.common['Authorization'] = response.headers.authorization
       if(response.status === 200) {
         // 載入待辦事項初始畫面
@@ -148,6 +142,7 @@ function signIn(email, password) {
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
+      // 顯示錯誤訊息
       errMsgDom().innerHTML = `
         <p>${error.response.data.message}</p>
         <p>帳號密碼錯誤，如未註冊，請先註冊。</p>
@@ -167,6 +162,7 @@ function signUp(email, nickname, password) {
     }
   })
     .then(response => {
+      // 顯示跳轉畫面預告
       errMsgDom().innerHTML = `
         <p>${response.data.message}</p>
         <p>將在 5 秒後跳轉至登入頁面</p>
@@ -192,8 +188,6 @@ function signUp(email, nickname, password) {
 /* 待辦事項頁面控制 */
 function listControl() {
   // 登出按鈕監聽
-  // const outLink = document.querySelector('[href="#"]')
-  // outLink
   aLink().addEventListener('click', (e) => {
     if(e.target.innerText === '登出') {
       // 登出 AJAX
@@ -202,14 +196,9 @@ function listControl() {
   })
   // 取得待辦事項
   getToDos()
-  if(toDosData.length === 0) {
-    toDosControl().innerHTML = noneList
-  } else {
-    toDosControl().innerHTML = listCard
-    // 渲染待辦事項列表
-    renderList()
-  }
-  // 監聽輸入
+  // 渲染待辦事項列表
+  renderList()
+  // 監聽輸入，檢查資料
   const addBtn = document.querySelector('.addTodoBtn')
   const newTodo = document.getElementById('newTodo')
   addBtn.addEventListener('click', () => checkInput(newTodo))
@@ -229,6 +218,7 @@ function signOut() {
   axios.delete(`${apiUrl}users/sign_out`)
     .then(response => {
       if(response.status === 200) {
+        // 將 axios 裡的 headers 預設值清空
         axios.defaults.headers.common['Authorization'] = ''
         // 渲染初始頁面
         Rendering()
@@ -241,7 +231,7 @@ function signOut() {
 function getToDos() {
   axios.get(`${apiUrl}todos`)
     .then(response => {
-      // 將資料存放入新的記憶體位置
+      // 將資料存做淺層拷貝
       toDosData = [...response.data.todos]
       // 渲染待辦事項列表
       renderList()
@@ -251,6 +241,7 @@ function getToDos() {
 
 /* 渲染待辦事項列表 */
 function renderList() {
+  // 判斷取回的資料作畫面渲染
   if(toDosData.length === 0) {
     toDosControl().innerHTML = noneList
   } else {
@@ -274,29 +265,6 @@ function renderList() {
   itemControl().innerHTML = template
   // 選擇待辦事項
   chooseTodo()
-}
-
-/* 選擇待辦事項 */
-function chooseTodo() {
-  itemControl().addEventListener('click', (e) => {
-    e.preventDefault()
-    // 取得點擊的目標 id 
-    const id = e.target.closest('li').dataset.id
-    if(e.target.getAttribute('aria-label') === 'editBtn') {
-      e.preventDefault();
-      console.log('編輯按鈕', id)
-    } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
-      e.preventDefault();
-      console.log('刪除按鈕', id)
-      // 刪除單一項目
-      // delTodo(id)
-    } else {
-      // 待辦事項 (未完成 / 完成) 切換
-      toDosToggle(id)
-    }
-    // 取得待辦事項
-    getToDos()
-  })
 }
 
 /* 檢查輸入資料 */
@@ -335,6 +303,29 @@ function addToDos(toDos) {
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+/* 選擇待辦事項 */
+function chooseTodo() {
+  itemControl().addEventListener('click', (e) => {
+    e.preventDefault()
+    // 取得點擊的目標 id 
+    const id = e.target.closest('li').dataset.id
+    if(e.target.getAttribute('aria-label') === 'editBtn') {
+      e.preventDefault();
+      console.log('編輯按鈕', id)
+    } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
+      e.preventDefault();
+      console.log('刪除按鈕', id)
+      // 刪除單一項目
+      // delTodo(id)
+    } else {
+      // 待辦事項 (未完成 / 完成) 切換
+      toDosToggle(id)
+    }
+    // 取得待辦事項
+    getToDos()
+  })
 }
 
 /* 待辦事項 (未完成 / 完成) 切換 */
