@@ -26,13 +26,8 @@ import { initList } from './assets/js/layout/InitListLayout'
 import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
-const gbControl = document.getElementById('js-global-control')
-function loginView() {
-  return document.getElementById('js-loginRegister-control')
-}
-function errMsgDom() {
-  return document.querySelector('.errMessage')
-}
+/* 載入 DOM 頁面控制 */
+import { gbControl, loginView, errMsgDom } from './assets/js/DomControl'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
@@ -49,7 +44,7 @@ let state = 'all'
 /* 渲染頁面 */
 function Rendering() {
   // 初始頁面
-  gbControl.innerHTML = indexPage
+  gbControl().innerHTML = indexPage
   // 顯示登入區塊
   loginView().innerHTML = login
   // 登入驗證
@@ -128,6 +123,7 @@ function PWCheck(PW, PWS, name) {
 
 /* 登入 AJAX */
 function signIn(email, password) {
+  errMsgDom().style.display = 'none'
   axios.post(`${apiUrl}users/sign_in`, {
     user: {
       email,
@@ -137,12 +133,21 @@ function signIn(email, password) {
     .then(response => {
       console.log(response)
       if(response.status === 200) {
-        gbControl.innerHTML = initList
+        gbControl().innerHTML = initList
         const userName = document.querySelector('.nav span')
         userName.innerText = response.data.nickname
       }
     })
-    .catch(error => console.log('錯誤資訊：', error.response))
+    .catch(error => {
+      console.log('錯誤資訊：', error.response)
+      if(error.response.status === 401) {
+        errMsgDom().innerHTML = `
+          <p>${error.response.data.message}</p>
+          <p>帳號密碼錯誤，如未註冊，請先註冊。</p>
+        `
+        errMsgDom().style.display = 'block'
+      }
+    })
 }
 
 /* 註冊 AJAX */
@@ -168,7 +173,17 @@ function signUp(email, nickname, password) {
         }, 5000)
       }
     })
-    .catch(error => console.log('錯誤資訊：', error.response))
+    .catch(error => {
+      console.log('錯誤資訊：', error.response)
+      if(error.response.status === 422) {
+        if(error.response.data.error.length <= 1) {
+          errMsgDom().innerHTML = `
+            <p>${error.response.data.error[0]}</p>
+          `
+        }
+        errMsgDom().style.display = 'block'
+      }
+    })
 }
 
 Rendering()
