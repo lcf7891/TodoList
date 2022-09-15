@@ -191,6 +191,16 @@ function listControl() {
       signOut()
     }
   })
+  // 監聽輸入
+  const addBtn = document.querySelector('.addTodoBtn')
+  const newTodo = document.getElementById('newTodo')
+  addBtn.addEventListener('click', () => checkInput(newTodo))
+  newTodo.addEventListener('keyup', (e) => {
+    if(e.key === 'Enter') {
+      // 檢查輸入資料
+      checkInput(newTodo)
+    }
+  })
   // 取得待辦事項
   getTodos()
 }
@@ -205,6 +215,27 @@ function signOut() {
       }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
+}
+
+/* 檢查輸入資料 */
+function checkInput(newTodo) {
+  const newValue = newTodo.value.trim()
+  errMsgDom().style.display = 'none'
+  if(!newValue) {
+    errMsgDom().innerHTML = `
+      <p>請輸入待辦事項</p>
+    `
+    errMsgDom().style.display = 'block'
+  } else {
+    // 新增待辦事項
+    addTodos(newValue)
+    newTodo.value = ''
+  }
+}
+
+/* 新增待辦事項 */
+function addTodos(todos) {
+  console.log(todos)
 }
 
 /* 取得待辦事項 */
