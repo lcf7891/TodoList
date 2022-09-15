@@ -209,6 +209,8 @@ function listControl() {
       checkInput(newTodo)
     }
   })
+  // 切換頁籤
+  // toggleTab()
 }
 
 /* 登出 AJAX */
@@ -243,18 +245,25 @@ function getTodos() {
 
 /* 檢查輸入資料 */
 function checkInput(newTodo) {
-  const newValue = newTodo.value.trim()
   errMsgDom().style.display = 'none'
+  const newValue = newTodo.value.trim()
+  const origin = todosData.find(item => newValue === item.content)
   if(!newValue) {
     errMsgDom().innerHTML = `
       <p>請輸入待辦事項</p>
     `
     errMsgDom().style.display = 'block'
+  } else if(newValue !== '' && origin !== undefined) {
+    errMsgDom().innerHTML = `
+      <p>重複的待辦事項</p>
+    `
+    errMsgDom().style.display = 'block'
   } else {
     // 新增待辦事項
     addTodos(newValue)
-    newTodo.value = ''
+    
   }
+  newTodo.value = ''
 }
 
 /* 新增待辦事項 */
@@ -274,6 +283,7 @@ function addTodos(todos) {
 
 /* 渲染待辦事項列表 */
 function renderList() {
+  // 組合事項列表
   let template = ''
   todosData.forEach(item => {
     template += `
@@ -287,8 +297,39 @@ function renderList() {
       </li>
     `
   })
+  // 渲染完成的事項列表
   itemControl().innerHTML = template
+  // 完成待辦事項
+  chooseTodo()
 }
+
+function chooseTodo() {
+
+}
+
+// /* 切換頁籤 */
+// function toggleTab(e) {
+//   const tag = document.querySelectorAll('#js-tabs-control li')
+//   tag.forEach((item) => item.classList.remove('active'));
+//   state = e.target.closest('li').dataset.toggle
+//   e.target.closest('li').classList.add('active')
+//   // 頁籤分類
+//   tagSort()
+// }
+
+// /* 頁籤分類 */
+// function tagSort() {
+//   let tempData = []
+//   if(state === 'wait') {
+//     tempData = todosData.filter(item => item.completed_at === null)
+//   } else if (state === 'done') {
+//     tempData = todosData.filter(item => item.completed_at !== null)
+//   } else {
+//     tempData = todosData
+//   }
+//   // 渲染待辦事項列表
+//   renderList(tempData)
+// }
 
 Rendering()
 
