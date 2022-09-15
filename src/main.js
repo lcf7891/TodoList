@@ -38,7 +38,7 @@ let todosData = []
 // 頁籤狀態
 let state = 'all'
 
-/* 渲染頁面 */
+/* 渲染初始頁面 */
 function Rendering() {
   // 初始頁面
   gbControl().innerHTML = indexPage
@@ -54,6 +54,7 @@ function Rendering() {
 function loginVerify() {
   const loginBtn = document.querySelector('[type="submit"]')
   loginBtn.addEventListener('click', () => {
+    // 取得輸入資料
     const email = document.getElementById('signInEmail').value.trim()
     const PW = document.getElementById('signInPassword').value.trim()
     // 輸入驗證
@@ -91,6 +92,7 @@ function regControl() {
 function regVerify() {
   const regBtn = document.querySelector('[type="submit"]')
   regBtn.addEventListener('click', () => {
+    // 取得輸入資料
     const email = document.getElementById('signUpEmail').value.trim()
     const nickname = document.getElementById('nickname').value.trim()
     let PW = document.getElementById('signUpPassword')
@@ -168,11 +170,13 @@ function signUp(email, nickname, password) {
       `
       errMsgDom().style.display = 'block'
       setTimeout(() => {
+        // 渲染初始頁面
         Rendering()
       }, 5000)
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
+      // 顯示錯誤訊息
       if(error.response.data.error.length <= 1) {
         errMsgDom().innerHTML = `
           <p>${error.response.data.error[0]}</p>
@@ -188,6 +192,7 @@ function listControl() {
   const outLink = document.querySelector('[href="#"]')
   outLink.addEventListener('click', (e) => {
     if(e.target.innerText === '登出') {
+      // 登出 AJAX
       signOut()
     }
   })
@@ -198,6 +203,7 @@ function listControl() {
   const newTodo = document.getElementById('newTodo')
   addBtn.addEventListener('click', () => checkInput(newTodo))
   newTodo.addEventListener('keyup', (e) => {
+    // 當點擊鍵盤 Enter 觸發動作
     if(e.key === 'Enter') {
       // 檢查輸入資料
       checkInput(newTodo)
@@ -211,6 +217,7 @@ function signOut() {
     .then(response => {
       if(response.status === 200) {
         axios.defaults.headers.common['Authorization'] = ''
+        // 渲染初始頁面
         Rendering()
       }
     })
@@ -221,11 +228,13 @@ function signOut() {
 function getTodos() {
   axios.get(`${apiUrl}todos`)
     .then(response => {
+      // 將資料存放入新的記憶體位置
       todosData = [...response.data.todos]
       if(todosData.length === 0) {
         todosControl().innerHTML = noneList
       } else {
         todosControl().innerHTML = listCard
+        // 渲染待辦事項列表
         renderList()
       }
     })
@@ -256,7 +265,6 @@ function addTodos(todos) {
     }
   })
     .then(response => {
-      console.log(response)
       if(response.status === 201) {
         getTodos()
       }
@@ -264,6 +272,7 @@ function addTodos(todos) {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
+/* 渲染待辦事項列表 */
 function renderList() {
   let template = ''
   todosData.forEach(item => {
