@@ -52,8 +52,6 @@ function Rendering() {
 
 /* 登入驗證 */
 function loginVerify() {
-  // const loginBtn = document.querySelector('[type="submit"]')
-  // loginBtn
   buttonBtn().addEventListener('click', (e) => {
     e.preventDefault()
     if(e.target.innerText === '登入') {
@@ -70,8 +68,6 @@ function loginVerify() {
 
 /* 登入與註冊切換 */
 function transformView() {
-  // const changeBtn = document.querySelector('[href="#"]')
-  // changeBtn
   aLink().addEventListener('click', (e) => {
     e.preventDefault()
     if(e.target.innerText === '註冊') {
@@ -96,8 +92,6 @@ function regControl() {
 
 /* 註冊驗證 */
 function regVerify() {
-  // const regBtn = document.querySelector('[type="submit"]')
-  // regBtn
   buttonBtn().addEventListener('click', (e) => {
     if(e.target.innerText === '註冊帳號') {
       // 取得輸入資料
@@ -202,8 +196,6 @@ function signUp(email, nickname, password) {
 /* 待辦事項頁面控制 */
 function listControl() {
   // 登出按鈕監聽
-  // const logOut = document.querySelector('[href="#"]')
-  // logOut
   aLink().addEventListener('click', (e) => {
     if(e.target.innerText === '登出') {
       // 登出 AJAX
@@ -212,8 +204,6 @@ function listControl() {
   })
   // 取得待辦事項
   getToDos()
-  // 渲染待辦事項列表
-  renderList()
   // 監聽輸入，檢查資料
   const addBtn = document.querySelector('.addTodoBtn')
   const newTodo = document.getElementById('newTodo')
@@ -247,40 +237,56 @@ function getToDos() {
     .then(response => {
       // 將資料存做淺層拷貝
       toDosData = [...response.data.todos]
-      // 渲染待辦事項列表
-      renderList()
+      // 判斷資料作畫面渲染
+      if(toDosData.length === 0) {
+        toDosControl().innerHTML = noneList
+      } else {
+        toDosControl().innerHTML = listCard
+        // 顯示待完成項目數量
+        const nudone = toDosData.filter(item => item.completed_at === null)
+        const pending = document.querySelector('[data-num]')
+        pending.innerText = nudone.length
+        // 渲染待辦事項列表
+        renderList(toDosData)
+      }
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 /* 渲染待辦事項列表 */
-function renderList() {
-  // 判斷取回的資料作畫面渲染
-  if(toDosData.length === 0) {
-    toDosControl().innerHTML = noneList
+function renderList(data) {
+  // 組合事項列表
+  let template = ''
+  data.forEach(item => {
+    template += `
+      <li class="li-style" data-id="${item.id}">
+        <label for="${item.id}" class="col DynamicBox">
+          <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
+          <span class="ms-5">${item.content}</span>
+        </label>
+        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+        <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
+      </li>
+    `
+  })
+  // 渲染完成的事項列表
+  itemControl().innerHTML = template
+  // 切換頁籤
+  tabToggle()
+  // 選擇待辦事項
+  chooseTodo()
+  // 取得清除已完成項目按鈕控制
+  const delAllDoneBtn = document.querySelector('.btn-clearAll')
+  // 取出已完成事項
+  const allDone = data.filter(item => item.completed_at !== null)
+  // 判斷有無完成項目開啟按鈕
+  if(allDone.length !== 0) {
+    delAllDoneBtn.removeAttribute('disabled')
   } else {
-    toDosControl().innerHTML = listCard
-    // 組合事項列表
-    let template = ''
-    toDosData.forEach(item => {
-      template += `
-        <li class="li-style" data-id="${item.id}">
-          <label for="${item.id}" class="col DynamicBox">
-            <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
-            <span class="ms-5">${item.content}</span>
-          </label>
-          <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
-          <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
-        </li>
-      `
-    })
-    // 渲染完成的事項列表
-    itemControl().innerHTML = template
-    // 切換頁籤
-    tabToggle()
-    // 選擇待辦事項
-    chooseTodo()
+    delAllDoneBtn.setAttribute('disabled', '')
   }
+  // 監聽清除已完成項目按鈕
+  delAllDoneBtn.addEventListener('click', delAllDone)
 }
 
 /* 檢查輸入資料 */
@@ -367,31 +373,35 @@ function toDosToggle(id) {
 
 /* 切換頁籤 */
 function tabToggle() {
-  const tabs = document.getElementById('js-tabs-control')
-  tabs.addEventListener('click', (e) => {
-    const tag = document.querySelectorAll('#js-tabs-control li')
-    tag.forEach((item) => item.classList.remove('active'));
-    state = e.target.closest('li').dataset.toggle
+  const tag = document.getElementById('js-tabs-control')
+  tag.addEventListener('click', (e) =>{
+    const tabs = document.querySelectorAll('#js-tabs-control li')
+    tabs.forEach(item => item.classList.remove('active'))
     e.target.closest('li').classList.add('active')
+    state = e.target.closest('li').dataset.toggle
     // 頁籤分類
-    // tagSort()
+    tagSort()
   })
 }
 
+/* 頁籤分類 */
+function tagSort() {
+  let tempData = []
+  if(state === 'wait') {
+    tempData = toDosData.filter(item => item.completed_at === null)
+  } else if (state === 'done') {
+    tempData = toDosData.filter(item => item.completed_at !== null)
+  } else {
+    tempData = toDosData
+  }
+  // 渲染待辦事項列表
+  renderList(tempData)
+}
 
-// /* 頁籤分類 */
-// function tagSort() {
-//   let tempData = []
-//   if(state === 'wait') {
-//     tempData = todosData.filter(item => item.completed_at === null)
-//   } else if (state === 'done') {
-//     tempData = todosData.filter(item => item.completed_at !== null)
-//   } else {
-//     tempData = todosData
-//   }
-//   // 渲染待辦事項列表
-//   renderList(tempData)
-// }
+/* 刪除全部已完成待辦事項 */
+function delAllDone() {
+  console.log('delAll')
+}
 
 Rendering()
 
