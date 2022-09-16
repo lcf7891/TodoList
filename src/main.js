@@ -244,6 +244,7 @@ function getToDos() {
         toDosControl().innerHTML = noneList
       } else {
         toDosControl().innerHTML = listCard
+        gbControl().classList = 'bg-twoColor'
         // 顯示待完成項目數量
         const nudone = toDosData.filter(item => item.completed_at === null)
         const pending = document.querySelector('[data-num]')
