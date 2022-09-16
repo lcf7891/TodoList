@@ -52,6 +52,8 @@ function Rendering() {
 
 /* 登入驗證 */
 function loginVerify() {
+  // const loginBtn = document.querySelector('[type="submit"]')
+  // loginBtn
   buttonBtn().addEventListener('click', (e) => {
     e.preventDefault()
     if(e.target.innerText === '登入') {
@@ -68,6 +70,8 @@ function loginVerify() {
 
 /* 登入與註冊切換 */
 function transformView() {
+  // const changeBtn = document.querySelector('[href="#"]')
+  // changeBtn
   aLink().addEventListener('click', (e) => {
     e.preventDefault()
     if(e.target.innerText === '註冊') {
@@ -92,6 +96,8 @@ function regControl() {
 
 /* 註冊驗證 */
 function regVerify() {
+  // const regBtn = document.querySelector('[type="submit"]')
+  // regBtn
   buttonBtn().addEventListener('click', (e) => {
     if(e.target.innerText === '註冊帳號') {
       // 取得輸入資料
@@ -134,9 +140,9 @@ function signIn(email, password) {
     }
   })
     .then(response => {
-      // 將使用者 Token 在 axios headers 作為預設值
-      axios.defaults.headers.common['Authorization'] = response.headers.authorization
       if(response.status === 200) {
+        // 將使用者 Token 在 axios headers 作為預設值
+        axios.defaults.headers.common['Authorization'] = response.headers.authorization
         // 載入待辦事項初始畫面
         gbControl().innerHTML = initList
         // 加入使用者暱稱
@@ -153,7 +159,7 @@ function signIn(email, password) {
         <p>${error.response.data.message}</p>
         <p>帳號密碼錯誤，如未註冊，請先註冊。</p>
       `
-      errMsgDom().style.display = 'block'
+      errMsgDom().style.display = 'block'     
     })
 }
 
@@ -168,16 +174,18 @@ function signUp(email, nickname, password) {
     }
   })
     .then(response => {
-      // 顯示跳轉畫面預告
-      errMsgDom().innerHTML = `
-        <p>${response.data.message}</p>
-        <p>將在 5 秒後跳轉至登入頁面</p>
-      `
-      errMsgDom().style.display = 'block'
-      setTimeout(() => {
-        // 渲染初始頁面
-        Rendering()
-      }, 5000)
+      if(response.status === 200) {
+        // 顯示跳轉畫面預告
+        errMsgDom().innerHTML = `
+          <p>${response.data.message}</p>
+          <p>將在 5 秒後跳轉至登入頁面</p>
+        `
+        errMsgDom().style.display = 'block'
+        setTimeout(() => {
+          // 渲染初始頁面
+          Rendering()
+        }, 5000)
+      }
     })
     .catch(error => {
       console.log('錯誤資訊：', error.response)
@@ -194,6 +202,8 @@ function signUp(email, nickname, password) {
 /* 待辦事項頁面控制 */
 function listControl() {
   // 登出按鈕監聽
+  // const logOut = document.querySelector('[href="#"]')
+  // logOut
   aLink().addEventListener('click', (e) => {
     if(e.target.innerText === '登出') {
       // 登出 AJAX
@@ -214,16 +224,6 @@ function listControl() {
       // 檢查輸入資料
       checkInput(newTodo)
     }
-  })
-  // 切換頁籤
-  const tabs = document.getElementById('js-tabs-control')
-  tabs.addEventListener('click', (e) => {
-    const tag = document.querySelectorAll('#js-tabs-control li')
-    tag.forEach((item) => item.classList.remove('active'));
-    state = e.target.closest('li').dataset.toggle
-    e.target.closest('li').classList.add('active')
-    // 頁籤分類
-    // tagSort()
   })
 }
 
@@ -260,32 +260,34 @@ function renderList() {
     toDosControl().innerHTML = noneList
   } else {
     toDosControl().innerHTML = listCard
+    // 組合事項列表
+    let template = ''
+    toDosData.forEach(item => {
+      template += `
+        <li class="li-style" data-id="${item.id}">
+          <label for="${item.id}" class="col DynamicBox">
+            <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
+            <span class="ms-5">${item.content}</span>
+          </label>
+          <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+          <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
+        </li>
+      `
+    })
+    // 渲染完成的事項列表
+    itemControl().innerHTML = template
+    // 切換頁籤
+    tabToggle()
+    // 選擇待辦事項
+    chooseTodo()
   }
-  // 組合事項列表
-  let template = ''
-  toDosData.forEach(item => {
-    template += `
-      <li class="li-style" data-id="${item.id}">
-        <label for="${item.id}" class="col DynamicBox">
-          <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
-          <span class="ms-5">${item.content}</span>
-        </label>
-        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
-        <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
-      </li>
-    `
-  })
-  // 渲染完成的事項列表
-  itemControl().innerHTML = template
-  // 選擇待辦事項
-  chooseTodo()
 }
 
 /* 檢查輸入資料 */
 function checkInput(newTodo) {
-  errMsgDom().style.display = 'none'
-  const newValue = newTodo.value.trim()
+  let newValue = newTodo.value.trim()
   const origin = toDosData.find(item => newValue === item.content)
+  errMsgDom().style.display = 'none'
   if(!newValue) {
     errMsgDom().innerHTML = `
       <p>請輸入待辦事項</p>
@@ -331,7 +333,7 @@ function chooseTodo() {
       // 刪除單一項目
       delToDos(id)
     } else {
-      // 待辦事項 (未完成 / 完成) 切換
+      // 待辦事項 (未完成 / 完成) 切換 AJAX
       toDosToggle(id)
     }
     // 取得待辦事項
@@ -351,7 +353,7 @@ function delToDos(id) {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
-/* 待辦事項 (未完成 / 完成) 切換 */
+/* 待辦事項 (未完成 / 完成) 切換 AJAX */
 function toDosToggle(id) {
   axios.patch(`${apiUrl}todos/${id}/toggle`)
     .then(response => {
@@ -362,6 +364,20 @@ function toDosToggle(id) {
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
+
+/* 切換頁籤 */
+function tabToggle() {
+  const tabs = document.getElementById('js-tabs-control')
+  tabs.addEventListener('click', (e) => {
+    const tag = document.querySelectorAll('#js-tabs-control li')
+    tag.forEach((item) => item.classList.remove('active'));
+    state = e.target.closest('li').dataset.toggle
+    e.target.closest('li').classList.add('active')
+    // 頁籤分類
+    // tagSort()
+  })
+}
+
 
 // /* 頁籤分類 */
 // function tagSort() {
