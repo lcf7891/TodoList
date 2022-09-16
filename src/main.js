@@ -279,16 +279,8 @@ function renderList(data) {
   tabToggle()
   // 選擇待辦事項
   chooseTodo()
-  // 取得清除已完成項目按鈕控制
-  const delAllDoneBtn = document.querySelector('.btn-clearAll')
-  // 判斷有無完成項目開啟按鈕
-  if(allDone.length !== 0) {
-    delAllDoneBtn.removeAttribute('disabled')
-  } else {
-    delAllDoneBtn.setAttribute('disabled', '')
-  }
-  // 監聽清除已完成項目按鈕
-  delAllDoneBtn.addEventListener('click', delAllDone)
+  // 刪除全部已完成的按鈕控制
+  delAllDone()
 }
 
 /* 檢查輸入資料 */
@@ -400,11 +392,21 @@ function tagSort() {
   renderList(tempData)
 }
 
-/* 刪除全部的按鈕控制 */
+/* 刪除全部已完成的按鈕控制 */
 function delAllDone() {
-
-  console.log(allDone)
-  console.log('delAll')
+  // 取得清除已完成項目按鈕控制
+  const delAllDoneBtn = document.querySelector('.btn-clearAll')
+  // 判斷有無完成項目開啟按鈕
+  if(allDone.length !== 0) {
+    delAllDoneBtn.removeAttribute('disabled')
+  } else {
+    delAllDoneBtn.setAttribute('disabled', '')
+  }
+  // 監聽清除已完成項目按鈕
+  delAllDoneBtn.addEventListener('click', () => {
+    const delArr = allDone.map(item => delToDos(item.id))
+    Promise.all(delArr)
+  })
 }
 
 Rendering()
