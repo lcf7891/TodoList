@@ -328,7 +328,8 @@ function chooseTodo() {
     // 取得點擊的目標 id 
     const id = e.target.closest('li').dataset.id
     if(e.target.getAttribute('aria-label') === 'editBtn') {
-      console.log('編輯按鈕', id)
+      // 編輯待辦事項
+      editToDos(id)
     } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
       // 刪除單一項目
       delToDos(id)
@@ -407,6 +408,11 @@ function delAllDone() {
     const delArr = allDone.map(item => delToDos(item.id))
     Promise.all(delArr)
   })
+}
+
+/* 編輯待辦事項 */
+function editToDos(id) {
+  console.log('編輯按鈕', id)
 }
 
 Rendering()
