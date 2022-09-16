@@ -37,6 +37,8 @@ const apiUrl = 'https://todoo.5xcamp.us/'
 let toDosData = []
 // 頁籤狀態
 let state = 'all'
+// 已完成的待辦事項
+let allDone = []
 
 /* 渲染初始頁面 */
 function Rendering() {
@@ -246,6 +248,8 @@ function getToDos() {
         const nudone = toDosData.filter(item => item.completed_at === null)
         const pending = document.querySelector('[data-num]')
         pending.innerText = nudone.length
+        // 取得已完成項目
+        allDone = toDosData.filter(item => item.completed_at !== null)
         // 渲染待辦事項列表
         renderList(toDosData)
       }
@@ -277,8 +281,6 @@ function renderList(data) {
   chooseTodo()
   // 取得清除已完成項目按鈕控制
   const delAllDoneBtn = document.querySelector('.btn-clearAll')
-  // 取出已完成事項
-  const allDone = data.filter(item => item.completed_at !== null)
   // 判斷有無完成項目開啟按鈕
   if(allDone.length !== 0) {
     delAllDoneBtn.removeAttribute('disabled')
@@ -390,7 +392,7 @@ function tagSort() {
   if(state === 'wait') {
     tempData = toDosData.filter(item => item.completed_at === null)
   } else if (state === 'done') {
-    tempData = toDosData.filter(item => item.completed_at !== null)
+    tempData = allDone
   } else {
     tempData = toDosData
   }
@@ -398,8 +400,10 @@ function tagSort() {
   renderList(tempData)
 }
 
-/* 刪除全部已完成待辦事項 */
+/* 刪除全部的按鈕控制 */
 function delAllDone() {
+
+  console.log(allDone)
   console.log('delAll')
 }
 
