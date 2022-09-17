@@ -10,7 +10,8 @@ import './assets/images/empty.png'
 import './assets/scss/all.scss'
 
 /* 載入 bootstrap JS */
-import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
+// import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
+// import { Modal } from 'bootstrap'
 
 /* 載入 bootstrap 驗證 */
 import { formValidation } from './assets/js/Validation'
@@ -229,6 +230,7 @@ function signOut() {
 
 /* 取得待辦事項 */
 function getToDos() {
+  errMsgDom().style.display = 'none'
   axios.get(`${apiUrl}todos`)
     .then(response => {
       // 將資料存做淺層拷貝
@@ -239,7 +241,7 @@ function getToDos() {
       } else {
         toDosControl().innerHTML = listCard
         // 顯示待完成項目數量
-        const nuDone = toDosData.filter(item => item.completed_at === null)
+        const nuDone= toDosData.filter(item => item.completed_at === null)
         const pending = document.querySelector('[data-num]')
         pending.innerText = nuDone.length
         // 取得已完成項目
@@ -262,7 +264,7 @@ function renderList(data) {
           <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
           <span class="ms-5">${item.content}</span>
         </label>
-        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
+        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
         <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
       </li>
     `
@@ -323,7 +325,7 @@ function chooseTodo() {
     const id = e.target.closest('li').dataset.id
     if(e.target.getAttribute('aria-label') === 'editBtn') {
       // 編輯待辦事項
-      editToDos(id)
+      editModal(id)
     } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
       // 刪除單一項目
       delToDos(id)
@@ -402,15 +404,31 @@ function delAllDone() {
   }
   // 監聽清除已完成項目按鈕
   delAllDoneBtn.addEventListener('click', () => {
-    // const delArr = allDone.map(item => delToDos(item.id))
-    // Promise.all(delArr)
-    Promise.all(allDone.map(item => delToDos(item.id)))
+    const delArr = allDone.map(item => delToDos(item.id))
+    Promise.all(delArr)
   })
 }
 
 /* 編輯待辦事項 */
-function editToDos(id) {
-  console.log('編輯按鈕', id)
+function editModal(id) {
+  console.log('編輯', id)
+}
+
+
+/* 編輯 AJAX */
+function editToDos(id, content) {
+  axios.put(`${apiUrl}todos/${id}`, {
+    todo: {
+      content
+    }
+  })
+    .then(response => {
+      console.log(response)
+      if(response.status === 200) {
+        getToDos()
+      }
+    })
+    .catch(error => console.log('錯誤資訊：', error.response))
 }
 
 Rendering()
