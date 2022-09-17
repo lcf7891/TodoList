@@ -47,68 +47,60 @@ function Rendering() {
   // 顯示登入區塊
   loginView().innerHTML = login
   // 登入驗證
-  loginVerify()
+  buttonBtn().addEventListener('click', loginVerify)
   // 登入與註冊切換
-  transformView()
+  aLink().addEventListener('click', transformView)
 }
 
 /* 登入驗證 */
-function loginVerify() {
-  buttonBtn().addEventListener('click', (e) => {
-    e.preventDefault()
-    if(e.target.innerText === '登入') {
-      // 取得輸入資料
-      const email = document.getElementById('signInEmail').value.trim()
-      const PW = document.getElementById('signInPassword').value.trim()
-      // 輸入驗證
-      formValidation()
-      // 登入 AJAX
-      signIn(email, PW)
-    }
-  })
+function loginVerify(e) {
+  if(e.target.innerText === '登入') {
+    // 取得輸入資料
+    const email = document.getElementById('signInEmail').value.trim()
+    const PW = document.getElementById('signInPassword').value.trim()
+    // 輸入驗證
+    formValidation()
+    // 登入 AJAX
+    signIn(email, PW)
+  }
 }
 
 /* 登入與註冊切換 */
-function transformView() {
-  aLink().addEventListener('click', (e) => {
-    e.preventDefault()
-    if(e.target.innerText === '註冊') {
-      // 切換至註冊
-      loginView().innerHTML = register
-      // 註冊頁面控制
-      regControl()
-    } else if(e.target.innerText === '登入') {
-      // 點擊登入按鈕重新渲染頁面
-      Rendering()
-    }
-  })
+function transformView(e) {
+  if(e.target.innerText === '註冊') {
+    // 切換至註冊
+    loginView().innerHTML = register
+    // 註冊頁面控制
+    regControl()
+  } else if(e.target.innerText === '登入') {
+    // 點擊登入按鈕重新渲染頁面
+    Rendering()
+  }
 }
 
 /* 註冊頁面控制 */
 function regControl() {
   // 登入與註冊切換
-  transformView()
+  aLink().addEventListener('click', transformView)
   // 註冊驗證
-  regVerify()
+  buttonBtn().addEventListener('click', regVerify)
 }
 
 /* 註冊驗證 */
-function regVerify() {
-  buttonBtn().addEventListener('click', (e) => {
-    if(e.target.innerText === '註冊帳號') {
-      // 取得輸入資料
-      const email = document.getElementById('signUpEmail').value.trim()
-      const nickname = document.getElementById('nickname').value.trim()
-      let PW = document.getElementById('signUpPassword')
-      let PWS = document.getElementById('signUpPasswords')
-      // 註冊密碼檢查
-      const password = PWCheck(PW, PWS, nickname)
-      // 輸入驗證
-      formValidation()
-      // 註冊
-      signUp(email, nickname, password)
-    }
-  })
+function regVerify(e) {
+  if(e.target.innerText === '註冊帳號') {
+    // 取得輸入資料
+    const email = document.getElementById('signUpEmail').value.trim()
+    const nickname = document.getElementById('nickname').value.trim()
+    let PW = document.getElementById('signUpPassword')
+    let PWS = document.getElementById('signUpPasswords')
+    // 註冊密碼檢查
+    const password = PWCheck(PW, PWS, nickname)
+    // 輸入驗證
+    formValidation()
+    // 註冊
+    signUp(email, nickname, password)
+  }
 }
 
 /* 註冊密碼檢查 */
@@ -170,6 +162,7 @@ function signUp(email, nickname, password) {
     }
   })
     .then(response => {
+      console.log(response)
       if(response.status === 200) {
         // 顯示跳轉畫面預告
         errMsgDom().innerHTML = `
@@ -197,6 +190,7 @@ function signUp(email, nickname, password) {
 
 /* 待辦事項頁面控制 */
 function listControl() {
+  gbControl().classList = 'bg-twoColor'
   // 登出按鈕監聽
   aLink().addEventListener('click', (e) => {
     if(e.target.innerText === '登出') {
@@ -244,11 +238,10 @@ function getToDos() {
         toDosControl().innerHTML = noneList
       } else {
         toDosControl().innerHTML = listCard
-        gbControl().classList = 'bg-twoColor'
         // 顯示待完成項目數量
-        const nudone = toDosData.filter(item => item.completed_at === null)
+        const nuDone = toDosData.filter(item => item.completed_at === null)
         const pending = document.querySelector('[data-num]')
-        pending.innerText = nudone.length
+        pending.innerText = nuDone.length
         // 取得已完成項目
         allDone = toDosData.filter(item => item.completed_at !== null)
         // 渲染待辦事項列表
@@ -372,8 +365,11 @@ function tabToggle() {
   const tag = document.getElementById('js-tabs-control')
   tag.addEventListener('click', (e) =>{
     const tabs = document.querySelectorAll('#js-tabs-control li')
+    // 清除全部 li 裡 class 的 active
     tabs.forEach(item => item.classList.remove('active'))
+    // 點擊的目標 li 加上 active
     e.target.closest('li').classList.add('active')
+    // 依點擊的目標修改 state 內容
     state = e.target.closest('li').dataset.toggle
     // 頁籤分類
     tagSort()
@@ -406,8 +402,9 @@ function delAllDone() {
   }
   // 監聽清除已完成項目按鈕
   delAllDoneBtn.addEventListener('click', () => {
-    const delArr = allDone.map(item => delToDos(item.id))
-    Promise.all(delArr)
+    // const delArr = allDone.map(item => delToDos(item.id))
+    // Promise.all(delArr)
+    Promise.all(allDone.map(item => delToDos(item.id)))
   })
 }
 
