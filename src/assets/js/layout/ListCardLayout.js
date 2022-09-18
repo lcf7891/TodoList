@@ -21,6 +21,7 @@ const listCard = `
       </li>
     </ul>
   </div>
+  <article class="modal-style" id="js-modal-control"></article>
 `
 
 // 事項列表版型
@@ -33,6 +34,24 @@ const listCard = `
     <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
     <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
   </li>
+*/}
+
+// Modal 版型
+{/*
+  <div class="modal-main">
+    <h4 class="modal-title">標題</h4>
+    <div class="modal-content">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="editInput" placeholder="content">
+        <label for="editInput">content</label>
+      </div>
+      <div class="modal-errMsg">錯誤提示</div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary">取消</button>
+      <button type="button" class="btn btn-outline-danger ms-5">儲存編輯</button>
+    </div>
+  </div>
 */}
 
 export { listCard }
