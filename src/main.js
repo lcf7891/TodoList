@@ -267,7 +267,7 @@ function renderList(data) {
           <input type="checkbox" name="${item.content}" id="${item.id}" ${item.completed_at ? 'checked' : ''}>
           <span class="ms-5">${item.content}</span>
         </label>
-        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
+        <button class="btn btn-todoItem bi bi-pencil-fill" type="button" aria-label="editBtn"></button>
         <button class="btn btn-todoItem bi bi-x-lg" type="button" aria-label="removeBtn"></button>
       </li>
     `
@@ -414,10 +414,12 @@ function delAllDone() {
 
 /* 編輯待辦事項 */
 function editModal(id) {
-  // let myModal = new Modal('#js-modal-control', {
-  //   keyboard: false
-  // })
-  // console.log(myModal)
+  const createModal = new bootstrap.Modal(document.getElementById('editModal'))
+  createModal.show()
+  const closeBtn = document.getElementById('closeBtn')
+  closeBtn.addEventListener('click', () => {
+    createModal.hide()
+  })
   console.log('編輯', id)
 }
 
@@ -439,9 +441,16 @@ function editToDos(id, content) {
 
 
 function testModal() {
-  
+  const myModal = new bootstrap.Modal(document.getElementById('testModal'))
+  const opBtn = document.getElementById('btnShow')
+  const closeBtn = document.getElementById('btnSave')
+  opBtn.addEventListener('click', () => {
+    myModal.show()
+  })
+  closeBtn.addEventListener('click', () => {
+    myModal.hide()
+  })
 }
 
 
 Rendering()
-testModal()

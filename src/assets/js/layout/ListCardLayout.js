@@ -21,6 +21,24 @@ const listCard = `
       </li>
     </ul>
   </div>
+  <!-- Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary">Close</button>
+        <button type="button" class="btn btn-primary" id="closeBtn">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
 `
 
 // 事項列表版型
