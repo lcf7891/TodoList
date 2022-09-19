@@ -22,19 +22,15 @@ const listCard = `
     </ul>
   </div>
   <!-- Modal -->
-  <div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal fade" id="editModal" tabindex="-1"   data-bs-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="btn-close" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
+
+      <div id="js-edit-control"></div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary">Close</button>
-        <button type="button" class="btn btn-primary" id="closeBtn">Understood</button>
+        <button type="button" class="btn btn-secondary" id="closeBtn">取消</button>
+        <button type="button" class="btn btn-outline-danger" id="saveBtn">儲存編輯</button>
       </div>
     </div>
   </div>

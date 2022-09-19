@@ -10,10 +10,6 @@ import './assets/images/empty.png'
 import './assets/scss/all.scss'
 
 /* 載入 bootstrap JS */
-// import '../node_modules/bootstrap/dist/js/bootstrap.bundle'
-// import { bootstrap } from 'bootstrap'
-// import { Modal } from '../node_modules/bootstrap/js/dist/modal'
-// import 'bootstrap'
 import * as bootstrap from 'bootstrap'
 
 /* 載入 bootstrap 驗證 */
@@ -414,13 +410,62 @@ function delAllDone() {
 
 /* 編輯待辦事項 */
 function editModal(id) {
+  // 創建 Modal
   const createModal = new bootstrap.Modal(document.getElementById('editModal'))
-  createModal.show()
+  // 取得 DOM 元素
+  const editContent = document.getElementById('js-edit-control')
   const closeBtn = document.getElementById('closeBtn')
+  // 開啟 Modal
+  createModal.show()
+  // 取出點擊的事項
+  const toDosItem = toDosData.filter(item => item.id === id)[0]
+  // 建立版型
+  const template = `
+    <div class="modal-header">
+      <h5 class="modal-title text-danger">編輯 - ${toDosItem.content}</h5>
+    </div>
+    <div class="modal-body">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="editInput" placeholder="${toDosItem.content}">
+        <label for="editInput">${toDosItem.content}</label>
+      </div>
+    </div>
+    <div class="editErrMsg"></div>
+  `
+  // 渲染版型
+  editContent.innerHTML = template
+  // 監聽取消按鈕
   closeBtn.addEventListener('click', () => {
+    // 關閉 Modal
     createModal.hide()
   })
-  console.log('編輯', id)
+  // 檢查編輯資料
+  editCheck(id, createModal)
+}
+
+/* 檢查編輯資料 */
+function editCheck(id, createModal) {
+  // 取得 DOM 元素
+  const saveBtn = document.getElementById('saveBtn')
+  const editTxt = document.getElementById('editInput')
+  const editErrMsg = document.getElementById('editErrMsg')
+  console.log(editErrMsg)
+  // editErrMsg.style.display = 'none'
+  const compareData = toDosData.filter(item => {
+    item.content === editTxt.value.trim()
+  })
+  console.log(compareData)
+  // if(editTxt.value.trim() === toDosItem.content) {
+  //   editErrMsg.innerHTML = 
+  // }
+
+  // 監聽儲存編輯按鈕
+  saveBtn.addEventListener('click', () => {
+    // 編輯 AJAX
+    // editTodos(id, toDos)
+    // 關閉 Modal
+    createModal.hide()
+  })
 }
 
 /* 編輯 AJAX */
@@ -438,19 +483,5 @@ function editToDos(id, content) {
     })
     .catch(error => console.log('錯誤資訊：', error.response))
 }
-
-
-function testModal() {
-  const myModal = new bootstrap.Modal(document.getElementById('testModal'))
-  const opBtn = document.getElementById('btnShow')
-  const closeBtn = document.getElementById('btnSave')
-  opBtn.addEventListener('click', () => {
-    myModal.show()
-  })
-  closeBtn.addEventListener('click', () => {
-    myModal.hide()
-  })
-}
-
 
 Rendering()
