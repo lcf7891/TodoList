@@ -319,8 +319,7 @@ function addToDos(toDos) {
 /* 選擇待辦事項 */
 function chooseTodo() {
   itemControl().addEventListener('click', (e) => {
-    e.preventDefault()
-    // 取得點擊的目標 id 
+    e.stopPropagation();
     const id = e.target.closest('li').dataset.id
     if(e.target.getAttribute('aria-label') === 'editBtn') {
       // 編輯待辦事項
@@ -415,6 +414,7 @@ function editModal(id) {
   // 取得 DOM 元素
   const editContent = document.getElementById('js-edit-control')
   const closeBtn = document.getElementById('closeBtn')
+  const saveBtn = document.getElementById('saveBtn')
   // 開啟 Modal
   createModal.show()
   // 取出點擊的事項
@@ -434,37 +434,36 @@ function editModal(id) {
   `
   // 渲染版型
   editContent.innerHTML = template
+  // 取得 template 渲染後 DOM 元素
+  const editTxt = document.getElementById('editInput')
+  const editErrMsg = document.querySelector('.editErrMsg')
   // 監聽取消按鈕
   closeBtn.addEventListener('click', () => {
     // 關閉 Modal
     createModal.hide()
   })
-  // 檢查編輯資料
-  editCheck(id, createModal)
-}
-
-/* 檢查編輯資料 */
-function editCheck(id, createModal) {
-  // 取得 DOM 元素
-  const saveBtn = document.getElementById('saveBtn')
-  const editTxt = document.getElementById('editInput')
-  const editErrMsg = document.getElementById('editErrMsg')
-  console.log(editErrMsg)
-  // editErrMsg.style.display = 'none'
-  const compareData = toDosData.filter(item => {
-    item.content === editTxt.value.trim()
-  })
-  console.log(compareData)
-  // if(editTxt.value.trim() === toDosItem.content) {
-  //   editErrMsg.innerHTML = 
-  // }
-
   // 監聽儲存編輯按鈕
   saveBtn.addEventListener('click', () => {
-    // 編輯 AJAX
-    // editTodos(id, toDos)
-    // 關閉 Modal
-    createModal.hide()
+    editErrMsg.style.display = 'none'
+    const toDos = editTxt.value.trim()
+    // 檢查編輯資料
+    if(editTxt.value.trim() === '') {
+      editErrMsg.innerHTML = '<p>請輸入要修改的名稱</p>'
+      editTxt.style.border = '1px solid red'
+      editErrMsg.style.display = 'block'
+    } else {
+      const compareData = toDosData.filter(item => item.content === toDos)
+      if(compareData.length !== 0) {
+        editErrMsg.innerHTML = '<p>已有相同的待辦事項</p>'
+        editTxt.style.border = '1px solid red'
+        editErrMsg.style.display = 'block'
+      } else {
+        // 編輯 AJAX
+        editToDos(id, toDos)
+        // 關閉 Modal
+        createModal.hide()
+      }
+    }
   })
 }
 

@@ -22,7 +22,7 @@ const listCard = `
     </ul>
   </div>
   <!-- Modal -->
-  <div class="modal fade" id="editModal" tabindex="-1"   data-bs-backdrop="static">
+  <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -49,22 +49,18 @@ const listCard = `
   </li>
 */}
 
-// Modal 版型
+// 編輯的 Modal 版型
 {/*
-  <div class="modal-main">
-    <h4 class="modal-title">標題</h4>
-    <div class="modal-content">
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="editInput" placeholder="content">
-        <label for="editInput">content</label>
-      </div>
-      <div class="modal-errMsg">錯誤提示</div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary">取消</button>
-      <button type="button" class="btn btn-outline-danger ms-5">儲存編輯</button>
+  <div class="modal-header">
+    <h5 class="modal-title text-danger">編輯 - ${toDosItem.content}</h5>
+  </div>
+  <div class="modal-body">
+    <div class="form-floating">
+      <input type="text" class="form-control" id="editInput" placeholder="${toDosItem.content}">
+      <label for="editInput">${toDosItem.content}</label>
     </div>
   </div>
+  <div class="editErrMsg"></div>
 */}
 
 export { listCard }
