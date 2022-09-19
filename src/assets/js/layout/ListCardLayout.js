@@ -22,15 +22,15 @@ const listCard = `
     </ul>
   </div>
   <!-- Modal -->
-  <div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal fade" id="hintModal" tabindex="-1" data-bs-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
 
-      <div id="js-edit-control"></div>
+      <div id="js-modal-control"></div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="closeBtn">取消</button>
-        <button type="button" class="btn btn-outline-danger" id="saveBtn">儲存編輯</button>
+        <button type="button" class="btn btn-outline-danger" id="confirmBtn"></button>
       </div>
     </div>
   </div>
@@ -61,6 +61,16 @@ const listCard = `
     </div>
   </div>
   <div class="editErrMsg"></div>
+*/}
+
+// 確認刪除的 Modal 版型
+{/*
+  <div class="modal-header">
+    <h5 class="modal-title text-danger">刪除 - ${toDosItem.content}</h5>
+  </div>
+  <div class="modal-body">
+    <p class="text-danger">是否要刪除『 ${toDosItem.content} 』，刪除後無法復原。</p>
+  </div>
 */}
 
 export { listCard }

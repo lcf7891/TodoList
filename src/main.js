@@ -27,7 +27,7 @@ import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
 /* 載入 DOM 頁面控制 */
-import { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn } from './assets/js/DomControl'
+import { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn, modalContent, closeBtn, confirmBtn } from './assets/js/DomControl'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
@@ -322,18 +322,55 @@ function chooseTodo() {
   itemControl().addEventListener('click', (e) => {
     e.stopPropagation();
     const id = e.target.closest('li').dataset.id
+    // 取出點擊的事項
+    const toDosItem = toDosData.filter(item => item.id === id)[0]
     if(e.target.getAttribute('aria-label') === 'editBtn') {
       // 編輯待辦事項
-      editModal(id)
+      editModal(id, toDosItem)
     } else if(e.target.getAttribute('aria-label') === 'removeBtn') {
       // 刪除單一項目
-      delToDos(id)
+      delModal(id, toDosItem)
+      // delToDos(id)
     } else {
       // 待辦事項 (未完成 / 完成) 切換 AJAX
       toDosToggle(id)
     }
     // 取得待辦事項
     getToDos()
+  })
+}
+
+/* 渲染版型 Modal 通用控制 */
+function commonModalControl(status, template) {
+  // 創建 Modal
+  const createModal = new bootstrap.Modal(document.getElementById('hintModal'))
+  // 開啟 Modal
+  createModal.show()
+  // 渲染版型
+  modalContent().innerHTML = template
+  confirmBtn().innerText = status
+  // 監聽取消按鈕，關閉 Modal
+  closeBtn().addEventListener('click', createModal.hide())
+  return createModal
+}
+
+/* 刪除確認 */
+function delModal(id, toDosItem) {
+  // 建立版型
+  const template = `
+    <div class="modal-header">
+      <h5 class="modal-title text-danger">刪除 - ${toDosItem.content}</h5>
+    </div>
+    <div class="modal-body">
+      <p class="text-danger">是否要刪除『 ${toDosItem.content} 』，刪除後無法復原。</p>
+    </div>
+  `
+  // 渲染版型，回傳 Modal 控制
+  const createModal = commonModalControl('確認刪除', template)
+  // 監聽確認刪除按鈕，刪除單一項目
+  confirmBtn().addEventListener('click', () => {
+    delToDos(id)
+    createModal.hide()
   })
 }
 
@@ -412,17 +449,7 @@ function delAllDone() {
 }
 
 /* 編輯待辦事項 */
-function editModal(id) {
-  // 創建 Modal
-  const createModal = new bootstrap.Modal(document.getElementById('editModal'))
-  // 取得 DOM 元素
-  const editContent = document.getElementById('js-edit-control')
-  const closeBtn = document.getElementById('closeBtn')
-  const saveBtn = document.getElementById('saveBtn')
-  // 開啟 Modal
-  createModal.show()
-  // 取出點擊的事項
-  const toDosItem = toDosData.filter(item => item.id === id)[0]
+function editModal(id, toDosItem) {
   // 建立版型
   const template = `
     <div class="modal-header">
@@ -436,18 +463,13 @@ function editModal(id) {
     </div>
     <div class="editErrMsg"></div>
   `
-  // 渲染版型
-  editContent.innerHTML = template
+  // 渲染版型，回傳 Modal 控制
+  const createModal = commonModalControl('儲存編輯', template)
   // 取得 template 渲染後 DOM 元素
   const editTxt = document.getElementById('editInput')
   const editErrMsg = document.querySelector('.editErrMsg')
-  // 監聽取消按鈕
-  closeBtn.addEventListener('click', () => {
-    // 關閉 Modal
-    createModal.hide()
-  })
   // 監聽儲存編輯按鈕
-  saveBtn.addEventListener('click', () => {
+  confirmBtn().addEventListener('click', () => {
     editErrMsg.style.display = 'none'
     const toDos = editTxt.value.trim()
     // 檢查編輯資料
@@ -480,7 +502,6 @@ function editToDos(id, content) {
     }
   })
     .then(response => {
-      console.log(response)
       if(response.status === 200) {
         getToDos()
       }

@@ -26,4 +26,16 @@ function buttonBtn() {
   return document.querySelector('[type="submit"]')
 }
 
-export { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn }
+function modalContent() {
+  return  document.getElementById('js-modal-control')
+}
+
+function closeBtn() {
+  return document.getElementById('closeBtn')
+}
+
+function confirmBtn() {
+  return document.getElementById('confirmBtn')
+}
+
+export { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn, modalContent, closeBtn, confirmBtn }
