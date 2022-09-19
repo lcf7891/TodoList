@@ -190,6 +190,7 @@ function signUp(email, nickname, password) {
 
 /* 待辦事項頁面控制 */
 function listControl() {
+  // 更改背景
   gbControl().classList = 'bg-twoColor'
   // 登出按鈕監聽
   aLink().addEventListener('click', (e) => {
@@ -362,8 +363,10 @@ function toDosToggle(id) {
 
 /* 切換頁籤 */
 function tabToggle() {
+  // 取得全部頁籤所在並監聽
   const tag = document.getElementById('js-tabs-control')
   tag.addEventListener('click', (e) =>{
+    // 取得所有頁籤 DOM 內容
     const tabs = document.querySelectorAll('#js-tabs-control li')
     // 清除全部 li 裡 class 的 active
     tabs.forEach(item => item.classList.remove('active'))
@@ -379,6 +382,7 @@ function tabToggle() {
 /* 頁籤分類 */
 function tagSort() {
   let tempData = []
+  // 依照當前狀態取得相應的資料
   if(state === 'wait') {
     tempData = toDosData.filter(item => item.completed_at === null)
   } else if (state === 'done') {
@@ -452,6 +456,7 @@ function editModal(id) {
       editTxt.style.border = '1px solid red'
       editErrMsg.style.display = 'block'
     } else {
+      // 篩選現有待辦事項與欲編輯的名稱是否有相同
       const compareData = toDosData.filter(item => item.content === toDos)
       if(compareData.length !== 0) {
         editErrMsg.innerHTML = '<p>已有相同的待辦事項</p>'
