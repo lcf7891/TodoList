@@ -10,9 +10,11 @@ import './assets/images/empty.png'
 import './assets/scss/all.scss'
 
 /* 載入 bootstrap JS */
-// import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
+// import '../node_modules/bootstrap/dist/js/bootstrap.bundle'
 // import { bootstrap } from 'bootstrap'
 // import { Modal } from '../node_modules/bootstrap/js/dist/modal'
+// import 'bootstrap'
+import * as bootstrap from 'bootstrap'
 
 /* 載入 bootstrap 驗證 */
 import { formValidation } from './assets/js/Validation'
@@ -419,7 +421,6 @@ function editModal(id) {
   console.log('編輯', id)
 }
 
-
 /* 編輯 AJAX */
 function editToDos(id, content) {
   axios.put(`${apiUrl}todos/${id}`, {
@@ -436,4 +437,11 @@ function editToDos(id, content) {
     .catch(error => console.log('錯誤資訊：', error.response))
 }
 
+
+function testModal() {
+  
+}
+
+
 Rendering()
+testModal()
