@@ -12,7 +12,7 @@ import './assets/scss/all.scss'
 /* 載入 bootstrap JS */
 // import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js'
 // import { bootstrap } from 'bootstrap'
-import { Modal } from '../node_modules/bootstrap/js/dist/modal'
+// import { Modal } from '../node_modules/bootstrap/js/dist/modal'
 
 /* 載入 bootstrap 驗證 */
 import { formValidation } from './assets/js/Validation'
@@ -165,7 +165,7 @@ function signUp(email, nickname, password) {
   })
     .then(response => {
       console.log(response)
-      if(response.status === 200) {
+      if(response.status === 201) {
         // 顯示跳轉畫面預告
         errMsgDom().innerHTML = `
           <p>${response.data.message}</p>
@@ -412,10 +412,10 @@ function delAllDone() {
 
 /* 編輯待辦事項 */
 function editModal(id) {
-  let myModal = new Modal('#js-modal-control', {
-    keyboard: false
-  })
-  console.log(myModal)
+  // let myModal = new Modal('#js-modal-control', {
+  //   keyboard: false
+  // })
+  // console.log(myModal)
   console.log('編輯', id)
 }
 

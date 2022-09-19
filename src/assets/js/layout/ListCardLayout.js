@@ -21,7 +21,7 @@ const listCard = `
       </li>
     </ul>
   </div>
-  <-- Modal -->
+  <!-- Modal -->
   <div class="modal fade" id="js-modal-control" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
