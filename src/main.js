@@ -42,6 +42,8 @@ let allDone = []
 
 /* 渲染初始頁面 */
 function Rendering() {
+  // 初始背景色
+  gbControl().setAttribute('class', 'bg-primary')
   // 初始頁面
   gbControl().innerHTML = indexPage
   // 顯示登入區塊
@@ -54,6 +56,7 @@ function Rendering() {
 
 /* 登入驗證 */
 function loginVerify(e) {
+  e.preventDefault()
   if(e.target.innerText === '登入') {
     // 取得輸入資料
     const email = document.getElementById('signInEmail').value.trim()
@@ -80,6 +83,7 @@ function transformView(e) {
 
 /* 註冊頁面控制 */
 function regControl() {
+  e.preventDefault()
   // 登入與註冊切換
   aLink().addEventListener('click', transformView)
   // 註冊驗證
@@ -320,7 +324,6 @@ function addToDos(toDos) {
 /* 選擇待辦事項 */
 function chooseTodo() {
   itemControl().addEventListener('click', (e) => {
-    e.stopPropagation();
     const id = e.target.closest('li').dataset.id
     // 取出點擊的事項
     const toDosItem = toDosData.filter(item => item.id === id)[0]
@@ -350,7 +353,7 @@ function commonModalControl(status, template) {
   modalContent().innerHTML = template
   confirmBtn().innerText = status
   // 監聽取消按鈕，關閉 Modal
-  closeBtn().addEventListener('click', createModal.hide())
+  closeBtn().addEventListener('click', () => createModal.hide())
   return createModal
 }
 
