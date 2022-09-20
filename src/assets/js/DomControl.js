@@ -23,7 +23,7 @@ function aLink() {
 }
 
 function buttonBtn() {
-  return document.querySelector('[type="submit"]')
+  return document.querySelector('[type="button"]')
 }
 
 function modalContent() {

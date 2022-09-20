@@ -48,16 +48,9 @@ function Rendering() {
   gbControl().innerHTML = indexPage
   // 顯示登入區塊
   loginView().innerHTML = login
-  // 登入驗證
-  buttonBtn().addEventListener('click', loginVerify)
-  // 登入與註冊切換
-  aLink().addEventListener('click', transformView)
-}
-
-/* 登入驗證 */
-function loginVerify(e) {
-  e.preventDefault()
-  if(e.target.innerText === '登入') {
+  // 監聽登入按鈕
+  buttonBtn().addEventListener('click', (e) => {
+    e.preventDefault()
     // 取得輸入資料
     const email = document.getElementById('signInEmail').value.trim()
     const PW = document.getElementById('signInPassword').value.trim()
@@ -65,33 +58,47 @@ function loginVerify(e) {
     formValidation()
     // 登入 AJAX
     signIn(email, PW)
-  }
+  })
+  // 登入與註冊切換
+  transformView()
+}
+
+function loginVerify() {
+  // 取得輸入資料
+  const email = document.getElementById('signInEmail').value.trim()
+  const PW = document.getElementById('signInPassword').value.trim()
+  // 輸入驗證
+  formValidation()
+  // 登入 AJAX
+  signIn(email, PW)
 }
 
 /* 登入與註冊切換 */
-function transformView(e) {
-  if(e.target.innerText === '註冊') {
-    // 切換至註冊
-    loginView().innerHTML = register
-    // 註冊頁面控制
-    regControl()
-  } else if(e.target.innerText === '登入') {
-    // 點擊登入按鈕重新渲染頁面
-    Rendering()
-  }
+function transformView() {
+  aLink().addEventListener('click', (e) => {
+    if(e.target.innerText === '註冊') {
+      // 切換至註冊
+      loginView().innerHTML = register
+      // 註冊頁面控制
+      regControl()
+    } else if(e.target.innerText === '登入') {
+      // 點擊登入按鈕重新渲染頁面
+      Rendering()
+    }
+  })
 }
 
 /* 註冊頁面控制 */
 function regControl() {
-  e.preventDefault()
-  // 登入與註冊切換
-  aLink().addEventListener('click', transformView)
   // 註冊驗證
   buttonBtn().addEventListener('click', regVerify)
+  // 登入與註冊切換
+  transformView()
 }
 
 /* 註冊驗證 */
 function regVerify(e) {
+  e.preventDefault()
   if(e.target.innerText === '註冊帳號') {
     // 取得輸入資料
     const email = document.getElementById('signUpEmail').value.trim()
