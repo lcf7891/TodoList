@@ -166,7 +166,6 @@ function signUp(email, nickname, password) {
     }
   })
     .then(response => {
-      console.log(response)
       if(response.status === 201) {
         // 顯示跳轉畫面預告
         errMsgDom().innerHTML = `
