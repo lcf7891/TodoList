@@ -88,6 +88,7 @@ function regControl() {
 
 /* 註冊驗證 */
 function regVerify(e) {
+  errMsgDom().style.display = 'none'
   if(e.target.innerText === '註冊帳號') {
     // 取得輸入資料
     const email = document.getElementById('signUpEmail').value.trim()
@@ -105,7 +106,6 @@ function regVerify(e) {
 
 /* 註冊密碼檢查 */
 function PWCheck(PW, PWS, name) {
-  errMsgDom().style.display = 'none'
   if(name !== '') {
     if(PW.value.trim() !== PWS.value.trim()) {
       PW.value = ''
