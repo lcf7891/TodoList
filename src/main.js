@@ -56,16 +56,34 @@ function Rendering() {
 
 /* 登入驗證 */
 function loginVerify(e) {
-  e.preventDefault()
+  // e.preventDefault()
+  console.log(e.target.innerText === '登入')
   if(e.target.innerText === '登入') {
-    // 取得輸入資料
     const email = document.getElementById('signInEmail').value.trim()
     const PW = document.getElementById('signInPassword').value.trim()
-    // 輸入驗證
-    formValidation()
-    // 登入 AJAX
-    signIn(email, PW)
+    const forms = document.querySelectorAll('.needs-validation')
+    console.log(Array.prototype.slice.call(forms))
+    Array.prototype.slice.call(forms).forEach(form => {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
   }
+  
+  // e.preventDefault()
+  // if(e.target.innerText === '登入') {
+  //   // 取得輸入資料
+  //   const email = document.getElementById('signInEmail').value.trim()
+  //   const PW = document.getElementById('signInPassword').value.trim()
+  //   // 輸入驗證
+  //   formValidation()
+  //   // 登入 AJAX
+  //   signIn(email, PW)
+  // }
 }
 
 /* 登入與註冊切換 */
