@@ -42,6 +42,8 @@ let allDone = []
 
 /* 渲染初始頁面 */
 function Rendering() {
+  // 初始背景色
+  gbControl().setAttribute('class', 'bg-primary')
   // 初始頁面
   gbControl().innerHTML = indexPage
   // 顯示登入區塊
@@ -49,7 +51,7 @@ function Rendering() {
   // 登入驗證
   buttonBtn().addEventListener('click', loginVerify)
   // 登入與註冊切換
-  aLink().addEventListener('click', transformView)
+  transformView()
 }
 
 /* 登入驗證 */
@@ -76,24 +78,26 @@ function loginVerify() {
 }
 
 /* 登入與註冊切換 */
-function transformView(e) {
-  if(e.target.innerText === '註冊') {
-    // 切換至註冊
-    loginView().innerHTML = register
-    // 註冊頁面控制
-    regControl()
-  } else if(e.target.innerText === '登入') {
-    // 點擊登入按鈕重新渲染頁面
-    Rendering()
-  }
+function transformView() {
+  aLink().addEventListener('click', (e) => {
+    if(e.target.innerText === '註冊') {
+      // 切換至註冊
+      loginView().innerHTML = register
+      // 註冊頁面控制
+      regControl()
+    } else if(e.target.innerText === '登入') {
+      // 點擊登入按鈕重新渲染頁面
+      Rendering()
+    }
+  })
 }
 
 /* 註冊頁面控制 */
 function regControl() {
-  // 登入與註冊切換
-  aLink().addEventListener('click', transformView)
   // 註冊驗證
   buttonBtn().addEventListener('click', regVerify)
+  // 登入與註冊切換
+  transformView()
 }
 
 /* 註冊驗證 */
@@ -353,7 +357,6 @@ function addToDos(toDos) {
 /* 選擇待辦事項 */
 function chooseTodo() {
   itemControl().addEventListener('click', (e) => {
-    e.stopPropagation();
     const id = e.target.closest('li').dataset.id
     // 取出點擊的事項
     const toDosItem = toDosData.filter(item => item.id === id)[0]
