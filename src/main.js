@@ -12,9 +12,6 @@ import './assets/scss/all.scss'
 /* 載入 bootstrap JS */
 import * as bootstrap from 'bootstrap'
 
-/* 載入 bootstrap 驗證 */
-import { formValidation } from './assets/js/Validation'
-
 /* 載入 axios 套件 */
 import axios from 'axios'
 
@@ -64,17 +61,6 @@ function loginVerify() {
   } else {
     signIn(email, PW)
   }
-
-  // e.preventDefault()
-  // if(e.target.innerText === '登入') {
-  //   // 取得輸入資料
-  //   const email = document.getElementById('signInEmail').value.trim()
-  //   const PW = document.getElementById('signInPassword').value.trim()
-  //   // 輸入驗證
-  //   formValidation()
-  //   // 登入 AJAX
-  //   signIn(email, PW)
-  // }
 }
 
 /* 登入與註冊切換 */
@@ -111,20 +97,6 @@ function regVerify() {
   if(password) {
     signUp(email, nickname, password)
   }
-
-  // if(e.target.innerText === '註冊帳號') {
-  //   // 取得輸入資料
-  //   const email = document.getElementById('signUpEmail').value.trim()
-  //   const nickname = document.getElementById('nickname').value.trim()
-  //   let PW = document.getElementById('signUpPassword')
-  //   let PWS = document.getElementById('signUpPasswords')
-  //   // 註冊密碼檢查
-  //   const password = PWCheck(PW, PWS, nickname)
-  //   // 輸入驗證
-  //   formValidation()
-  //   // 註冊
-  //   signUp(email, nickname, password)
-  // }
 }
 
 /* 註冊密碼檢查 */
@@ -141,18 +113,6 @@ function PWCheck(PW, PWS, name) {
   } else if(!formControl().checkValidity()) {
     formControl().classList.add('was-validated')
   }
-
-  // errMsgDom().style.display = 'none'
-  // if(name !== '') {
-  //   if(PW.value.trim() !== PWS.value.trim()) {
-  //     PW.value = ''
-  //     PWS.value = ''
-  //     errMsgDom().innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
-  //     errMsgDom().style.display = 'block'
-  //   } else {
-  //     return PW.value.trim()
-  //   }
-  // }
 }
 
 /* 登入 AJAX */
