@@ -4,7 +4,7 @@ const register = `
     <img class="mb-5" src="./assets/images/logo_lg.png" alt="logo_lg">
     <h3 class="fw-bold mb-6">註冊帳號</h3>
   </div>
-  <form class="col-lg-7 needs-validation" novalidate>
+  <form class="col-lg-7 needs-validation" onsubmit="return false;" novalidate>
     <div class="mb-6">
       <label for="signUpEmail" class="form-label">Email</label>
       <input type="email" class="form-control form-control-lg py-3" id="signUpEmail" placeholder="請輸入Email" required>

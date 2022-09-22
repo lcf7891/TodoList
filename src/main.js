@@ -62,7 +62,18 @@ function loginVerify(e) {
     const email = document.getElementById('signInEmail').value.trim()
     const PW = document.getElementById('signInPassword').value.trim()
     // 輸入驗證
-    formValidation()
+    // formValidation()
+    const forms = document.querySelectorAll('.needs-validation')
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms).forEach(form => {
+        form.addEventListener('submit', function(event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
     // 登入 AJAX
     signIn(email, PW)
   }
@@ -93,7 +104,7 @@ function regControl() {
 
 /* 註冊驗證 */
 function regVerify(e) {
-  e.preventDefault()
+  // e.preventDefault()
   if(e.target.innerText === '註冊帳號') {
     // 取得輸入資料
     const email = document.getElementById('signUpEmail').value.trim()
