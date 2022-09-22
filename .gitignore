@@ -1,2 +1,8 @@
-node_modules
 dist
+node_modules
+# src
+# .gitignore
+# babel.config.json
+# package-lock.json
+# package.json
+# webpack.config.js

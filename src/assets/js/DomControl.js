@@ -23,7 +23,15 @@ function aLink() {
 }
 
 function buttonBtn() {
-  return document.querySelector('[type="submit"]')
+  return document.querySelector('[type="button"]')
+}
+
+function formControl() {
+  // 取得 form 所有 DOM 元素，類陣列
+  const forms = document.querySelectorAll('.needs-validation')
+  // 轉換為陣列
+  const form = Array.prototype.slice.call(forms)
+  return form[0]
 }
 
 function modalContent() {
@@ -38,4 +46,4 @@ function confirmBtn() {
   return document.getElementById('confirmBtn')
 }
 
-export { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn, modalContent, closeBtn, confirmBtn }
+export { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn, formControl, modalContent, closeBtn, confirmBtn }

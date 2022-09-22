@@ -35,7 +35,7 @@ const register = `
     </div>
     <div class="errMessage"></div>
     <div class="mb-4 text-center">
-      <button class="btn btn-lg btn-secondary py-3 px-12" type="submit">註冊帳號</button>
+      <button class="btn btn-lg btn-secondary py-3 px-12" type="button">註冊帳號</button>
     </div>
     <div class="text-center">
       <a class="link-secondary text-decoration-none" href="#">登入</a>

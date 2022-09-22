@@ -21,7 +21,7 @@ const login = `
     </div>
     <div class="errMessage"></div>
     <div class="mb-6 text-center">
-      <button class="btn btn-lg btn-secondary py-3 px-12" type="submit">登入</button>
+      <button class="btn btn-lg btn-secondary py-3 px-12" type="button">登入</button>
     </div>
     <div class="text-center">
       <a class="link-secondary text-decoration-none" href="#">註冊</a>
