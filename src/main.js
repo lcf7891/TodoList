@@ -27,7 +27,7 @@ import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
 /* 載入 DOM 頁面控制 */
-import { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn, modalContent, closeBtn, confirmBtn } from './assets/js/DomControl'
+import { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn, formControl, modalContent, closeBtn, confirmBtn } from './assets/js/DomControl'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
@@ -53,16 +53,26 @@ function Rendering() {
 }
 
 /* 登入驗證 */
-function loginVerify(e) {
-  if(e.target.innerText === '登入') {
-    // 取得輸入資料
-    const email = document.getElementById('signInEmail').value.trim()
-    const PW = document.getElementById('signInPassword').value.trim()
-    // 輸入驗證
-    formValidation()
-    // 登入 AJAX
+function loginVerify() {
+  errMsgDom().style.display = 'none'
+  const email = document.getElementById('signInEmail').value.trim()
+  const PW = document.getElementById('signInPassword').value.trim()
+  if(!email || !PW) {
+    formControl().classList.add('was-validated')
+  } else {
     signIn(email, PW)
   }
+
+  // e.preventDefault()
+  // if(e.target.innerText === '登入') {
+  //   // 取得輸入資料
+  //   const email = document.getElementById('signInEmail').value.trim()
+  //   const PW = document.getElementById('signInPassword').value.trim()
+  //   // 輸入驗證
+  //   formValidation()
+  //   // 登入 AJAX
+  //   signIn(email, PW)
+  // }
 }
 
 /* 登入與註冊切換 */
@@ -87,26 +97,35 @@ function regControl() {
 }
 
 /* 註冊驗證 */
-function regVerify(e) {
-  if(e.target.innerText === '註冊帳號') {
-    // 取得輸入資料
-    const email = document.getElementById('signUpEmail').value.trim()
-    const nickname = document.getElementById('nickname').value.trim()
-    let PW = document.getElementById('signUpPassword')
-    let PWS = document.getElementById('signUpPasswords')
-    // 註冊密碼檢查
-    const password = PWCheck(PW, PWS, nickname)
-    // 輸入驗證
-    formValidation()
-    // 註冊
+function regVerify() {
+  errMsgDom().style.display = 'none'
+  const email = document.getElementById('signUpEmail').value.trim()
+  const nickname = document.getElementById('nickname').value.trim()
+  let PW = document.getElementById('signUpPassword')
+  let PWS = document.getElementById('signUpPasswords')
+  let password = PWCheck(PW, PWS, nickname)
+  if(password) {
     signUp(email, nickname, password)
   }
+
+  // if(e.target.innerText === '註冊帳號') {
+  //   // 取得輸入資料
+  //   const email = document.getElementById('signUpEmail').value.trim()
+  //   const nickname = document.getElementById('nickname').value.trim()
+  //   let PW = document.getElementById('signUpPassword')
+  //   let PWS = document.getElementById('signUpPasswords')
+  //   // 註冊密碼檢查
+  //   const password = PWCheck(PW, PWS, nickname)
+  //   // 輸入驗證
+  //   formValidation()
+  //   // 註冊
+  //   signUp(email, nickname, password)
+  // }
 }
 
 /* 註冊密碼檢查 */
 function PWCheck(PW, PWS, name) {
-  errMsgDom().style.display = 'none'
-  if(name !== '') {
+  if(name) {
     if(PW.value.trim() !== PWS.value.trim()) {
       PW.value = ''
       PWS.value = ''
@@ -115,7 +134,21 @@ function PWCheck(PW, PWS, name) {
     } else {
       return PW.value.trim()
     }
+  } else if(!formControl().checkValidity()) {
+    formControl().classList.add('was-validated')
   }
+
+  // errMsgDom().style.display = 'none'
+  // if(name !== '') {
+  //   if(PW.value.trim() !== PWS.value.trim()) {
+  //     PW.value = ''
+  //     PWS.value = ''
+  //     errMsgDom().innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
+  //     errMsgDom().style.display = 'block'
+  //   } else {
+  //     return PW.value.trim()
+  //   }
+  // }
 }
 
 /* 登入 AJAX */
@@ -162,6 +195,7 @@ function signUp(email, nickname, password) {
     }
   })
     .then(response => {
+      console.log(response)
       if(response.status === 201) {
         // 顯示跳轉畫面預告
         errMsgDom().innerHTML = `
