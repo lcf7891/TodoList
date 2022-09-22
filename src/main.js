@@ -24,7 +24,19 @@ import { noneList } from './assets/js/layout/NoListLayout'
 import { listCard } from './assets/js/layout/ListCardLayout'
 
 /* 載入 DOM 頁面控制 */
-import { gbControl, loginView, errMsgDom, toDosControl, itemControl, aLink, buttonBtn, formControl, modalContent, closeBtn, confirmBtn } from './assets/js/DomControl'
+import {
+  gbControl,
+  loginView,
+  errMsgDom,
+  toDosControl,
+  itemControl,
+  aLink,
+  buttonBtn,
+  formControl,
+  modalContent,
+  closeBtn,
+  confirmBtn
+} from './assets/js/DomControl'
 
 /* API 網址 */
 const apiUrl = 'https://todoo.5xcamp.us/'
