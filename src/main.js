@@ -55,25 +55,14 @@ function Rendering() {
 }
 
 /* 登入驗證 */
-function loginVerify(e) {
+function loginVerify(e) {  
   e.preventDefault()
   if(e.target.innerText === '登入') {
     // 取得輸入資料
     const email = document.getElementById('signInEmail').value.trim()
     const PW = document.getElementById('signInPassword').value.trim()
     // 輸入驗證
-    // formValidation()
-    const forms = document.querySelectorAll('.needs-validation')
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms).forEach(form => {
-        form.addEventListener('submit', function(event) {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-          form.classList.add('was-validated')
-        }, false)
-      })
+    formValidation()
     // 登入 AJAX
     signIn(email, PW)
   }
