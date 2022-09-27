@@ -111,6 +111,10 @@ function regVerify() {
   let PWS = document.getElementById('signUpPasswords')
   // 註冊密碼檢查
   let password = PWCheck(PW, PWS, nickname)
+  if(!formControl().checkValidity()) {
+    // 檢查輸入資料
+    formControl().classList.add('was-validated')
+  }
   if(password) {
     // 註冊 AJAX
     signUp(email, nickname, password)
@@ -125,13 +129,12 @@ function PWCheck(PW, PWS, name) {
       PWS.value = ''
       errMsgDom().innerHTML = '<p>輸入兩次密碼不一致，請重新輸入密碼。</p>'
       errMsgDom().style.display = 'block'
+      // 檢查輸入資料
+      // formControl().classList.add('was-validated')
     } else {
       // 回傳
       return PW.value.trim()
     }
-  } else if(!formControl().checkValidity()) {
-    // 檢查輸入資料
-    formControl().classList.add('was-validated')
   }
 }
 
